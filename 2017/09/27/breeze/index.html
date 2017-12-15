@@ -7,7 +7,7 @@
 
 <html class="theme-next pisces use-motion" lang="zh-Hans">
 <head>
-  <meta charset="UTF-8"/>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -102,7 +102,7 @@
 <meta property="og:description" content="Breeze小结(不断更新)">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/t1.png">
-<meta property="og:updated_time" content="2017-09-27T11:32:30.000Z">
+<meta property="og:updated_time" content="2017-10-09T07:52:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Breeze小结">
 <meta name="twitter:description" content="Breeze小结(不断更新)">
@@ -141,7 +141,7 @@
 
 
 
-  <title>Breeze小结 | lxmly</title>
+  <title>Breeze小结 | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -166,7 +166,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail ">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -357,7 +357,9 @@
       
 
       
-        <h2 id="Vector"><a href="#Vector" class="headerlink" title="Vector"></a>Vector</h2><ul>
+        <p>Breeze是scala数值运算库，旨在不牺牲效率的前提下，尽可能通用、简洁和（功能）强大<br><a href="https://github.com/scalanlp/breeze/" target="_blank" rel="noopener">github地址</a>  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">  &lt;groupId&gt;org.scalanlp&lt;/groupId&gt;</div><div class="line">  &lt;artifactId&gt;breeze_2.11&lt;/artifactId&gt; </div><div class="line">  &lt;version&gt;0.13.2&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<h2 id="Vector"><a href="#Vector" class="headerlink" title="Vector"></a>Vector</h2><ul>
 <li><p>所有向量都是<mark>列向量</mark>  </p>
 </li>
 <li><p>子向量可以切片和更新</p>
@@ -394,6 +396,22 @@
       
       
 
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/27/tf_word2vec_op/" rel="prev" title="tensorflow word2vec的一些看法">
+                tensorflow word2vec的一些看法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
@@ -467,7 +485,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -478,7 +496,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -515,7 +533,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Vector"><span class="nav-number">1.</span> <span class="nav-text">Vector</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Matrix"><span class="nav-number">2.</span> <span class="nav-text">Matrix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作"><span class="nav-number">3.</span> <span class="nav-text">操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广播"><span class="nav-number">4.</span> <span class="nav-text">广播</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Vector"><span class="nav-number">1.</span> <span class="nav-text"><a href="#Vector" class="headerlink" title="Vector"></a>Vector</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Matrix"><span class="nav-number">2.</span> <span class="nav-text"><a href="#Matrix" class="headerlink" title="Matrix"></a>Matrix</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x64CD;&#x4F5C;" class="headerlink" title="&#x64CD;&#x4F5C;"></a>&#x64CD;&#x4F5C;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#广播"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x5E7F;&#x64AD;" class="headerlink" title="&#x5E7F;&#x64AD;"></a>&#x5E7F;&#x64AD;</span></a></li></ol></div>
             
 
           </div>
@@ -693,6 +711,45 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
 
   
 

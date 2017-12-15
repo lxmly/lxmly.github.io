@@ -94,13 +94,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="lxmly">
-<meta property="og:url" content="http://yoursite.com/categories/scala/index.html">
+<meta name="description" content="tensorflow models">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tensorflow word2vec的一些看法">
+<meta property="og:url" content="http://yoursite.com/2017/11/27/tf_word2vec_op/index.html">
 <meta property="og:site_name" content="lxmly">
+<meta property="og:description" content="tensorflow models">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-15T08:49:24.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="lxmly">
+<meta name="twitter:title" content="tensorflow word2vec的一些看法">
+<meta name="twitter:description" content="tensorflow models">
 
 
 
@@ -129,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/scala/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/11/27/tf_word2vec_op/"/>
 
 
 
 
 
-  <title>分类: scala | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>tensorflow word2vec的一些看法 | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -160,7 +164,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left  ">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -244,55 +248,176 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>scala<small>分类</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/27/tf_word2vec_op/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lxmly">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2017/09/27/breeze/" itemprop="url">
-              
-                <span itemprop="name">Breeze小结</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">tensorflow word2vec的一些看法</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-09-27T18:15:06+08:00"
-              content="2017-09-27" >
-          09-27
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-27T18:12:07+08:00">
+                2017-11-27
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deep-learning/" itemprop="url" rel="index">
+                    <span itemprop="name">deep learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  tensorflow models
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>许多优秀算法有一个特点:简单高效，word2vec正属于此类。简单的一个hidden layer，外加高效的negative sample，就能取得很不错的embedding效果。</p>
+<p>当然最靠谱的算法实现就是word2vec作者给出的源码，在实际应用中，不论是词embedding或者行为序列embedding，获得的效果都不错。今天谈论一下tensorflow word2vec的使用感受。 </p>
+<p>个人认为在算法应用中，最重要的是数据的收集，预处理和特征工程。没有正确可靠的数据，再好的算法也是巧妇难为无米之炊，如果只是单纯走通算法，在实际落地中，意义很小。一个算法如果线上表现不好，一方面是参数调整，更多的是要考虑数据处理是否有问题。<br>    word2vec用tensorflow来实现，代码很简洁，负采样也有现成实现nce_loss。但我最感兴趣的是数据处理的方式，官方给出的demo是基于skip-gram + negative sample，材料中对数据处理也没有详述，在实际应用中，有下面几点感受：</p>
+<ul>
+<li>设置vocabulary_size这个参数不合适，word2vec的c源码是设置了min_count，这样的好处是只保留频繁的单词，因为频繁，所以训练才会充分，那些频率低的单词的训练结果置信度很低，会降低整体embedding的可靠程度。这里设置vocabulary_size就不合理了，虽然按照频次倒排，但无法排除频率低的单词。</li>
+<li>generate_batch的实现有点别扭，比如global data_index，让代码显得很松散，还有collections.deque的使用，让代码读起来不清晰。</li>
+<li>num_steps参数不合适，在训练过程中，需要打印中间结果信息，方便检验运行是否正确。用num_steps来衡量训练迭代充分与否不恰当，这和vocabulary_size一个道理，num_steps设置多少才算合理呢？在word2vec的c源码是设置了epoch这个参数，使得可以一轮一轮地用数据训练模型，简单明了。</li>
+</ul>
+<p>在实际应用中，我也对上面几点进行了修改，贴合原word2vec的数据处理方式，线上效果不错。有这样的不足，一是word2vec的离线效果不好衡量，一般都是训练结束，用tsne可视化一下，看起来很炫就结束了。而原word2vec的c实现是经过了工业界检验的，里面有很多小trick，这些都是线上迭代的结晶。</p>
+<p>在实际线上应用的感受是，skip-gram模型是优于cbow模型的。因为本身是做推荐算法的，个人觉得word2vec也是一种协同思想，最后embedding的结果是单词间共现关系的体现。在cbow模型中，$mean(context)\rightarrow target$这会丢失许多信息，使得训练并不充分。而cbow对于语言模型，也挺奇怪，上下文的语义就是平均吗。。有点粗鲁。RNN的LSTM就设立了各种gate来学习context，很精巧。</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/27/breeze/" rel="next" title="Breeze小结">
+                <i class="fa fa-chevron-left"></i> Breeze小结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -300,6 +425,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -494,10 +623,10 @@
 
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
 
-  
+
 
   
 
