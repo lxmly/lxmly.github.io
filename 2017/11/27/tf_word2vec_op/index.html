@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="lxmly">
 <meta property="og:description" content="tensorflow word2vec的一些看法 emmmmmmm">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-15T08:51:45.000Z">
+<meta property="og:updated_time" content="2017-12-16T03:29:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="tensorflow word2vec的一些看法">
 <meta name="twitter:description" content="tensorflow word2vec的一些看法 emmmmmmm">
@@ -363,8 +363,8 @@
 <li>generate_batch的实现有点别扭，比如global data_index，让代码显得很松散，还有collections.deque的使用，让代码读起来不清晰。</li>
 <li>num_steps参数不合适，在训练过程中，需要打印中间结果信息，方便检验运行是否正确。用num_steps来衡量训练迭代充分与否不恰当，这和vocabulary_size一个道理，num_steps设置多少才算合理呢？在word2vec的c源码是设置了epoch这个参数，使得可以一轮一轮地用数据训练模型，简单明了。</li>
 </ul>
-<p>在实际应用中，我也对上面几点进行了修改，贴合原word2vec的数据处理方式，线上效果不错。有这样的不足，一是word2vec的离线效果不好衡量，一般都是训练结束，用tsne可视化一下，看起来很炫就结束了。而原word2vec的c实现是经过了工业界检验的，里面有很多小trick，这些都是线上迭代的结晶。</p>
-<p>在实际线上应用的感受是，skip-gram模型是优于cbow模型的。因为本身是做推荐算法的，个人觉得word2vec也是一种协同思想，最后embedding的结果是单词间共现关系的体现。在cbow模型中，$mean(context)\rightarrow target$这会丢失许多信息，使得训练并不充分。而cbow对于语言模型，也挺奇怪，上下文的语义就是平均吗。。有点粗鲁。RNN的LSTM就设立了各种gate来学习context，很精巧。</p>
+<p>在实际应用中，我也对上面几点进行了修改，贴合原word2vec的数据处理方式，线上效果不错。tensorflow-word2vec-demo有这样的不足，觉得是因为word2vec的离线效果不好衡量，一般都是训练结束，用tsne可视化一下，看起来很炫就结束了。而原word2vec的c实现是经过了工业界检验的，里面有很多小trick，这些都是线上迭代的结晶，看起来不显眼，却是不可或缺，许多trick的堆叠引起质变，与pure的算法实现在线上的表现差距巨大。</p>
+<p>此外，在实际线上应用的感受是，skip-gram模型是优于cbow模型的。因为本身是做推荐算法的，个人觉得word2vec也是一种协同思想，最后embedding的结果是单词间共现关系的体现。在cbow模型中，$mean(context)\rightarrow target$这会丢失许多信息，使得训练并不充分。而cbow对于语言模型，也挺奇怪，上下文的语义就是平均吗。。有点粗鲁。RNN的LSTM就设立了各种gate来学习context，很精巧。</p>
 
       
     </div>
