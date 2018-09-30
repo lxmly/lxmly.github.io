@@ -103,7 +103,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/neural_1.png">
 <meta property="og:image" content="http://yoursite.com/images/neural_3.png">
-<meta property="og:updated_time" content="2018-09-30T06:18:07.000Z">
+<meta property="og:updated_time" content="2018-09-30T07:24:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Neural Collaborative Filtering">
 <meta name="twitter:description" content="Neural Collaborative Filtering">
@@ -367,8 +367,35 @@ r_{ui}=p_{u}^Tq_{i}=\sum_{k=1}^{K}p_{uk}q_{ik}</script><p>可以认为MF是基�
 <li>两个网络拥有独立的Embedding，保证灵活性和表现</li>
 <li>对user和item vector同时进行了concatenate和multiply操作，特征学习比较全面</li>
 </ul>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>文章提出的网络结构并不复杂，用keras实现起来很简洁，自己简单实现了一下<br><a href="https://github.com/lxmly/recsyspy" target="_blank" rel="noopener">详细代码</a></p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>文章提出的网络结构并不复杂，用keras实现起来很简洁，自己简单实现了一下</p>
+<p><a href="https://github.com/lxmly/recsyspy" target="_blank" rel="noopener">详细代码</a></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">gmf_layer = multiply([mf_embedding_user, mf_embedding_item])</div><div class="line"></div><div class="line">mlp_embedding_user = Embedding(user_num, self.mlp_dim)(user_input)</div><div class="line">mlp_embedding_item = Embedding(item_num, self.mlp_dim)(item_input)</div><div class="line"></div><div class="line">mlp_layer = concatenate([mlp_embedding_user, mlp_embedding_item])</div><div class="line"></div><div class="line">mlp_layer = BatchNormalization()(mlp_layer)</div><div class="line">mlp_layer = Dense(<span class="number">32</span>)(mlp_layer)</div><div class="line">mlp_layer = Dense(<span class="number">16</span>)(mlp_layer)</div><div class="line">mlp_layer = Dense(<span class="number">8</span>)(mlp_layer)</div><div class="line">mlp_layer = Dense(<span class="number">4</span>)(mlp_layer)</div><div class="line">mlp_layer = Dropout(<span class="number">0.5</span>)(mlp_layer)</div><div class="line"></div><div class="line">neumf_layer = concatenate([gmf_layer, mlp_layer])</div><div class="line">neumf_layer = Flatten()(neumf_layer)</div><div class="line">pred = Dense(<span class="number">1</span>)(neumf_layer)</div></pre></td></tr></table></figure>
+<p>使用movielens进行了简单测试，效果尚可</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">RMSE</th>
+<th style="text-align:left">MAE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">NeuMF</td>
+<td style="text-align:left">0.9433</td>
+<td style="text-align:left">0.7485   </td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>既考虑用户和物品向量的连接，又兼顾二者的交互，模型学习能力更强</li>
+<li>灵活性，DNN较于传统算法的优势，就是非常方便学习异构数据<ul>
+<li>这里可以很方便将物品和用户的id Embedding替换为用户和物品属性特征进行学习</li>
+</ul>
+</li>
+</ul>
 <p>参考</p>
 <ul>
 <li>Neural Collaborative Filtering</li>
@@ -530,7 +557,7 @@ r_{ui}=p_{u}^Tq_{i}=\sum_{k=1}^{K}p_{uk}q_{ik}</script><p>可以认为MF是基�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#传统MF的不足"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4F20;&#x7EDF;MF&#x7684;&#x4E0D;&#x8DB3;" class="headerlink" title="&#x4F20;&#x7EDF;MF&#x7684;&#x4E0D;&#x8DB3;"></a>&#x4F20;&#x7EDF;MF&#x7684;&#x4E0D;&#x8DB3;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NCF框架"><span class="nav-number">2.</span> <span class="nav-text"><a href="#NCF&#x6846;&#x67B6;" class="headerlink" title="NCF&#x6846;&#x67B6;"></a>NCF&#x6846;&#x67B6;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x4EE3;&#x7801;&#x5B9E;&#x73B0;" class="headerlink" title="&#x4EE3;&#x7801;&#x5B9E;&#x73B0;"></a>&#x4EE3;&#x7801;&#x5B9E;&#x73B0;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#传统MF的不足"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4F20;&#x7EDF;MF&#x7684;&#x4E0D;&#x8DB3;" class="headerlink" title="&#x4F20;&#x7EDF;MF&#x7684;&#x4E0D;&#x8DB3;"></a>&#x4F20;&#x7EDF;MF&#x7684;&#x4E0D;&#x8DB3;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NCF框架"><span class="nav-number">2.</span> <span class="nav-text"><a href="#NCF&#x6846;&#x67B6;" class="headerlink" title="NCF&#x6846;&#x67B6;"></a>NCF&#x6846;&#x67B6;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x4EE3;&#x7801;&#x5B9E;&#x73B0;" class="headerlink" title="&#x4EE3;&#x7801;&#x5B9E;&#x73B0;"></a>&#x4EE3;&#x7801;&#x5B9E;&#x73B0;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优点"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x4F18;&#x70B9;" class="headerlink" title="&#x4F18;&#x70B9;"></a>&#x4F18;&#x70B9;</span></a></li></ol></div>
             
 
           </div>
