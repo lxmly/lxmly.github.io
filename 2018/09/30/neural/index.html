@@ -103,7 +103,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/neural_1.png">
 <meta property="og:image" content="http://yoursite.com/images/neural_3.png">
-<meta property="og:updated_time" content="2018-09-30T06:12:32.000Z">
+<meta property="og:updated_time" content="2018-09-30T06:18:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Neural Collaborative Filtering">
 <meta name="twitter:description" content="Neural Collaborative Filtering">
@@ -358,7 +358,7 @@
       
 
       
-        <h1 id="Neural-Collaborative-Filtering"><a href="#Neural-Collaborative-Filtering" class="headerlink" title="Neural Collaborative Filtering"></a>Neural Collaborative Filtering</h1><p>文章主要讲述DNN在矩阵分解上的应用，针对传统Matrix Factorization Object公式拟合能力的不足，提出NCF网络框架来学习user-item间的交互。</p>
+        <p>文章主要讲述DNN在矩阵分解上的应用，针对传统Matrix Factorization Object公式拟合能力的不足，提出NCF网络框架来学习user-item间的交互。</p>
 <h2 id="传统MF的不足"><a href="#传统MF的不足" class="headerlink" title="传统MF的不足"></a>传统MF的不足</h2><script type="math/tex; mode=display">
 r_{ui}=p_{u}^Tq_{i}=\sum_{k=1}^{K}p_{uk}q_{ik}</script><p>可以认为MF是基于隐式向量的线性模型<br><img src="/images/neural_1.png" alt="neural_1"><br>文中举了上图的简单例子证明MF的拟合能力不足，基于Jaccard来衡量用户间两两之前的相似度，用户vector $p_4$在右图中便无处安放，这便会产生ranking loss，不过用户向量是五维表示，作者在二维平面里来举例有点不妥当。</p>
 <h2 id="NCF框架"><a href="#NCF框架" class="headerlink" title="NCF框架"></a>NCF框架</h2><p><img src="/images/neural_3.png" alt="neural_3"><br>这是作者提出的最终网路结构</p>
@@ -530,7 +530,7 @@ r_{ui}=p_{u}^Tq_{i}=\sum_{k=1}^{K}p_{uk}q_{ik}</script><p>可以认为MF是基�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Neural-Collaborative-Filtering"><span class="nav-number">1.</span> <span class="nav-text"><a href="#Neural-Collaborative-Filtering" class="headerlink" title="Neural Collaborative Filtering"></a>Neural Collaborative Filtering</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#传统MF的不足"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#&#x4F20;&#x7EDF;MF&#x7684;&#x4E0D;&#x8DB3;" class="headerlink" title="&#x4F20;&#x7EDF;MF&#x7684;&#x4E0D;&#x8DB3;"></a>&#x4F20;&#x7EDF;MF&#x7684;&#x4E0D;&#x8DB3;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NCF框架"><span class="nav-number">1.2.</span> <span class="nav-text"><a href="#NCF&#x6846;&#x67B6;" class="headerlink" title="NCF&#x6846;&#x67B6;"></a>NCF&#x6846;&#x67B6;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">1.3.</span> <span class="nav-text"><a href="#&#x4EE3;&#x7801;&#x5B9E;&#x73B0;" class="headerlink" title="&#x4EE3;&#x7801;&#x5B9E;&#x73B0;"></a>&#x4EE3;&#x7801;&#x5B9E;&#x73B0;</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#传统MF的不足"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4F20;&#x7EDF;MF&#x7684;&#x4E0D;&#x8DB3;" class="headerlink" title="&#x4F20;&#x7EDF;MF&#x7684;&#x4E0D;&#x8DB3;"></a>&#x4F20;&#x7EDF;MF&#x7684;&#x4E0D;&#x8DB3;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NCF框架"><span class="nav-number">2.</span> <span class="nav-text"><a href="#NCF&#x6846;&#x67B6;" class="headerlink" title="NCF&#x6846;&#x67B6;"></a>NCF&#x6846;&#x67B6;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x4EE3;&#x7801;&#x5B9E;&#x73B0;" class="headerlink" title="&#x4EE3;&#x7801;&#x5B9E;&#x73B0;"></a>&#x4EE3;&#x7801;&#x5B9E;&#x73B0;</span></a></li></ol></div>
             
 
           </div>
