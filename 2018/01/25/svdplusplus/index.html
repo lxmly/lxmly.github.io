@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="lxmly">
 <meta property="og:description" content="SVD++算法总结和实现">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-27T06:39:49.000Z">
+<meta property="og:updated_time" content="2018-12-27T06:44:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SVD++总结">
 <meta name="twitter:description" content="SVD++算法总结和实现">
@@ -356,7 +356,7 @@
 
       
         <p>&emsp;&emsp;协同过滤(collaborative filtering)是推荐系统的常用方法，一个重要的优点是CF是领域无关，不涉及领域知识就可以完成模型的训练。协同过滤的两个主要领域是邻居方法（neighborhood methods, 如userKNN、 itemKNN、 slopOne等）和隐式因子模型(latent factor models， 也就是矩阵分解模型（matrix factorization），如SVD、SVD++等)，本文是对SVD++算法的总结。</p>
-<h2 id="基础矩阵分解模型"><a href="#基础矩阵分解模型" class="headerlink" title="基础矩阵分解模型"></a><strong>基础矩阵分解模型</strong></h2><p>&emsp;&emsp;矩阵分解模型是将用户和物品映射到 $f$ 维的隐式因子空间（latent factor space），每个用户关联了一个向量$ p<em>{u}$，每个物品关联一个向量 $q</em>{i}$，向量因子隐含了兴趣因子。在该空间里，用户对物品的评分化为向量点积，如下所示。</p>
+<h2 id="基础矩阵分解模型"><a href="#基础矩阵分解模型" class="headerlink" title="基础矩阵分解模型"></a><strong>基础矩阵分解模型</strong></h2><p>&emsp;&emsp;矩阵分解模型是将用户和物品映射到 $f$ 维的隐式因子空间（latent factor space），每个用户关联了一个向量$ p<em>{u}$，每个物品关联一个向量$q</em>{i}$，向量因子隐含了兴趣因子。在该空间里，用户对物品的评分化为向量点积，如下所示。</p>
 <script type="math/tex; mode=display">p_{u}=\begin{bmatrix}
         0.3 \\
         0.2 \\
@@ -383,7 +383,7 @@
         \vdots & \vdots & \ddots  & \vdots\\
         r_{m1} & r_{m2} & \cdots  & r_{mi}\\
         \end{bmatrix}</script><p>&emsp;&emsp;该模型最关联的是奇异值分解(SVD)，但传统的SVD却不适用于模型的训练，因为用户-物品矩阵往往是极度稀疏的。所以这里只使用已有的评分数据，并通过正则模型防止过拟合。为了训练因子向量，基于已知评分数据集极小化正则均方误差：</p>
-<script type="math/tex; mode=display">\min_{q^*, p^*} \sum_{(u,i)\in K}  (r_{ui}-q_i^T*p_u)^2 + \lambda(||q_i||^2 +||p_u||^2)</script><p>这里，$K$表示所有的有评分的$(u,i)$对，$\lambda$表示正则化系数。极小化上式的方法有两种：随机梯度下降(SGT)和交替最小二乘(ALS)，这里不再详述。</p>
+<script type="math/tex; mode=display">\min_{q^*, p^*} \sum_{(u,i)\in K}  (r_{ui}-q_i^T*p_u)^2 + \lambda(||q_i||^2 +||p_u||^2)</script><p>这里，$K$表示所有的有评分的$(u,i)$对，$\lambda$表示正则化系数。极小化上式的方法有两种：随机梯度下降和交替最小二乘(ALS)，这里不再详述。</p>
 <h2 id="偏见"><a href="#偏见" class="headerlink" title="偏见"></a><strong>偏见</strong></h2><p>&emsp;&emsp;矩阵分解的一个优点是它可以很灵活地加入各种影响评分的因素，这里我们引入‘偏见’因素。从评分数据中显示出，相比于其他用户，有些用户给分就是偏高或偏。相比于其他物品，有些物品就是能得到偏高的评分。<br>因此，用 $q<em>{i}^Tp</em>{u}$ 来定义完整评分是有缺陷的，我们认为评分=兴趣+偏见。偏见公式、新评分公式和学习公式如下：</p>
 <script type="math/tex; mode=display">b_{ui} = \mu + b_i + b _u\\
 r_{ui} = \mu + b_i + b _u+q_{i}^Tp_{u}\\
