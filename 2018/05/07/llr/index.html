@@ -94,20 +94,17 @@
 
 
 
-<meta name="description" content="Neural Collaborative Filtering">
+<meta name="description" content="一种很不错的相似度度量方式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Neural Collaborative Filtering">
-<meta property="og:url" content="http://yoursite.com/2018/09/30/neural/index.html">
+<meta property="og:title" content="log-likelihood ratio">
+<meta property="og:url" content="http://yoursite.com/2018/05/07/llr/index.html">
 <meta property="og:site_name" content="lxmly">
-<meta property="og:description" content="Neural Collaborative Filtering">
+<meta property="og:description" content="一种很不错的相似度度量方式">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/neural_1.png">
-<meta property="og:image" content="http://yoursite.com/images/neural_3.png">
-<meta property="og:updated_time" content="2018-09-30T07:25:23.000Z">
+<meta property="og:updated_time" content="2018-12-27T08:40:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Neural Collaborative Filtering">
-<meta name="twitter:description" content="Neural Collaborative Filtering">
-<meta name="twitter:image" content="http://yoursite.com/images/neural_1.png">
+<meta name="twitter:title" content="log-likelihood ratio">
+<meta name="twitter:description" content="一种很不错的相似度度量方式">
 
 
 
@@ -136,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/30/neural/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/05/07/llr/"/>
 
 
 
 
 
-  <title>Neural Collaborative Filtering | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>log-likelihood ratio | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -265,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/30/neural/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/07/llr/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -282,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Neural Collaborative Filtering</h1>
+          <h1 class="post-title" itemprop="name headline">log-likelihood ratio</h1>
         
 
         <div class="post-meta">
@@ -294,8 +291,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-30T12:15:30+08:00">
-                2018-09-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-07T21:10:41+08:00">
+                2018-05-07
               </time>
             
 
@@ -317,8 +314,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Papers/" itemprop="url" rel="index">
-                    <span itemprop="name">Papers</span>
+                  <a href="/categories/algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">algorithm</span>
                   </a>
                 </span>
 
@@ -341,7 +338,7 @@
 
           
               <div class="post-description">
-                  Neural Collaborative Filtering
+                  一种很不错的相似度度量方式
               </div>
           
 
@@ -358,44 +355,45 @@
       
 
       
-        <p>文章主要讲述DNN在矩阵分解上的应用，针对传统Matrix Factorization Object公式拟合能力的不足，提出NCF网络框架来学习user-item间的交互。</p>
-<h2 id="传统MF的不足"><a href="#传统MF的不足" class="headerlink" title="传统MF的不足"></a>传统MF的不足</h2><script type="math/tex; mode=display">
-r_{ui}=p_{u}^Tq_{i}=\sum_{k=1}^{K}p_{uk}q_{ik}</script><p>可以认为MF是基于隐式向量的线性模型<br><img src="/images/neural_1.png" alt="neural_1"><br>文中举了上图的简单例子证明MF的拟合能力不足，基于Jaccard来衡量用户间两两之前的相似度，用户vector $p_4$在右图中便无处安放，这便会产生ranking loss，不过用户向量是五维表示，作者在二维平面里来举例有点不妥当。</p>
-<h2 id="NCF框架"><a href="#NCF框架" class="headerlink" title="NCF框架"></a>NCF框架</h2><p><img src="/images/neural_3.png" alt="neural_3"><br>这是作者提出的最终网路结构</p>
-<ul>
-<li>包含两个结构 MLP Layer($Multi-Layer Perceptron$)和 GMF Layer($Generalized Matrix Factorization$), 并对二者进行融合。</li>
-<li>两个网络拥有独立的Embedding，保证灵活性和表现</li>
-<li>对user和item vector同时进行了concatenate和multiply操作，特征学习比较全面</li>
-</ul>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>文章提出的网络结构并不复杂，用keras实现起来很简洁，自己简单实现了一下</p>
-<p><a href="https://github.com/lxmly/recsyspy" target="_blank" rel="noopener">详细代码</a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">gmf_layer = multiply([mf_embedding_user, mf_embedding_item])</div><div class="line"></div><div class="line">mlp_embedding_user = Embedding(user_num, self.mlp_dim)(user_input)</div><div class="line">mlp_embedding_item = Embedding(item_num, self.mlp_dim)(item_input)</div><div class="line"></div><div class="line">mlp_layer = concatenate([mlp_embedding_user, mlp_embedding_item])</div><div class="line"></div><div class="line">mlp_layer = BatchNormalization()(mlp_layer)</div><div class="line">mlp_layer = Dense(<span class="number">32</span>)(mlp_layer)</div><div class="line">mlp_layer = Dense(<span class="number">16</span>)(mlp_layer)</div><div class="line">mlp_layer = Dense(<span class="number">8</span>)(mlp_layer)</div><div class="line">mlp_layer = Dense(<span class="number">4</span>)(mlp_layer)</div><div class="line">mlp_layer = Dropout(<span class="number">0.5</span>)(mlp_layer)</div><div class="line"></div><div class="line">neumf_layer = concatenate([gmf_layer, mlp_layer])</div><div class="line">neumf_layer = Flatten()(neumf_layer)</div><div class="line">pred = Dense(<span class="number">1</span>)(neumf_layer)</div></pre></td></tr></table></figure>
-<p>使用movielens进行了简单测试，效果尚可</p>
-<div class="table-container">
+        <p>LLR（log-likelihood ratio）是最新版mahout的itemcf的相似度度量方法。该算法简单有效，mahout舍弃了其他所有物品相似度度量方法，如cosine、pearson等，可见该算法确有独到之处。</p>
+<h3 id="事件A与事件B间的关系"><a href="#事件A与事件B间的关系" class="headerlink" title="事件A与事件B间的关系"></a><strong>事件A与事件B间的关系</strong></h3><div class="table-container">
 <table>
 <thead>
 <tr>
-<th style="text-align:left"></th>
-<th style="text-align:left">RMSE</th>
-<th style="text-align:left">MAE</th>
+<th>——</th>
+<th>事件A</th>
+<th>除事件A外的事件</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left">NeuMF</td>
-<td style="text-align:left">0.9433</td>
-<td style="text-align:left">0.7485   </td>
+<td>事件B</td>
+<td>A and B ($k_{11}$)</td>
+<td>!A and B($k_{12}$)</td>
+</tr>
+<tr>
+<td>除事件B外的事件</td>
+<td>A and !B($k_{21}$)</td>
+<td>!A and !B($k_{22}$)</td>
 </tr>
 </tbody>
 </table>
 </div>
-<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
-<li>既考虑用户和物品向量的连接，又兼顾二者的交互，模型学习能力更强</li>
-<li>灵活性，DNN较于传统算法的优势，就是非常方便学习异构数据，这里可以很方便将物品和用户的id Embedding替换为用户和物品属性特征进行学习</li>
-</ul>
-<p>参考</p>
-<ul>
-<li>Neural Collaborative Filtering</li>
+<h3 id="计算公式"><a href="#计算公式" class="headerlink" title="计算公式"></a><strong>计算公式</strong></h3><script type="math/tex; mode=display">LLR = 2 sum(k) (H(k) - H(rowSums(k)) - H(colSums(k)))</script><p>其中$H(k)=-\sum \frac{k<em>{ij}}{sum(k)}log\frac{k</em>{ij}}{sum(k)}$</p>
+<h3 id="mahout中的计算方式"><a href="#mahout中的计算方式" class="headerlink" title="mahout中的计算方式"></a><strong>mahout中的计算方式</strong></h3><p>mahout中用相对简洁的方式进行了实现，如下所示，注意这里的entropy并不是真正意义上的entropy。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">entropy</span></span>(a: <span class="type">Long</span>, b: <span class="type">Long</span>): <span class="type">Double</span> = &#123;</div><div class="line">    xLogX(a + b) - xLogX(a) - xLogX(b)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">entropy</span></span>(a: <span class="type">Long</span>, b: <span class="type">Long</span>, c: <span class="type">Long</span>, d: <span class="type">Long</span>): <span class="type">Double</span> = &#123;</div><div class="line">    xLogX(a + b + c + d) - xLogX(a) - xLogX(b) - xLogX(c) - xLogX(d)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<script type="math/tex; mode=display">
+rowEntropy=entropy(k11, k12) + entropy(k21, k22) \\
+columnEntropy = entropy(k11, k21) + entropy(k12, k22)\\
+matrixEntropy = entropy(k11, k12, k21, k22)\\
+LLR=2 * (matrixEntropy - rowEntropy - columnEntropy)</script><p>注意到这其实是并集、交集的操作</p>
+<script type="math/tex; mode=display">
+    k11=A \cap B\\
+    k12= B - A \cap B\\
+    k21= A - A \cap B\\
+    k22=all\_event\_num-A-B + A \cap B</script><p>对于itemcf的场景下物品$a$和物品$b$的LLR计算，$A$就表示接触过物品$a$的用户数，$B$表示接触过物品$b$的用户数， $A\cap B$表示同时接触过物品$a$和物品$b$的用户数，$all_event_num$表示所有用户数。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a href="http://tdunning.blogspot.com/2008/03/surprise-and-coincidence.html" target="_blank" rel="noopener">http://tdunning.blogspot.com/2008/03/surprise-and-coincidence.html</a> </li>
 </ul>
 
       
@@ -421,8 +419,8 @@ r_{ui}=p_{u}^Tq_{i}=\sum_{k=1}^{K}p_{uk}q_{ik}</script><p>可以认为MF是基�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/07/llr/" rel="next" title="log-likelihood ratio">
-                <i class="fa fa-chevron-left"></i> log-likelihood ratio
+              <a href="/2018/04/03/spark_als/" rel="next" title="spark ALS原理解析">
+                <i class="fa fa-chevron-left"></i> spark ALS原理解析
               </a>
             
           </div>
@@ -430,6 +428,10 @@ r_{ui}=p_{u}^Tq_{i}=\sum_{k=1}^{K}p_{uk}q_{ik}</script><p>可以认为MF是基�
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/30/neural/" rel="prev" title="Neural Collaborative Filtering">
+                Neural Collaborative Filtering <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -554,7 +556,7 @@ r_{ui}=p_{u}^Tq_{i}=\sum_{k=1}^{K}p_{uk}q_{ik}</script><p>可以认为MF是基�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#传统MF的不足"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4F20;&#x7EDF;MF&#x7684;&#x4E0D;&#x8DB3;" class="headerlink" title="&#x4F20;&#x7EDF;MF&#x7684;&#x4E0D;&#x8DB3;"></a>&#x4F20;&#x7EDF;MF&#x7684;&#x4E0D;&#x8DB3;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NCF框架"><span class="nav-number">2.</span> <span class="nav-text"><a href="#NCF&#x6846;&#x67B6;" class="headerlink" title="NCF&#x6846;&#x67B6;"></a>NCF&#x6846;&#x67B6;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x4EE3;&#x7801;&#x5B9E;&#x73B0;" class="headerlink" title="&#x4EE3;&#x7801;&#x5B9E;&#x73B0;"></a>&#x4EE3;&#x7801;&#x5B9E;&#x73B0;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优点"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x4F18;&#x70B9;" class="headerlink" title="&#x4F18;&#x70B9;"></a>&#x4F18;&#x70B9;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#事件A与事件B间的关系"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x4E8B;&#x4EF6;A&#x4E0E;&#x4E8B;&#x4EF6;B&#x95F4;&#x7684;&#x5173;&#x7CFB;" class="headerlink" title="&#x4E8B;&#x4EF6;A&#x4E0E;&#x4E8B;&#x4EF6;B&#x95F4;&#x7684;&#x5173;&#x7CFB;"></a><strong>&#x4E8B;&#x4EF6;A&#x4E0E;&#x4E8B;&#x4EF6;B&#x95F4;&#x7684;&#x5173;&#x7CFB;</strong></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算公式"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x8BA1;&#x7B97;&#x516C;&#x5F0F;" class="headerlink" title="&#x8BA1;&#x7B97;&#x516C;&#x5F0F;"></a><strong>&#x8BA1;&#x7B97;&#x516C;&#x5F0F;</strong></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mahout中的计算方式"><span class="nav-number">3.</span> <span class="nav-text"><a href="#mahout&#x4E2D;&#x7684;&#x8BA1;&#x7B97;&#x65B9;&#x5F0F;" class="headerlink" title="mahout&#x4E2D;&#x7684;&#x8BA1;&#x7B97;&#x65B9;&#x5F0F;"></a><strong>mahout&#x4E2D;&#x7684;&#x8BA1;&#x7B97;&#x65B9;&#x5F0F;</strong></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</span></a></li></ol></div>
             
 
           </div>
