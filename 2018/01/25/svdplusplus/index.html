@@ -94,17 +94,17 @@
 
 
 
-<meta name="description" content="tensorflow word2vec的一些看法 emmmmmmm">
+<meta name="description" content="SVD++算法总结和实现">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tensorflow word2vec的一些看法">
-<meta property="og:url" content="http://yoursite.com/2017/11/27/tf_word2vec_op/index.html">
+<meta property="og:title" content="SVD++总结">
+<meta property="og:url" content="http://yoursite.com/2018/01/25/svdplusplus/index.html">
 <meta property="og:site_name" content="lxmly">
-<meta property="og:description" content="tensorflow word2vec的一些看法 emmmmmmm">
+<meta property="og:description" content="SVD++算法总结和实现">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-27T03:41:17.000Z">
+<meta property="og:updated_time" content="2018-12-27T06:39:49.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tensorflow word2vec的一些看法">
-<meta name="twitter:description" content="tensorflow word2vec的一些看法 emmmmmmm">
+<meta name="twitter:title" content="SVD++总结">
+<meta name="twitter:description" content="SVD++算法总结和实现">
 
 
 
@@ -133,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/11/27/tf_word2vec_op/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/25/svdplusplus/"/>
 
 
 
 
 
-  <title>tensorflow word2vec的一些看法 | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>SVD++总结 | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/27/tf_word2vec_op/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/25/svdplusplus/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -279,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">tensorflow word2vec的一些看法</h1>
+          <h1 class="post-title" itemprop="name headline">SVD++总结</h1>
         
 
         <div class="post-meta">
@@ -291,8 +291,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-27T18:12:07+08:00">
-                2017-11-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-25T18:00:05+08:00">
+                2018-01-25
               </time>
             
 
@@ -338,7 +338,7 @@
 
           
               <div class="post-description">
-                  tensorflow word2vec的一些看法 emmmmmmm
+                  SVD++算法总结和实现
               </div>
           
 
@@ -355,16 +355,43 @@
       
 
       
-        <p>许多优秀算法有一个特点:简单高效，word2vec正属于此类。简单的一个hidden layer，外加高效的negative sample，就能取得很不错的embedding效果。</p>
-<p>当然最靠谱的算法实现就是word2vec作者给出的源码，在实际应用中，不论是词embedding或者行为序列embedding，获得的效果都不错。今天谈论一下tensorflow word2vec的使用感受。 </p>
-<p>个人认为在算法应用中，最重要的是数据的收集，预处理和特征工程。没有正确可靠的数据，再好的算法也是巧妇难为无米之炊，如果只是单纯走通算法，在实际落地中，意义很小。一个算法如果线上表现不好，一方面是参数调整，更多的是要考虑数据处理是否有问题。<br>    word2vec用tensorflow来实现，代码很简洁，负采样也有现成实现nce_loss。但我最感兴趣的是数据处理的方式，官方给出的demo是基于skip-gram + negative sample，材料中对数据处理也没有详述，在实际应用中，有下面几点感受：</p>
-<ul>
-<li>设置vocabulary_size这个参数不合适，word2vec的c源码是设置了min_count，这样的好处是只保留频繁的单词，因为频繁，所以训练才会充分，那些频率低的单词的训练结果置信度很低，会降低整体embedding的可靠程度。这里设置vocabulary_size就不合理了，虽然按照频次倒排，但无法排除频率低的单词。</li>
-<li>generate_batch的实现有点别扭，比如global data_index，让代码显得很松散，还有collections.deque的使用，让代码读起来不清晰。</li>
-<li>num_steps参数不合适，在训练过程中，需要打印中间结果信息，方便检验运行是否正确。用num_steps来衡量训练迭代充分与否不恰当，这和vocabulary_size一个道理，num_steps设置多少才算合理呢？在word2vec的c源码是设置了epoch这个参数，使得可以一轮一轮地用数据训练模型，简单明了。</li>
-</ul>
-<p>在实际应用中，我也对上面几点进行了修改，贴合原word2vec的数据处理方式，线上效果不错。tensorflow-word2vec-demo有这样的不足，觉得是因为word2vec的离线效果不好衡量，一般都是训练结束，用tsne可视化一下，看起来很炫就结束了。而原word2vec的c实现是经过了工业界检验的，里面有很多小trick，这些都是线上迭代的结晶，看起来不显眼，却是不可或缺，许多trick的堆叠引起质变，pure的算法实现与此相比在线上的表现差距巨大。</p>
-<p>此外，在实际线上应用的感受是，skip-gram模型是优于cbow模型的。因为本身是做推荐算法的，个人觉得word2vec也是一种协同思想，最后embedding的结果是单词间共现关系的体现。在cbow模型中，$mean(context)\rightarrow target$这会丢失许多信息，使得训练并不充分。而cbow对于语言模型，也挺奇怪，上下文的语义就是平均吗。。有点粗鲁。RNN的LSTM就设立了各种gate来学习context，很精巧。</p>
+        <p>&emsp;&emsp;协同过滤(collaborative filtering)是推荐系统的常用方法，一个重要的优点是CF是领域无关，不涉及领域知识就可以完成模型的训练。协同过滤的两个主要领域是邻居方法（neighborhood methods, 如userKNN、 itemKNN、 slopOne等）和隐式因子模型(latent factor models， 也就是矩阵分解模型（matrix factorization），如SVD、SVD++等)，本文是对SVD++算法的总结。</p>
+<h2 id="基础矩阵分解模型"><a href="#基础矩阵分解模型" class="headerlink" title="基础矩阵分解模型"></a><strong>基础矩阵分解模型</strong></h2><p>&emsp;&emsp;矩阵分解模型是将用户和物品映射到 $f$ 维的隐式因子空间（latent factor space），每个用户关联了一个向量$ p<em>{u}$，每个物品关联一个向量 $q</em>{i}$，向量因子隐含了兴趣因子。在该空间里，用户对物品的评分化为向量点积，如下所示。</p>
+<script type="math/tex; mode=display">p_{u}=\begin{bmatrix}
+        0.3 \\
+        0.2 \\
+        \vdots \\
+        0.5 \\
+        \end{bmatrix} \phantom{20}    
+        q_{i}=\begin{bmatrix}
+        0.2 \\
+        0.1 \\
+        \vdots \\
+        0.3 \\
+        \end{bmatrix} \phantom{20}    
+        r_{ui}=p_{u}^Tq_{i}=q_{i}^Tp_{u}</script><script type="math/tex; mode=display">\begin{bmatrix}
+        p_{1}^T \\
+        p_{2}^T \\
+        \vdots \\
+        p_{m}^T \\
+        \end{bmatrix} *
+        \begin{bmatrix} 
+        q_{1} & q_{2} & \cdots   q_{n}  \\
+        \end{bmatrix}=\begin{bmatrix}
+        r_{11}  & r_{12} & \cdots  & r_{1i}\\
+        r_{21} & r_{22} & \cdots  & r_{2i}\\
+        \vdots & \vdots & \ddots  & \vdots\\
+        r_{m1} & r_{m2} & \cdots  & r_{mi}\\
+        \end{bmatrix}</script><p>&emsp;&emsp;该模型最关联的是奇异值分解(SVD)，但传统的SVD却不适用于模型的训练，因为用户-物品矩阵往往是极度稀疏的。所以这里只使用已有的评分数据，并通过正则模型防止过拟合。为了训练因子向量，基于已知评分数据集极小化正则均方误差：</p>
+<script type="math/tex; mode=display">\min_{q^*, p^*} \sum_{(u,i)\in K}  (r_{ui}-q_i^T*p_u)^2 + \lambda(||q_i||^2 +||p_u||^2)</script><p>这里，$K$表示所有的有评分的$(u,i)$对，$\lambda$表示正则化系数。极小化上式的方法有两种：随机梯度下降(SGT)和交替最小二乘(ALS)，这里不再详述。</p>
+<h2 id="偏见"><a href="#偏见" class="headerlink" title="偏见"></a><strong>偏见</strong></h2><p>&emsp;&emsp;矩阵分解的一个优点是它可以很灵活地加入各种影响评分的因素，这里我们引入‘偏见’因素。从评分数据中显示出，相比于其他用户，有些用户给分就是偏高或偏。相比于其他物品，有些物品就是能得到偏高的评分。<br>因此，用 $q<em>{i}^Tp</em>{u}$ 来定义完整评分是有缺陷的，我们认为评分=兴趣+偏见。偏见公式、新评分公式和学习公式如下：</p>
+<script type="math/tex; mode=display">b_{ui} = \mu + b_i + b _u\\
+r_{ui} = \mu + b_i + b _u+q_{i}^Tp_{u}\\
+\min_{q^*, p^*} \sum_{(u,i)\in K}  (r_{ui}-b_i - b _u-q_i^T*p_u)^2 + \lambda(||q_i||^2 +||p_u||^2+b_u^2+bi^2 )</script><p>这里，$b_i$表示物品偏见，$b_u$表示用户偏见， $\mu$表示全局均值。至此，SVD矩阵分解算法总结完毕。</p>
+<h2 id="隐式数据-implicit-data"><a href="#隐式数据-implicit-data" class="headerlink" title="隐式数据 (implicit data)"></a><strong>隐式数据</strong> (implicit data)</h2><p>&emsp;&emsp;这次加入的因素是隐式数据表达的物品兴趣偏好。我们称呼用户对物品评分这种类型的数据为显式数据(explicit data)。而用户的行为数据，如浏览电影详情页，观看电影等，我们称之为隐式数据。隐式数据反应了用户的兴趣偏好，即隐式反馈。而在现实的推荐系统中，这类数据才是主体数据。于是现在评分变为显示兴趣+偏见+隐式反馈，用户兴趣=显式兴趣+隐式反馈，新的评分公式如下：</p>
+<script type="math/tex; mode=display">r_{ui} = \mu + b_i + b _u+q_{i}^T(p_{u} + |N(u)|^{-\frac{1}{2}}\sum_{j\in N(u)}y_j)</script><p>在这里，$N(u)$表示用户u的行为物品集，$y_j$表示物品j所表达的隐式反馈。这就是所谓的SVD++,它在SVD的基础上，加入了隐式反馈因素，更细致地表达了用户兴趣。<br>&emsp;&emsp;这里隐式反馈的归一化项为什么是$ |N(u)|^{-\frac{1}{2}}$而不是$|N(u)|$，论文里没有提到。我猜想是当用户发生越多行为的时候，他的隐式反馈越准确，相应其权重应提升，$ |N(u)|^{-\frac{1}{2}}$满足了这种设定。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a><strong>实现</strong></h2><p>基于python实现了svd++，源码地址：<a href="https://github.com/lxmly/recsyspy" target="_blank" rel="noopener">https://github.com/lxmly/recsyspy</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h2><p><a href="http://www.cs.rochester.edu/twiki/pub/Main/HarpSeminar/" target="_blank" rel="noopener">Factorization meets the neighborhood: a multifaceted collaborative filtering model</a><br><a href="https://datajobs.com/data-science-repo/Recommender-Systems-%5BNetflix%5D.pdf" target="_blank" rel="noopener">Matrix factorization techniques for recommender systems</a></p>
 
       
     </div>
@@ -389,8 +416,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/27/breeze/" rel="next" title="Breeze小结">
-                <i class="fa fa-chevron-left"></i> Breeze小结
+              <a href="/2017/11/27/tf_word2vec_op/" rel="next" title="tensorflow word2vec的一些看法">
+                <i class="fa fa-chevron-left"></i> tensorflow word2vec的一些看法
               </a>
             
           </div>
@@ -399,8 +426,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/01/25/svdplusplus/" rel="prev" title="SVD++总结">
-                SVD++总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/09/30/neural/" rel="prev" title="Neural Collaborative Filtering">
+                Neural Collaborative Filtering <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -453,8 +480,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/profile.jpeg"
@@ -507,6 +543,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础矩阵分解模型"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x57FA;&#x7840;&#x77E9;&#x9635;&#x5206;&#x89E3;&#x6A21;&#x578B;" class="headerlink" title="&#x57FA;&#x7840;&#x77E9;&#x9635;&#x5206;&#x89E3;&#x6A21;&#x578B;"></a><strong>&#x57FA;&#x7840;&#x77E9;&#x9635;&#x5206;&#x89E3;&#x6A21;&#x578B;</strong></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#偏见"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x504F;&#x89C1;" class="headerlink" title="&#x504F;&#x89C1;"></a><strong>&#x504F;&#x89C1;</strong></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#隐式数据-implicit-data"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x9690;&#x5F0F;&#x6570;&#x636E;-implicit-data" class="headerlink" title="&#x9690;&#x5F0F;&#x6570;&#x636E; (implicit data)"></a><strong>&#x9690;&#x5F0F;&#x6570;&#x636E;</strong> (implicit data)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x5B9E;&#x73B0;" class="headerlink" title="&#x5B9E;&#x73B0;"></a><strong>&#x5B9E;&#x73B0;</strong></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a><strong>&#x53C2;&#x8003;</strong></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
