@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="SVD++ spark实现，基于图">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spark SVD++源码解析">
+<meta property="og:url" content="http://yoursite.com/2018/06/07/spark_svd/index.html">
+<meta property="og:site_name" content="lxmly">
+<meta property="og:description" content="SVD++ spark实现，基于图">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://spark.apache.org/docs/latest/img/triplet.png">
+<meta property="og:updated_time" content="2018-12-28T03:10:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="spark SVD++源码解析">
+<meta name="twitter:description" content="SVD++ spark实现，基于图">
+<meta name="twitter:image" content="https://spark.apache.org/docs/latest/img/triplet.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/07/spark_svd/"/>
+
+
+
+
+
+  <title>spark SVD++源码解析 | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">lxmly</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/07/spark_svd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lxmly">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">spark SVD++源码解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-07T23:12:21+08:00">
+                2018-06-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  SVD++ spark实现，基于图
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>&emsp;&emsp;上一篇对[SVD++算法][4]的原理进行了总结，本文是对Spark SVDPlusPlus源码的分析总结。源码位置在Spark源码包的org.apache.spark.graphx.lib.SVDPlusPlus，需要引入spark-graphx相关包。</p>
+<h2 id="迭代公式推导"><a href="#迭代公式推导" class="headerlink" title="迭代公式推导"></a><strong>迭代公式推导</strong></h2><p>&emsp;&emsp;相比于SVD和implicit ALS算法，SVD++的python单机版算法效率明显低很多，因为多了很重的一个子项$|N(u)|^{-\frac{1}{2}}\sum_{j\in N(u)}y_j$，需要汇总用户接触物品集所表达的隐式反馈$y_j$。模型的训练目标如下：</p>
+<script type="math/tex; mode=display">\min_{q_*, q_*,b_*,y_*} \sum_{(u,i)\in K}  (r_{ui}-\mu - b_i - b _u -q_{i}^T(p_{u} + |N(u)|^{-\frac{1}{2}}\sum_{j\in N(u)}y_j))^2 + \lambda_1(||q_i||^2 +||p_u||^2 + \sum_{j\in N(u)}||y_j||^2)+\lambda_2(b_u^2+bi^2 )</script><p>下面是Spark SVDPlusPlus的配置类</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Conf</span>(<span class="params"></span></span></div><div class="line"><span class="class"><span class="params">      var rank: <span class="type">Int</span>,//因子向量维度</span></span></div><div class="line"><span class="class"><span class="params">      var maxIters: <span class="type">Int</span>,//最大迭代次数</span></span></div><div class="line"><span class="class"><span class="params">      var minVal: <span class="type">Double</span>,//评分下限</span></span></div><div class="line"><span class="class"><span class="params">      var maxVal: <span class="type">Double</span>,//评分上限</span></span></div><div class="line"><span class="class"><span class="params">      var gamma1: <span class="type">Double</span>,//b*梯度下降学习速率</span></span></div><div class="line"><span class="class"><span class="params">      var gamma2: <span class="type">Double</span>,//q,p,y梯度下降学习速率</span></span></div><div class="line"><span class="class"><span class="params">      var gamma6: <span class="type">Double</span>,//b*正则系数</span></span></div><div class="line"><span class="class"><span class="params">      var gamma7: <span class="type">Double</span></span>)<span class="title">//q</span>,<span class="title">p</span>,<span class="title">y正则系数</span></span></div><div class="line"><span class="class">    <span class="keyword">extends</span> <span class="title">Serializable</span></span></div></pre></td></tr></table></figure>
+<p>基于梯度下降（为了并行，注意这里是批量梯度下降，不是随机梯度下降）方法，对目标学习公式求偏导，可得到如下迭代公式(为了方便源码表达，这里系数名称和源码保持一致):</p>
+<script type="math/tex; mode=display">b_u\leftarrow b_u + \sum_{i\in N(u)}\gamma_1(e_{ui}-\gamma_6*b_u)\\
+ b_i\leftarrow b_i + \sum_{u\in N(i)}\gamma_1(e_{ui}-\gamma_6*b_i)\\
+ q_i\leftarrow q_i + \sum_{u\in N(i)}\gamma_2(e_{ui}(p_u+|N(u)|^{-\frac{1}{2}}\sum_{j\in N(u)}y_j)-\gamma_7*q_i)\\
+ p_u\leftarrow p_u+\sum_{i\in N(u)}\gamma_2(e_{ui}*q_i - \gamma_7*p_u)\\
+ y_i\leftarrow y_i+\sum_{u\in N(i)}\gamma_2(e_{ui}*|N(u)|^{-\frac{1}{2}}*q_i-\gamma_7*y_i)</script><h2 id="Spark-Graphx"><a href="#Spark-Graphx" class="headerlink" title="Spark Graphx"></a><strong>Spark Graphx</strong></h2><p>&emsp;&emsp;因为Spark SVD++是基于Spark Graphx实现的，所以先对Graphx做简明总结。Graphx是用于图并行计算的spark组件，它基于RDD引入了图抽象：每个顶点和边都绑定属性的多重图（multigraph，两个顶点间有多条边）。Graphx提供了图操作和图算法集合。图的基本单元是点（Vertix）和边（Edge）组成的Triplets，下图中的蓝橙颜色块表示属性。</p>
+<p><img src="https://spark.apache.org/docs/latest/img/triplet.png" alt="这里写图片描述"><br>&emsp;&emsp;对于用户的评分数据，A就表示用户，B表示物品，边上的橙色块表示评分，蓝色快储存了我们需要迭代了p、q、y、b*，会在之后详述。</p>
+<p>Spark SVD++用到的图操作如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>aggregateMessages</td>
+<td>Graphx的核心聚合操作，主要有两步操作<br>1.sendMsg：将edge中的属性发送到顶点<br>2.mergeMsg：在顶点处进行merge操作<br>这里我们可以联想到将物品表达的隐式反馈汇总到用户顶点</td>
+</tr>
+<tr>
+<td>outerJoinVertices</td>
+<td>是aggregateMessages的小伙伴<br>聚合操作会返回新的Vertices集合（这也是scala函数式编程的特点）<br>基于VertixId与原来的Triplets集合进行join，更新对应顶点里的属性</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="核心源码分析"><a href="#核心源码分析" class="headerlink" title="核心源码分析"></a><strong>核心源码分析</strong></h2><p>下面分析关键代码片段，主要关注变量迭代，入口代码如下，Edge保存了Double类型的评分数据，srcVertex是用户，dstVertex是物品</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">run</span></span>(edges: <span class="type">RDD</span>[<span class="type">Edge</span>[<span class="type">Double</span>]], conf: <span class="type">Conf</span>)</div></pre></td></tr></table></figure>
+<h3 id="顶点属性初始化和全局均值-u-计算"><a href="#顶点属性初始化和全局均值-u-计算" class="headerlink" title="顶点属性初始化和全局均值$u$计算"></a><strong>顶点属性初始化和全局均值$u$计算</strong></h3><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 生成默认的顶点属性 包含四个属性（v1，v2，0，0），v1、v2表示向量</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">defaultF</span></span>(rank: <span class="type">Int</span>): (<span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Double</span>, <span class="type">Double</span>) = &#123;</div><div class="line">      <span class="comment">// <span class="doctag">TODO:</span> use a fixed random seed</span></div><div class="line">      <span class="keyword">val</span> v1 = <span class="type">Array</span>.fill(rank)(<span class="type">Random</span>.nextDouble())</div><div class="line">      <span class="keyword">val</span> v2 = <span class="type">Array</span>.fill(rank)(<span class="type">Random</span>.nextDouble())</div><div class="line">      (v1, v2, <span class="number">0.0</span>, <span class="number">0.0</span>)</div><div class="line">    &#125;</div><div class="line"><span class="comment">//计算全局均值u    </span></div><div class="line"><span class="keyword">val</span> (rs, rc) = edges.map(e =&gt; (e.attr, <span class="number">1</span>L)).reduce((a, b) =&gt; (a._1 + b._1, a._2 + b._2))</div><div class="line"><span class="keyword">val</span> u = rs / rc    </div><div class="line"><span class="comment">//初始化图g    </span></div><div class="line"><span class="keyword">var</span> g = <span class="type">Graph</span>.fromEdges(edges, defaultF(conf.rank)).cache()</div></pre></td></tr></table></figure>
+<p>&emsp;&emsp;这里为什么顶点属性是(v1, v2, 0.0, 0.0)=（Array,Array,Double,Double）这个模样，源代码没有注释，阅读了后面的代码细节才能推断出来，觉得这是源码做的不好的地方，虽然整体处理流程设计的很精巧，可读性却一般般，不过跟猜谜语一样，也挺有趣。<br>我们的目标是迭代$p_u、q_i、y_i、b_i、bu$，其中$p_u，b_i$属于用户属性，$q_i、y_i、b_i$属于物品属性。看完整个代码，位置分布谜底如下，空缺的位置是存放一些中间值。</p>
+<ul>
+<li>用户属性 <script type="math/tex">(p_u，\_，b_u，\_)</script></li>
+<li>物品属性 <script type="math/tex">(q_i, y_i，b_i，\_)</script></li>
+</ul>
+<p>下面以user_property表示用户顶点属性，item_property表示物品顶点属性，下标从0开始。随着源码不断更新空缺位置，此时</p>
+<ul>
+<li><script type="math/tex; mode=display">user\_property=(\_，\_，\_，\_)</script></li>
+<li><script type="math/tex; mode=display">item\_property=(\_，\_，\_，\_)</script></li>
+</ul>
+<h3 id="bias和norm初始化-b-u-b-i-和-N-u-frac-1-2"><a href="#bias和norm初始化-b-u-b-i-和-N-u-frac-1-2" class="headerlink" title="bias和norm初始化($b_u,b_i$和$|N(u)|^{-\frac{1}{2}}$)"></a><strong>bias和norm初始化($b_u,b_i$和$|N(u)|^{-\frac{1}{2}}$)</strong></h3><p>计算每个用户和物品的rating<em>count($rc</em><em>$)、rating<em>sum $rs</em></em>$ (*号表示不区分用户和物品)</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> t0 = g.aggregateMessages[(<span class="type">Long</span>, <span class="type">Double</span>)](</div><div class="line">  ctx =&gt; &#123; ctx.sendToSrc((<span class="number">1</span>L, ctx.attr)); ctx.sendToDst((<span class="number">1</span>L, ctx.attr)) &#125;,</div><div class="line">  (g1, g2) =&gt; (g1._1 + g2._1, g1._2 + g2._2))</div></pre></td></tr></table></figure>
+<p>初始化 <script type="math/tex">b_*=\frac{rs_*}{rc_*}-u，norm=|N(u)|^{-\frac{1}{2}}</script></p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> gJoinT0 = g.outerJoinVertices(t0) &#123;</div><div class="line">  (vid: <span class="type">VertexId</span>, vd: (<span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Double</span>, <span class="type">Double</span>),</div><div class="line">   msg: <span class="type">Option</span>[(<span class="type">Long</span>, <span class="type">Double</span>)]) =&gt;</div><div class="line">    (vd._1, vd._2, msg.get._2 / msg.get._1 - u, <span class="number">1.0</span> / scala.math.sqrt(msg.get._1))</div><div class="line">&#125;.cache()</div><div class="line"><span class="comment">//触发spark action操作，便于缓存</span></div><div class="line">materialize(gJoinT0)</div><div class="line">g.unpersist()</div><div class="line">g = gJoinT0</div></pre></td></tr></table></figure>
+<p>此时,</p>
+<script type="math/tex; mode=display">user\_property=(\_，\_，b_u，|N(u)|^{-\frac{1}{2}})</script><script type="math/tex; mode=display">item\_property=(\_，\_，b_i，|N(i)|^{-\frac{1}{2}})</script><p>这里，物品属性中的$|N(i)|^{-\frac{1}{2}}$并没有什么作用，作者应该是为了代码简洁，对用户属性和物品属性使用了同样的处理作用，出现了这个副产物。至此，准备工作全部ready。</p>
+<h3 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a><strong>迭代</strong></h3><h4 id="阶段1-计算-p-u-N-u-frac-1-2-sum-j-in-N-u-y-j"><a href="#阶段1-计算-p-u-N-u-frac-1-2-sum-j-in-N-u-y-j" class="headerlink" title="阶段1 计算 p_u +|N(u)|^{-\frac{1}{2}}\sum_{j\in N(u)}y_j"></a>阶段1 计算 <script type="math/tex">p_u +|N(u)|^{-\frac{1}{2}}\sum_{j\in N(u)}y_j</script></h4><p>这是为下一步计算预测评分pred，进而计算误差和因子更新迭代做准备。根据公式，需要把用户$u$看过的物品所表达的隐式反馈聚合到用户端（这一点太符合spark图计算了）。</p>
+<h5 id="1-1-聚合计算-sum-j-in-N-u-y-j"><a href="#1-1-聚合计算-sum-j-in-N-u-y-j" class="headerlink" title="1.1 聚合计算$\sum_{j\in N(u)}y_j$"></a><strong>1.1 聚合计算$\sum_{j\in N(u)}y_j$</strong></h5><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> t1 = g.aggregateMessages[<span class="type">Array</span>[<span class="type">Double</span>]](</div><div class="line">  <span class="comment">//注意聚合用到了物品属性第二个位置的值，可以推断出该位置是隐式反馈yi</span></div><div class="line">  ctx =&gt; ctx.sendToSrc(ctx.dstAttr._2),</div><div class="line">  (g1, g2) =&gt; &#123;</div><div class="line">    <span class="keyword">val</span> out = g1.clone()</div><div class="line">    <span class="comment">//向量相加操作 g1 + g2，使用了blas daxpy api，out=out+g2</span></div><div class="line">    blas.daxpy(out.length, <span class="number">1.0</span>, g2, <span class="number">1</span>, out, <span class="number">1</span>)</div><div class="line">    <span class="comment">//和用户u关联的隐式反馈之和</span></div><div class="line">    out</div><div class="line">  &#125;)</div></pre></td></tr></table></figure>
+<h5 id="1-2-更新-user-property-1-N-u-frac-1-2-sum-j-in-N-u-y-j"><a href="#1-2-更新-user-property-1-N-u-frac-1-2-sum-j-in-N-u-y-j" class="headerlink" title="1.2 更新 $user_property[1]= |N(u)|^{-\frac{1}{2}}\sum_{j\in N(u)}y_j$"></a><strong>1.2 更新</strong> $user_property[1]= |N(u)|^{-\frac{1}{2}}\sum_{j\in N(u)}y_j$</h5><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> gJoinT1 = g.outerJoinVertices(t1) &#123;</div><div class="line">  (vid: <span class="type">VertexId</span>, vd: (<span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Double</span>, <span class="type">Double</span>),</div><div class="line">   msg: <span class="type">Option</span>[<span class="type">Array</span>[<span class="type">Double</span>]]) =&gt;</div><div class="line">    <span class="comment">//物品顶点接收不到，因为聚合信息只发送给了用户顶点</span></div><div class="line">    <span class="keyword">if</span> (msg.isDefined) &#123;</div><div class="line">      <span class="keyword">val</span> out = vd._1.clone()</div><div class="line">      blas.daxpy(out.length, vd._4, msg.get, <span class="number">1</span>, out, <span class="number">1</span>)</div><div class="line">      (vd._1, out, vd._3, vd._4)</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      vd</div><div class="line">    &#125;</div><div class="line">&#125;.cache()</div></pre></td></tr></table></figure>
+<p>此时</p>
+<script type="math/tex; mode=display">user\_property= (p_u，|N(u)|^{-\frac{1}{2}}\sum_{j\in N(u)}y_j，b_u，|N(u)|^{-\frac{1}{2}})</script><script type="math/tex; mode=display">item\_property = (q_i，y_i，b_i，|N(i)|^{-\frac{1}{2}})</script><h4 id="阶段2-更新-p-u-，-q-i-，-y-i"><a href="#阶段2-更新-p-u-，-q-i-，-y-i" class="headerlink" title="阶段2 更新$p_u$，$q_i$，$y_i$"></a><strong>阶段2 更新$p_u$，$q_i$，$y_i$</strong></h4><h5 id="2-1-梯度求解"><a href="#2-1-梯度求解" class="headerlink" title="2.1 梯度求解"></a><strong>2.1 梯度求解</strong></h5><p>ctx.sendToSrc ($\Delta p_u,\Delta y_i$， $\Delta b_u$)<br>ctx.sendToDst ($\Delta q_i,\Delta y_i$， $\Delta b_i$) </p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sendMsgTrainF</span></span>(conf: <span class="type">Conf</span>, u: <span class="type">Double</span>)</div><div class="line">    (ctx: <span class="type">EdgeContext</span>[</div><div class="line">      (<span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Double</span>, <span class="type">Double</span>),</div><div class="line">      <span class="type">Double</span>,</div><div class="line">      (<span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Double</span>)]) &#123;</div><div class="line">  <span class="keyword">val</span> (usr, itm) = (ctx.srcAttr, ctx.dstAttr)</div><div class="line">  <span class="comment">//这里说明了pu，qi的位置</span></div><div class="line">  <span class="keyword">val</span> (p, q) = (usr._1, itm._1)</div><div class="line">  <span class="keyword">val</span> rank = p.length</div><div class="line">  <span class="comment">//计算误差</span></div><div class="line">  <span class="keyword">var</span> pred = u + usr._3 + itm._3 + blas.ddot(rank, q, <span class="number">1</span>, usr._2, <span class="number">1</span>)</div><div class="line">  pred = math.max(pred, conf.minVal)</div><div class="line">  pred = math.min(pred, conf.maxVal)</div><div class="line">  <span class="keyword">val</span> err = ctx.attr - pred</div><div class="line">  <span class="comment">// updateP = (err * q - conf.gamma7 * p) * conf.gamma2</span></div><div class="line">  <span class="keyword">val</span> updateP = q.clone()</div><div class="line">  blas.dscal(rank, err * conf.gamma2, updateP, <span class="number">1</span>)</div><div class="line">  blas.daxpy(rank, -conf.gamma7 * conf.gamma2, p, <span class="number">1</span>, updateP, <span class="number">1</span>)</div><div class="line">  <span class="comment">// updateQ = (err * usr._2 - conf.gamma7 * q) * conf.gamma2</span></div><div class="line">  <span class="keyword">val</span> updateQ = usr._2.clone()</div><div class="line">  blas.dscal(rank, err * conf.gamma2, updateQ, <span class="number">1</span>)</div><div class="line">  blas.daxpy(rank, -conf.gamma7 * conf.gamma2, q, <span class="number">1</span>, updateQ, <span class="number">1</span>)</div><div class="line">  <span class="comment">// updateY = (err * usr._4 * q - conf.gamma7 * itm._2) * conf.gamma2</span></div><div class="line">  <span class="keyword">val</span> updateY = q.clone()</div><div class="line">  blas.dscal(rank, err * usr._4 * conf.gamma2, updateY, <span class="number">1</span>)</div><div class="line">  blas.daxpy(rank, -conf.gamma7 * conf.gamma2, itm._2, <span class="number">1</span>, updateY, <span class="number">1</span>)</div><div class="line">  ctx.sendToSrc((updateP, updateY, (err - conf.gamma6 * usr._3) * conf.gamma1))</div><div class="line">  ctx.sendToDst((updateQ, updateY, (err - conf.gamma6 * itm._3) * conf.gamma1))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="2-2-合并为-sum-Delta-p-sum-Delta-y-i，-sum-Delta-b"><a href="#2-2-合并为-sum-Delta-p-sum-Delta-y-i，-sum-Delta-b" class="headerlink" title="2.2 合并为 \sum_\Delta p_*,\sum_\Delta y_i， \sum_\Delta b_*"></a>2.2 合并为 <script type="math/tex">\sum_\Delta p_*,\sum_\Delta y_i， \sum_\Delta b_*</script></h5><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> t2 = g.aggregateMessages(</div><div class="line">  sendMsgTrainF(conf, u),</div><div class="line">  (g1: (<span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Double</span>), g2: (<span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Double</span>)) =&gt;</div><div class="line">  &#123;</div><div class="line">    <span class="keyword">val</span> out1 = g1._1.clone()</div><div class="line">    blas.daxpy(out1.length, <span class="number">1.0</span>, g2._1, <span class="number">1</span>, out1, <span class="number">1</span>)</div><div class="line">    <span class="keyword">val</span> out2 = g2._2.clone()</div><div class="line">    blas.daxpy(out2.length, <span class="number">1.0</span>, g2._2, <span class="number">1</span>, out2, <span class="number">1</span>)</div><div class="line">    (out1, out2, g1._3 + g2._3)</div><div class="line">  &#125;)</div></pre></td></tr></table></figure>
+<h5 id="2-3-更新-p-u，q-i，y-i"><a href="#2-3-更新-p-u，q-i，y-i" class="headerlink" title="2.3 更新 p_u，q_i，y_i"></a>2.3 更新 <script type="math/tex">p_u，q_i，y_i</script></h5><figure class="highlight scala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">val</span> gJoinT2 = g.outerJoinVertices(t2) &#123;</div><div class="line">  (vid: <span class="type">VertexId</span>,</div><div class="line">   vd: (<span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Double</span>, <span class="type">Double</span>),</div><div class="line">   msg: <span class="type">Option</span>[(<span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Array</span>[<span class="type">Double</span>], <span class="type">Double</span>)]) =&gt; &#123;</div><div class="line">    <span class="keyword">val</span> out1 = vd._1.clone()</div><div class="line">    blas.daxpy(out1.length, <span class="number">1.0</span>, msg.get._1, <span class="number">1</span>, out1, <span class="number">1</span>)</div><div class="line">    <span class="keyword">val</span> out2 = vd._2.clone()</div><div class="line">    blas.daxpy(out2.length, <span class="number">1.0</span>, msg.get._2, <span class="number">1</span>, out2, <span class="number">1</span>)</div><div class="line">    (out1, out2, vd._3 + msg.get._3, vd._4)</div><div class="line">  &#125;</div><div class="line">&#125;.cache()</div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h2><p>&emsp;&emsp;整个源码阅读下来，还是挺有收获的，理解了svd++的并行原理。spark svd++处理逻辑设计的很精巧，代码简洁高效，全篇代码也就200行左右，当然这也和spark、scala语言简洁有关。spark图模块的聚合操作非常契合svd++的迭代计算。唯一觉得有点不好的地方是代码可读性稍微不足，不过也是因为自己水平不足，读起来有点费劲。越精巧的代码就应该多点注释增强可读性，方便维护和迭代。<br>&emsp;&emsp;如果文中有哪里理解不对的地方，希望大家帮忙指正。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h2><p><a href="https://github.com/apache/spark/blob/master/graphx/src/main/scala/org/apache/spark/graphx/lib/SVDPlusPlus.scala" target="_blank" rel="noopener">spark svd++源码</a><br><a href="http://www.farseer.cn/2015/08/16/svd-implementation-in-graphx/" target="_blank" rel="noopener">spark svd++源码分析</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/09/xgboost/" rel="next" title="xgboost核心原理">
+                <i class="fa fa-chevron-left"></i> xgboost核心原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/30/neural/" rel="prev" title="Neural Collaborative Filtering">
+                Neural Collaborative Filtering <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/profile.jpeg"
+               alt="" />
+          <p class="site-author-name" itemprop="name"></p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#迭代公式推导"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x8FED;&#x4EE3;&#x516C;&#x5F0F;&#x63A8;&#x5BFC;" class="headerlink" title="&#x8FED;&#x4EE3;&#x516C;&#x5F0F;&#x63A8;&#x5BFC;"></a><strong>&#x8FED;&#x4EE3;&#x516C;&#x5F0F;&#x63A8;&#x5BFC;</strong></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-Graphx"><span class="nav-number">2.</span> <span class="nav-text"><a href="#Spark-Graphx" class="headerlink" title="Spark Graphx"></a><strong>Spark Graphx</strong></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核心源码分析"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x6838;&#x5FC3;&#x6E90;&#x7801;&#x5206;&#x6790;" class="headerlink" title="&#x6838;&#x5FC3;&#x6E90;&#x7801;&#x5206;&#x6790;"></a><strong>&#x6838;&#x5FC3;&#x6E90;&#x7801;&#x5206;&#x6790;</strong></span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#顶点属性初始化和全局均值-u-计算"><span class="nav-number">3.1.</span> <span class="nav-text"><a href="#&#x9876;&#x70B9;&#x5C5E;&#x6027;&#x521D;&#x59CB;&#x5316;&#x548C;&#x5168;&#x5C40;&#x5747;&#x503C;-u-&#x8BA1;&#x7B97;" class="headerlink" title="&#x9876;&#x70B9;&#x5C5E;&#x6027;&#x521D;&#x59CB;&#x5316;&#x548C;&#x5168;&#x5C40;&#x5747;&#x503C;$u$&#x8BA1;&#x7B97;"></a><strong>&#x9876;&#x70B9;&#x5C5E;&#x6027;&#x521D;&#x59CB;&#x5316;&#x548C;&#x5168;&#x5C40;&#x5747;&#x503C;$u$&#x8BA1;&#x7B97;</strong></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bias和norm初始化-b-u-b-i-和-N-u-frac-1-2"><span class="nav-number">3.2.</span> <span class="nav-text"><a href="#bias&#x548C;norm&#x521D;&#x59CB;&#x5316;-b-u-b-i-&#x548C;-N-u-frac-1-2" class="headerlink" title="bias&#x548C;norm&#x521D;&#x59CB;&#x5316;($b_u,b_i$&#x548C;$|N(u)|^{-\frac{1}{2}}$)"></a><strong>bias&#x548C;norm&#x521D;&#x59CB;&#x5316;($b_u,b_i$&#x548C;$|N(u)|^{-\frac{1}{2}}$)</strong></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#迭代"><span class="nav-number">3.3.</span> <span class="nav-text"><a href="#&#x8FED;&#x4EE3;" class="headerlink" title="&#x8FED;&#x4EE3;"></a><strong>&#x8FED;&#x4EE3;</strong></span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#阶段1-计算-p-u-N-u-frac-1-2-sum-j-in-N-u-y-j"><span class="nav-number">3.3.1.</span> <span class="nav-text"><a href="#&#x9636;&#x6BB5;1-&#x8BA1;&#x7B97;-p-u-N-u-frac-1-2-sum-j-in-N-u-y-j" class="headerlink" title="&#x9636;&#x6BB5;1 &#x8BA1;&#x7B97; p_u +|N(u)|^{-\frac{1}{2}}\sum_{j\in N(u)}y_j"></a>&#x9636;&#x6BB5;1 &#x8BA1;&#x7B97; <script type="math/tex">p_u +|N(u)|^{-\frac{1}{2}}\sum_{j\in N(u)}y_j</script></span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-聚合计算-sum-j-in-N-u-y-j"><span class="nav-number">3.3.1.1.</span> <span class="nav-text"><a href="#1-1-&#x805A;&#x5408;&#x8BA1;&#x7B97;-sum-j-in-N-u-y-j" class="headerlink" title="1.1 &#x805A;&#x5408;&#x8BA1;&#x7B97;$\sum_{j\in N(u)}y_j$"></a><strong>1.1 &#x805A;&#x5408;&#x8BA1;&#x7B97;$\sum_{j\in N(u)}y_j$</strong></span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-更新-user-property-1-N-u-frac-1-2-sum-j-in-N-u-y-j"><span class="nav-number">3.3.1.2.</span> <span class="nav-text"><a href="#1-2-&#x66F4;&#x65B0;-user-property-1-N-u-frac-1-2-sum-j-in-N-u-y-j" class="headerlink" title="1.2 &#x66F4;&#x65B0; $user_property[1]= |N(u)|^{-\frac{1}{2}}\sum_{j\in N(u)}y_j$"></a><strong>1.2 &#x66F4;&#x65B0;</strong> $user_property[1]= |N(u)|^{-\frac{1}{2}}\sum_{j\in N(u)}y_j$</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#阶段2-更新-p-u-，-q-i-，-y-i"><span class="nav-number">3.3.2.</span> <span class="nav-text"><a href="#&#x9636;&#x6BB5;2-&#x66F4;&#x65B0;-p-u-&#xFF0C;-q-i-&#xFF0C;-y-i" class="headerlink" title="&#x9636;&#x6BB5;2 &#x66F4;&#x65B0;$p_u$&#xFF0C;$q_i$&#xFF0C;$y_i$"></a><strong>&#x9636;&#x6BB5;2 &#x66F4;&#x65B0;$p_u$&#xFF0C;$q_i$&#xFF0C;$y_i$</strong></span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-梯度求解"><span class="nav-number">3.3.2.1.</span> <span class="nav-text"><a href="#2-1-&#x68AF;&#x5EA6;&#x6C42;&#x89E3;" class="headerlink" title="2.1 &#x68AF;&#x5EA6;&#x6C42;&#x89E3;"></a><strong>2.1 &#x68AF;&#x5EA6;&#x6C42;&#x89E3;</strong></span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-合并为-sum-Delta-p-sum-Delta-y-i，-sum-Delta-b"><span class="nav-number">3.3.2.2.</span> <span class="nav-text"><a href="#2-2-&#x5408;&#x5E76;&#x4E3A;-sum-Delta-p-sum-Delta-y-i&#xFF0C;-sum-Delta-b" class="headerlink" title="2.2 &#x5408;&#x5E76;&#x4E3A; \sum_\Delta p_*,\sum_\Delta y_i&#xFF0C; \sum_\Delta b_*"></a>2.2 &#x5408;&#x5E76;&#x4E3A; <script type="math/tex">\sum_\Delta p_*,\sum_\Delta y_i， \sum_\Delta b_*</script></span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-更新-p-u，q-i，y-i"><span class="nav-number">3.3.2.3.</span> <span class="nav-text"><a href="#2-3-&#x66F4;&#x65B0;-p-u&#xFF0C;q-i&#xFF0C;y-i" class="headerlink" title="2.3 &#x66F4;&#x65B0; p_u&#xFF0C;q_i&#xFF0C;y_i"></a>2.3 &#x66F4;&#x65B0; <script type="math/tex">p_u，q_i，y_i</script></span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a><strong>&#x603B;&#x7ED3;</strong></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a><strong>&#x53C2;&#x8003;</strong></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"enable":true,"per_page":false,"cdn":"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
