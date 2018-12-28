@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="Spark 温故知新">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark Guides">
+<meta property="og:url" content="http://yoursite.com/2017/06/07/spark_guide/index.html">
+<meta property="og:site_name" content="lxmly">
+<meta property="og:description" content="Spark 温故知新">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-28T05:53:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark Guides">
+<meta name="twitter:description" content="Spark 温故知新">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/07/spark_guide/"/>
+
+
+
+
+
+  <title>Spark Guides | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">lxmly</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/07/spark_guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lxmly">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spark Guides</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-07T23:11:25+08:00">
+                2017-06-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/spark/" itemprop="url" rel="index">
+                    <span itemprop="name">spark</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  Spark 温故知新
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文是对[Spark Guides]的要点总结，会持续更新。</p>
+<h3 id="Resilient-Distributed-Datasets-RDDs"><a href="#Resilient-Distributed-Datasets-RDDs" class="headerlink" title="Resilient Distributed Datasets (RDDs)"></a>Resilient Distributed Datasets (RDDs)</h3><p>可并行、容错的元素集合,建立RDDs的两种方式:</p>
+<ul>
+<li><p>在driver program中并行化已存在的数据集合<br>使用SparkContext的parallelize将一个scala seq转化为并行集合。该方法的一个重要参数是数据集的分区数（partitions number）。Spark会为每个partition起一个task。通常，每个CPU分配2-4 partitions。一般地，Spark会根据集群自动设置partitions数，当然你也可以手动设置（e.g. sc.parallelize(data, 10)）</p>
+</li>
+<li><p>读取外部数据集<br>Spark可以从来自于任何支持Hadoop的存储来源建立为分布式数据集，包括你的本地文件系统、HDFS、Cassandra、HBase等。输入格式支持text files, SequenceFiles, 和其他任何Hadoop InputFormat。   </p>
+<p>注意:  </p>
+<ul>
+<li>Spark所有文件输入方法支持目录、压缩文件和正则匹配</li>
+<li>Spark一般为文件每个block创建一个分区（HDFS默认128M）。注意partitions数不能小于blocks数</li>
+</ul>
+</li>
+</ul>
+<h3 id="RDD操作"><a href="#RDD操作" class="headerlink" title="RDD操作"></a>RDD操作</h3><p>RDDs支持两种类型的操作：</p>
+<ul>
+<li>transformations 转换<br>基于已有数据集建立新的数据集</li>
+<li>actions 动作<br>在数据集上执行计算后，返回给driver program一个值  </li>
+</ul>
+<p>注意，spark所有的transformations都是惰性（lazy）的，即它们并不立即计算结果。它们仅记忆应用到数据集上的transformations，直到一个要求返回结果的action执行时，才会开始计算，这种设计使得spark更高效。 </p>
+<p>默认的，transformed RDD在每次跑一个action时都会重新计算。但是，你可以使用persist (or cache) 方法把一个RDD持久化到内存中，在这种情况下，下次再访问该RDD时会非常快。当然，也支持硬盘持久化，或者在多个结点复制。</p>
+<h3 id="理解闭包（closures）"><a href="#理解闭包（closures）" class="headerlink" title="理解闭包（closures）"></a>理解闭包（closures）</h3><p>为了执行任务，Spark会把RDD操作的过程拆分成tasks，每一个任务被一个executor执行。在执行前，Spark会计算任务的闭包。closure指的是那些必须对executor可见的变量和方法，以用来执行在RDD上的计算。closure会被序列化然后送到每个executor。  </p>
+<p>为了确保well-defined的行为，应当使用Accumulator。Accumulators是当execution被拆分到集群工作节点间时，特意用来提供安全更新变量的机制。</p>
+<h3 id="Transformations"><a href="#Transformations" class="headerlink" title="Transformations"></a>Transformations</h3><ul>
+<li>map(func)    </li>
+<li>filter(func)    </li>
+<li>flatMap(func)    </li>
+<li>mapPartitions(func)    </li>
+<li>mapPartitionsWithIndex(func)    </li>
+<li>sample(withReplacement, fraction, seed)</li>
+<li>union(otherDataset)    </li>
+<li>intersection(otherDataset)    </li>
+<li>distinct([numTasks]))    </li>
+<li>groupByKey([numTasks])    </li>
+<li>reduceByKey(func, [numTasks])    </li>
+<li>aggregateByKey(zeroValue)(seqOp, combOp, [numTasks]</li>
+<li>sortByKey([ascending], [numTasks])    </li>
+<li>join(otherDataset, [numTasks])    </li>
+<li>cogroup(otherDataset, [numTasks])    </li>
+<li>cartesian(otherDataset)    </li>
+<li>pipe(command, [envVars])    </li>
+<li>coalesce(numPartitions)    </li>
+<li>repartition(numPartitions)    </li>
+<li>repartitionAndSortWithinPartitions(partitioner)  </li>
+</ul>
+<h3 id="Actions"><a href="#Actions" class="headerlink" title="Actions"></a>Actions</h3><ul>
+<li>reduce(func)    </li>
+<li>collect()    </li>
+<li>count()    </li>
+<li>first()    </li>
+<li>take(n)    </li>
+<li>takeSample(withReplacement, num, [seed])</li>
+<li>takeOrdered(n, [ordering])    </li>
+<li>saveAsTextFile(path)    </li>
+<li>saveAsSequenceFile(path) </li>
+<li>saveAsObjectFile(path) </li>
+<li>countByKey()    </li>
+<li>foreach(func)    </li>
+</ul>
+<h3 id="Shuffle-operations"><a href="#Shuffle-operations" class="headerlink" title="Shuffle operations"></a>Shuffle operations</h3><p>shuffle用于重分布（re-distributing)数据，以便数据在分区之间被不同地分组（grouped differently across partitions）。这一般会导致在executors和机器间复制，使得shuffle成为复杂、costly的操作。</p>
+<p>在Spark中，数据一般不会跨区分布，以便对于特定操作能够处在必要的位置。因此，对于reduceByKey操作，Spark需要执行一次all-to-all操作。它必须从所有分区读取，以查找所有键的所有values，然后将分区的值汇总在一起以计算每个键的最终结果—这就是所谓的shuffle。</p>
+<p>触发shuffle的操作有 </p>
+<ul>
+<li>repartition操作如 repartition 和 coalesce </li>
+<li>ByKey操作如 groupByKey 和 reduceByKey</li>
+<li>join操作如 cogroup 和 join</li>
+</ul>
+<h3 id="RDD持久化"><a href="#RDD持久化" class="headerlink" title="RDD持久化"></a>RDD持久化</h3><p>在操作间持久化一个数据集是Spark的重要特性。当你持久化一个RDD，每个节点都会存储它计算的任何分区至memory中，在此数据集上（或从它衍生的数据集）的actions中都会重利用之。这使得之后的actions变得更快（通常多于10X提速）。Caching是迭代算法和快速交互式应用（fast interactive use）的重要工具。</p>
+<p>可以使用 persist() 或者 cache() 方法进行持久化。当它在一次action中第一次计算出来后，它就会保存在节点memory中。Spark的cache是容错的，如果一个RDD的任何分区丢失后，它会自动重计算之，通过使用原来建立它的transformations。</p>
+<p>此外，有不同的持久化等级：</p>
+<ul>
+<li>MEMORY_ONLY</li>
+<li>MEMORY_AND_DISK</li>
+<li>MEMORY_ONLY_SER </li>
+<li>MEMORY_AND_DISK_SER</li>
+<li>DISK_ONLY</li>
+<li>MEMORY_ONLY_2, MEMORY_AND_DISK_2, etc</li>
+<li>OFF_HEAP (experimental)    </li>
+</ul>
+<h3 id="如何选择持久化等级"><a href="#如何选择持久化等级" class="headerlink" title="如何选择持久化等级"></a>如何选择持久化等级</h3><p>这是关于memory使用状况和CPU效率间的trade-off，建议通过以下过程来选择一个：</p>
+<ul>
+<li><p>如果你的RDDs在默认存储等级 (MEMORY_ONLY)下fit comfortably，就保持这样的设定。这种是最高CPU效率的选择。</p>
+</li>
+<li><p>如果不是，试着使用MEMORY_ONLY_SER并选择一个快速的序列化包来使得对象们存储更空间高效（space-efficient）</p>
+</li>
+<li><p>除非计算你的数据集的函数集(functions)非常expensive，或者它们过滤了大量数据，否则不要将之溢出到磁盘（spill to disk）。除此以外，重计算一个分区和把它从磁盘读取速度是一样的。</p>
+</li>
+<li>如果你想拥有快速的错误恢复（fault recovery），使用冗余（replicated）存储级别。所有的存储级别通过重计算损失的数据来提供容错，但是冗余备份使得你可以继续在RDDs上运行，而不需要等待重新计算丢失的分区。</li>
+</ul>
+<h3 id="Shared-Variables（共享变量）"><a href="#Shared-Variables（共享变量）" class="headerlink" title="Shared Variables（共享变量）"></a>Shared Variables（共享变量）</h3><p>Broadcast Variables 与 Accumulators</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/01/als_formula/" rel="prev" title="Explicit ALS公式推导">
+                Explicit ALS公式推导 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/profile.jpeg"
+               alt="" />
+          <p class="site-author-name" itemprop="name"></p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/lxmly" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.kaggle.com/uuulearn" target="_blank" title="Kaggle">
+                  
+                    <i class="fa fa-fw fa-kaggle"></i>
+                  
+                    
+                      Kaggle
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Resilient-Distributed-Datasets-RDDs"><span class="nav-number">1.</span> <span class="nav-text"><a href="#Resilient-Distributed-Datasets-RDDs" class="headerlink" title="Resilient Distributed Datasets (RDDs)"></a>Resilient Distributed Datasets (RDDs)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RDD操作"><span class="nav-number">2.</span> <span class="nav-text"><a href="#RDD&#x64CD;&#x4F5C;" class="headerlink" title="RDD&#x64CD;&#x4F5C;"></a>RDD&#x64CD;&#x4F5C;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理解闭包（closures）"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x7406;&#x89E3;&#x95ED;&#x5305;&#xFF08;closures&#xFF09;" class="headerlink" title="&#x7406;&#x89E3;&#x95ED;&#x5305;&#xFF08;closures&#xFF09;"></a>&#x7406;&#x89E3;&#x95ED;&#x5305;&#xFF08;closures&#xFF09;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transformations"><span class="nav-number">4.</span> <span class="nav-text"><a href="#Transformations" class="headerlink" title="Transformations"></a>Transformations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Actions"><span class="nav-number">5.</span> <span class="nav-text"><a href="#Actions" class="headerlink" title="Actions"></a>Actions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shuffle-operations"><span class="nav-number">6.</span> <span class="nav-text"><a href="#Shuffle-operations" class="headerlink" title="Shuffle operations"></a>Shuffle operations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RDD持久化"><span class="nav-number">7.</span> <span class="nav-text"><a href="#RDD&#x6301;&#x4E45;&#x5316;" class="headerlink" title="RDD&#x6301;&#x4E45;&#x5316;"></a>RDD&#x6301;&#x4E45;&#x5316;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何选择持久化等级"><span class="nav-number">8.</span> <span class="nav-text"><a href="#&#x5982;&#x4F55;&#x9009;&#x62E9;&#x6301;&#x4E45;&#x5316;&#x7B49;&#x7EA7;" class="headerlink" title="&#x5982;&#x4F55;&#x9009;&#x62E9;&#x6301;&#x4E45;&#x5316;&#x7B49;&#x7EA7;"></a>&#x5982;&#x4F55;&#x9009;&#x62E9;&#x6301;&#x4E45;&#x5316;&#x7B49;&#x7EA7;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shared-Variables（共享变量）"><span class="nav-number">9.</span> <span class="nav-text"><a href="#Shared-Variables&#xFF08;&#x5171;&#x4EAB;&#x53D8;&#x91CF;&#xFF09;" class="headerlink" title="Shared Variables&#xFF08;&#x5171;&#x4EAB;&#x53D8;&#x91CF;&#xFF09;"></a>Shared Variables&#xFF08;&#x5171;&#x4EAB;&#x53D8;&#x91CF;&#xFF09;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <!--
+{n class="post-meta-divider">|</span>
+
+
+
+
+
+
+
+
+-->
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"enable":true,"per_page":false,"cdn":"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
