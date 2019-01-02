@@ -94,14 +94,21 @@
 
 
 
+<meta name="description" content="线性与深度的融合">
 <meta property="og:type" content="article">
-<meta property="og:title" content="lxmly">
-<meta property="og:url" content="http://yoursite.com/2018/12/29/kaggle_summary/index.html">
+<meta property="og:title" content="Wide &amp; Deep">
+<meta property="og:url" content="http://yoursite.com/2018/12/05/wide_and_deep/index.html">
 <meta property="og:site_name" content="lxmly">
+<meta property="og:description" content="线性与深度的融合">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-29T08:57:02.000Z">
+<meta property="og:image" content="http://yoursite.com/images/wide_deep_1.png">
+<meta property="og:image" content="http://yoursite.com/images/wide_deep_2.png">
+<meta property="og:image" content="http://yoursite.com/images/wide_deep_3.png">
+<meta property="og:updated_time" content="2019-01-02T06:39:09.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="lxmly">
+<meta name="twitter:title" content="Wide &amp; Deep">
+<meta name="twitter:description" content="线性与深度的融合">
+<meta name="twitter:image" content="http://yoursite.com/images/wide_deep_1.png">
 
 
 
@@ -130,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/12/29/kaggle_summary/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/12/05/wide_and_deep/"/>
 
 
 
 
 
-  <title> | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>Wide & Deep | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -269,7 +276,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/29/kaggle_summary/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/05/wide_and_deep/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -286,7 +293,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">Wide & Deep</h1>
         
 
         <div class="post-meta">
@@ -298,8 +305,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-29T16:57:00+08:00">
-                2018-12-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-05T22:10:10+08:00">
+                2018-12-05
               </time>
             
 
@@ -309,6 +316,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -321,6 +350,10 @@
 
           
 
+          
+              <div class="post-description">
+                  线性与深度的融合
+              </div>
           
 
         </div>
@@ -336,7 +369,40 @@
       
 
       
-        
+        <p>Wide &amp; Deep 是Google Play推荐系统的排序模型，它旨在获得记忆(Memorization)和泛化(Generalized)的能力，克服线性模型和deep模型的缺点，并融合二者的优点，这是一个简单高效的排序模型，在当前工业界广泛使用。</p>
+<ul>
+<li>记忆(Memorization)能力: 推荐的物品和用户行为主题非常相关，Exploitation </li>
+<li>泛化(Generalized)能力：强调推荐物品的多样性，Exploration</li>
+</ul>
+<p>记忆和泛化就像推荐系统的E&amp;E，是利用和探索间的trade-off。</p>
+<p>线性模型具有简单、可扩展和可解释性强等优点，经常用于训练one-hot编码后的稀疏矩阵，当然我们也可以构造交叉特征组合，具有不错的记忆能力，但是它的缺点就是无法发现用户行为中未出现的特征组合，缺乏泛化能力。</p>
+<p>基于Embedding的模型，；例如分解机或者deep模型，可以在较少特征工程的前提下，泛化出之前未曾出现过的行为特征组合。但是因为用户的行为往往是非常稀疏的，以大稀疏矩阵做训练输入，无法有效更新deep模型的参数，往往造成deep模型的过拟合，使得推荐效果很不相关，缺乏记忆能力。</p>
+<h3 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h3><p><img src="/images/wide_deep_1.png" alt="wide_deep_1"></p>
+<h4 id="Wide模型"><a href="#Wide模型" class="headerlink" title="Wide模型"></a>Wide模型</h4><p>Wide模型就是一个广义线性模型，文中还提到一个最重要的特征处理是做特征的cross-product转换，这使得生成线性模型增添非线性的特质。</p>
+<script type="math/tex; mode=display">y=\mathbf{w}^T\mathbf{x}+b</script><h4 id="Deep模型"><a href="#Deep模型" class="headerlink" title="Deep模型"></a>Deep模型</h4><p>Deep模型就是一个简单的前馈神经网络，如上图右侧所示。对于稀疏、高维的类别特征，首先需要将其转换为低维，稠密的Embedding向量，向量维度一般取O(10)~O(100)。Embedding向量随机初始化，并通过最小化损失函数而不断训练。模型激活函数采用ReLU。</p>
+<h4 id="Joint-Training联合训练"><a href="#Joint-Training联合训练" class="headerlink" title="Joint Training联合训练"></a>Joint Training联合训练</h4><p>Wide组件和Deep组件通过weighted sum的方式结合，然后流经一个普通的logistic损失函数实现联合训练。文章特意指出了Joint Training和Ensemble之间的区别。</p>
+<p>Ensemble这个词，想必打数据挖掘比赛的童鞋都会非常熟悉，使用多个模型分别训练，然后根据模型间的差异性、本地cv和线上表现进行融合，往往会获得不错的提升，但可以看出，各个模型间在训练期间是没有任何联系的。相反，Joint Training是在训练期间通过同时考虑多个模型和融合权重来优化所有模型参数。这对模型大小也是有意义的，对于Ensemble，因为模型间是独立的，所以单模型通过需要足够大才能获得不错的效果。而对于Joint Training，wide部分只需要以较小数量的cross-product特征转换来弥补deep部分的弱点，而无需实现一个全尺寸(full-size)的wide模型。</p>
+<p>Joint Training通过使用mini-batch梯度优化进行反向传播来完成Wide模型和Deep模型的训练，融合模型公式如下。</p>
+<script type="math/tex; mode=display">
+P\left ( Y=1\mid \mathbf{x} \right )=\sigma \left ( \mathbf{w}_{wide}^T\left [ \mathbf{x},\phi \left ( \mathbf{x} \right ) \right ] + \mathbf{w}_{deep}^Ta^{\left ( l_f \right )}+b \right )</script><h3 id="系统实现"><a href="#系统实现" class="headerlink" title="系统实现"></a>系统实现</h3><p><img src="/images/wide_deep_2.png" alt="wide_deep_2"></p>
+<h4 id="数据生成"><a href="#数据生成" class="headerlink" title="数据生成"></a>数据生成</h4><ul>
+<li>二分label: app是否被下载</li>
+<li>特征处理：<ul>
+<li>ID映射</li>
+<li>频次阈值过滤</li>
+<li>float特征归一化</li>
+</ul>
+</li>
+</ul>
+<h4 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h4><p>参数设计如下图：</p>
+<p><img src="/images/wide_deep_3.png" alt="wide_deep_3"></p>
+<p>因为当新数据来时，模型需要重新训练，但是一次完整的训练是非常耗时的，这推迟了从获得新数据到线上模型更新的时间。采用warm-starting解决该问题，每次训练以前次训练的参数初始化，这会大大加速模型的拟合时间。</p>
+<h4 id="模型服务"><a href="#模型服务" class="headerlink" title="模型服务"></a>模型服务</h4><p>通过多线程并行小批量预测提速</p>
+<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p>wide &amp; deep 简单有效，这个特点是生产环境的最爱。它融合线性模型与深度模型的各自优势，获得了很不错的线上提升，这也是融合的魅力。三个臭皮匠赛过诸葛亮，融合通过取长补短，往往能取得 1 + 1 &gt; 2的效果。</p>
+<p>在数据挖掘比赛里，多个差异化的优秀单模型融合往往能取得boost，这是打比赛的常规套路。不过在工业生产环境对模型的资源效率要求很高，如训练和预测时间、耗费的机器资源等，所以多模型Ensemble在生产环境下比较危险，优秀的单模型更加有效。这里，wide &amp; deep模型就提供了另外一种思路 —- 差异化多模型的Joint Training。</p>
+<p>wide模型和deep模型各有所长，又各有所短，差异化明显，通过Joint Training将二者融合在单模型中，不仅满足了生产环境的苛刻资源要求，又取得了融合的效果，一举两得。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>Wide &amp; Deep Learning for Recommender Systems</p>
+
       
     </div>
     
@@ -369,10 +435,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/12/29/w2vec/" rel="prev" title="">
-                 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -424,8 +486,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/profile.jpeg"
@@ -440,7 +511,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -502,6 +573,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型结构"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x6A21;&#x578B;&#x7ED3;&#x6784;" class="headerlink" title="&#x6A21;&#x578B;&#x7ED3;&#x6784;"></a>&#x6A21;&#x578B;&#x7ED3;&#x6784;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Wide模型"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#Wide&#x6A21;&#x578B;" class="headerlink" title="Wide&#x6A21;&#x578B;"></a>Wide&#x6A21;&#x578B;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Deep模型"><span class="nav-number">1.2.</span> <span class="nav-text"><a href="#Deep&#x6A21;&#x578B;" class="headerlink" title="Deep&#x6A21;&#x578B;"></a>Deep&#x6A21;&#x578B;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Joint-Training联合训练"><span class="nav-number">1.3.</span> <span class="nav-text"><a href="#Joint-Training&#x8054;&#x5408;&#x8BAD;&#x7EC3;" class="headerlink" title="Joint Training&#x8054;&#x5408;&#x8BAD;&#x7EC3;"></a>Joint Training&#x8054;&#x5408;&#x8BAD;&#x7EC3;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统实现"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x7CFB;&#x7EDF;&#x5B9E;&#x73B0;" class="headerlink" title="&#x7CFB;&#x7EDF;&#x5B9E;&#x73B0;"></a>&#x7CFB;&#x7EDF;&#x5B9E;&#x73B0;</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据生成"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#&#x6570;&#x636E;&#x751F;&#x6210;" class="headerlink" title="&#x6570;&#x636E;&#x751F;&#x6210;"></a>&#x6570;&#x636E;&#x751F;&#x6210;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型训练"><span class="nav-number">2.2.</span> <span class="nav-text"><a href="#&#x6A21;&#x578B;&#x8BAD;&#x7EC3;" class="headerlink" title="&#x6A21;&#x578B;&#x8BAD;&#x7EC3;"></a>&#x6A21;&#x578B;&#x8BAD;&#x7EC3;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模型服务"><span class="nav-number">2.3.</span> <span class="nav-text"><a href="#&#x6A21;&#x578B;&#x670D;&#x52A1;" class="headerlink" title="&#x6A21;&#x578B;&#x670D;&#x52A1;"></a>&#x6A21;&#x578B;&#x670D;&#x52A1;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思考"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x601D;&#x8003;" class="headerlink" title="&#x601D;&#x8003;"></a>&#x601D;&#x8003;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
