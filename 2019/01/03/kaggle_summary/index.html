@@ -94,20 +94,17 @@
 
 
 
-<meta name="description" content="spark ALS算法原理与源码解析">
+<meta name="description" content="Kaggle">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spark Streaming小结">
-<meta property="og:url" content="http://yoursite.com/2018/04/03/spark_streaming/index.html">
+<meta property="og:title" content="Kaggle比赛小结">
+<meta property="og:url" content="http://yoursite.com/2019/01/03/kaggle_summary/index.html">
 <meta property="og:site_name" content="lxmly">
-<meta property="og:description" content="spark ALS算法原理与源码解析">
+<meta property="og:description" content="Kaggle">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/spark_streaming_1.png">
-<meta property="og:image" content="http://yoursite.com/images/spark_streaming_2.png">
-<meta property="og:updated_time" content="2018-12-27T08:36:35.000Z">
+<meta property="og:updated_time" content="2019-02-19T07:02:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spark Streaming小结">
-<meta name="twitter:description" content="spark ALS算法原理与源码解析">
-<meta name="twitter:image" content="http://yoursite.com/images/spark_streaming_1.png">
+<meta name="twitter:title" content="Kaggle比赛小结">
+<meta name="twitter:description" content="Kaggle">
 
 
 
@@ -136,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/03/spark_streaming/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/01/03/kaggle_summary/"/>
 
 
 
 
 
-  <title>Spark Streaming小结 | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>Kaggle比赛小结 | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -275,7 +272,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/03/spark_streaming/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/03/kaggle_summary/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -292,7 +289,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Spark Streaming小结</h1>
+          <h1 class="post-title" itemprop="name headline">Kaggle比赛小结</h1>
         
 
         <div class="post-meta">
@@ -304,8 +301,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-03T21:20:35+08:00">
-                2018-04-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-03T20:01:05+08:00">
+                2019-01-03
               </time>
             
 
@@ -327,8 +324,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/spark/" itemprop="url" rel="index">
-                    <span itemprop="name">spark</span>
+                  <a href="/categories/随笔/" itemprop="url" rel="index">
+                    <span itemprop="name">随笔</span>
                   </a>
                 </span>
 
@@ -351,7 +348,7 @@
 
           
               <div class="post-description">
-                  spark ALS算法原理与源码解析
+                  Kaggle
               </div>
           
 
@@ -368,24 +365,27 @@
       
 
       
-        <p>Spark Streaming是core Spark API的扩展，实现可扩展(scalable)，高吞吐量(high-throughput)，容错的实时数据流的流式处理。数据可以从多种数据源如kafka、flume等灌入，而且可以使用带有高级函数如map、reduce、join和window的复杂算法来处理。实际上，你可以在数据流上使用spark的机器学习和图处理算法。</p>
-<p>spark streaming接收数据，然后把它切割成batches,如下图</p>
-<p><img src="/images/spark_streaming_1.png" alt="spark_streaming_1"></p>
-<p>Spark Streaming 将其抽象为离散流或者DStream，代表了连续的数据流。Dstream的本质是一连串的RDDs</p>
-<h3 id="窗口操作"><a href="#窗口操作" class="headerlink" title="窗口操作"></a><strong>窗口操作</strong></h3><p>一个滑动的窗口，两个因素：窗口大小和滑动尺寸</p>
-<p><img src="/images/spark_streaming_2.png" alt="spark_streaming_2"></p>
-<p>例子</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// Reduce last 30 seconds of data, every 10 seconds</div><div class="line">val windowedWordCounts = pairs.reduceByKeyAndWindow((a:Int,b:Int) =&gt; (a + b), Seconds(30), Seconds(10))</div></pre></td></tr></table></figure>
-<h3 id="使用foreachRDD的设计模式"><a href="#使用foreachRDD的设计模式" class="headerlink" title="使用foreachRDD的设计模式"></a><strong>使用foreachRDD的设计模式</strong></h3><p>功能很强大，使用需谨慎！<br>使用它的时候一般是输出到外部数据源的时候，此时需要与数据源建立connection</p>
-<h4 id="错误的使用方式"><a href="#错误的使用方式" class="headerlink" title="错误的使用方式"></a>错误的使用方式</h4><p>关注注释，因为connection对象是不可序列化的，这会导致序列化错误。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">dstream.foreachRDD &#123; rdd =&gt;</div><div class="line">  val connection = createNewConnection()  <span class="comment">// executed at the driver</span></div><div class="line">  rdd.foreach &#123; record =&gt;</div><div class="line">    connection.send(record) <span class="comment">// executed at the worker</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="低效的使用方式"><a href="#低效的使用方式" class="headerlink" title="低效的使用方式"></a>低效的使用方式</h4><p>在worker端每一个rdd都创建连接，很明显这个是低效而且愚蠢的方式。连接是很昂贵的资源。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">dstream.foreachRDD &#123; rdd =&gt;</div><div class="line">  rdd.foreach &#123; record =&gt;</div><div class="line">    val connection = createNewConnection()</div><div class="line">    connection.send(record)</div><div class="line">    connection.close()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="浪费的使用方式"><a href="#浪费的使用方式" class="headerlink" title="浪费的使用方式"></a>浪费的使用方式</h4><p>相比于前者，扩大了范围rdd-&gt;partition</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">dstream.foreachRDD &#123; rdd =&gt;</div><div class="line">  rdd.foreachPartition &#123; partitionOfRecords =&gt;</div><div class="line">    val connection = createNewConnection()</div><div class="line">    partitionOfRecords.foreach(record =&gt; connection.send(record))</div><div class="line">    connection.close()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="正确的使用方式"><a href="#正确的使用方式" class="headerlink" title="正确的使用方式"></a>正确的使用方式</h4><p>使用连接池</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">dstream.foreachRDD &#123; rdd =&gt;</div><div class="line">  rdd.foreachPartition &#123; partitionOfRecords =&gt;</div><div class="line">    // ConnectionPool is a static, lazily initialized pool of connections</div><div class="line">    val connection = ConnectionPool.getConnection()</div><div class="line">    partitionOfRecords.foreach(record =&gt; connection.send(record))</div><div class="line">    ConnectionPool.returnConnection(connection)  // return to the pool for future reuse</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h3><p><a href="http://spark.apache.org/docs/latest/streaming-programming-guide.html" target="_blank" rel="noopener">http://spark.apache.org/docs/latest/streaming-programming-guide.html</a></p>
+        <p>打kaggle比赛有一段时间了，8个月拿到Kaggle Master，也算是一种肯定。整个过程付出很多，收获更多，需要阶段性总结一下。对我来说，kaggle就是一个非常不错的学习交流平台，在这里我通过比赛加深了对各种数据和模型的认识，掌握了许多可以迁移到实际工作中的数据挖掘技巧。在这里还结识了非常优秀的队友，和他们协作非常愉快。</p>
+<h2 id="Trust-CV"><a href="#Trust-CV" class="headerlink" title="Trust CV"></a>Trust CV</h2><p>比赛一般分为public board和private board，第一阶段显示的都是public board，最终成绩以private board为准。许多同学都被public board诱惑，陷入过拟合的境地，在终榜遭到shake up。我经过这段时间的熏陶，Trust CV已经成为我的准则，它代表着泛化能力的强弱。</p>
+<p>公榜往往只有总体数据的10%~20%，而给出的训练数据往往数倍于公榜数据量。通过设置合理的CV交叉验证，我们可以通过训练数据来给予模型合理的判断，其可信度以数据量而论，往往高于公榜score。在talking data比赛中，我们就因为迷恋public board而错失金牌，从此之后基于Trust CV理念，在最后提交的选择中，我们的选择都还不错。</p>
+<p>机器学习有个理念是bias-variance tradeoff，它是指模型复杂度的影响，其目的也是追求模型更强的泛化能力，其实在这里有异曲同工之妙。</p>
+<h2 id="特征-VS-模型"><a href="#特征-VS-模型" class="headerlink" title="特征 VS 模型"></a>特征 VS 模型</h2><p>我一般只挑选表格和nlp比赛参加。对于传统表格比赛，模型的选择基本趋向于lightgbm和xgboost等boost tree模型，在融合的时候也会加入FM，Ridge等弱模型作为锦上添花。因为模型大家使用的都差多，所以可以说特征为王，优秀的特征工程是重中之中，通过学习优秀的top解法，可以看到大量细致、琐碎的特征工程穿插其中，把数据的细节挖的清清楚楚。</p>
+<p>在特征的时候，除了一些固定的套路外，可以通过直觉来嗅出特征的味道。在普遍场景下，我们需要对用户进行画像建模，有时候也需要对物品进行画像建模。我们可以把自己代入到这个场景中，比如信用违约预测，我们可以想象当这个用户有什么异常行为后会在接下来更有可能违约呢，比如他历史上有多次违约记录，他最近开销很大，甚至超过了收入等等。发现数据规律的过程是充满乐趣的。</p>
+<p>对于模型，在nlp比赛中往往比较重要，随着DNN模型在nlp领域占据主导地位，特征工程的作用不再那么重要，往往聚焦于字符的清洗处理，以期命中更多的Embedding。网络结构的探索成为主要发力方向，这也是可以理解的，因为DNN本身就暗含特征工程，削弱了传统特征工程的作用。不过在一些场景下，在网络中加入统计特征还是有不错的收益的。</p>
+<h2 id="比赛与算法落地的区别"><a href="#比赛与算法落地的区别" class="headerlink" title="比赛与算法落地的区别"></a>比赛与算法落地的区别</h2><p>打比赛的pipeline和工作中的算法落地还是有区别的，我觉得比赛的pipeline其实是工作模型落地的一个子集。</p>
+<ul>
+<li>在比赛中，有预清洗好的数据和明确的离线拟合指标，然后通过特征工程、模型参数优化和模型融合来不断拟合，整个过程都是离线和静态的。</li>
+<li>在工作中，我们要拟合的却是线上，这个过程和目标都是在线和动态的，不过特征工程和模型参数优化这两个极为关键的模块和打比赛是具有共通性的。此外，在工作中，我们需要先从数仓中进行数据清洗，然后基于线上目标定义与之契合的离线metric，通过特征工程、模型离线训练、模型线上部署、ABTest不断提高线上指标数据。在这个过程中：<ul>
+<li>数据清洗和离线指标定义非常重要，离线指标和线上指标不同步也是经常遇到的问题</li>
+<li>模型需要有严格的效率控制，打比赛的花式Ensemble宣告失效，耗时的模型结构需要商榷，我们需要进行模型精度和效率的trade-off。</li>
+</ul>
+</li>
+<li>比赛中的数据量往往不大，一般在百万级左右，而工业界的数据量至少亿级别以上了。就需要用到spark、hadoop等分布式框架了。</li>
+</ul>
+<p>打比赛就像读论文一样，也是学习提高方式。在工作中进行排序模型的落地中，就用到了一些在比赛中学到的特征工程和调参技巧，获得了不错的收益。</p>
+<h2 id="Team-Work"><a href="#Team-Work" class="headerlink" title="Team Work"></a>Team Work</h2><p>对我来说，打比赛获得学习经验的意义大于最后成绩，当然二者也不矛盾。我会倾向于团队协作完成一场比赛，在一个优秀团队里往往能学习到更多。这个协作过程中尽全力是我的原则，大家能力有高低，但负责任、靠谱的协作态度是必须的。</p>
+<p>在这个过程中，我们一般会先独自进行特征工程，以期保持各自的模型差异性，并保持特征模型等相关交流，然后在后期进行模型差异性融合，往往能取得不错的boost。<br>团队交流也是充满乐趣的，比赛中后期往往会有一段疲乏期，这时候进展开始变缓，团队交流能有效缓解这种情况，有时还能激发灵感。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总之，虽然打比赛占用了许多工作外的假期时间，但收获良多。kaggle的知识分享做的是非常优秀的，它提供了另外一种学习视野，收获良多。但kaggle比赛不能锻炼我们的每一块肌肉，对于工业界的算法落地，还是需要从更多细致的方面进行设计和考量。</p>
 
       
     </div>
@@ -410,8 +410,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/03/spark_als/" rel="next" title="spark ALS原理解析">
-                <i class="fa fa-chevron-left"></i> spark ALS原理解析
+              <a href="/2018/12/05/wide_and_deep/" rel="next" title="Wide & Deep">
+                <i class="fa fa-chevron-left"></i> Wide & Deep
               </a>
             
           </div>
@@ -420,8 +420,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/05/07/llr/" rel="prev" title="log-likelihood ratio">
-                log-likelihood ratio <i class="fa fa-chevron-right"></i>
+              <a href="/2019/01/05/attention/" rel="prev" title="Attention">
+                Attention <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -571,7 +571,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#窗口操作"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x7A97;&#x53E3;&#x64CD;&#x4F5C;" class="headerlink" title="&#x7A97;&#x53E3;&#x64CD;&#x4F5C;"></a><strong>&#x7A97;&#x53E3;&#x64CD;&#x4F5C;</strong></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用foreachRDD的设计模式"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x4F7F;&#x7528;foreachRDD&#x7684;&#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;" class="headerlink" title="&#x4F7F;&#x7528;foreachRDD&#x7684;&#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;"></a><strong>&#x4F7F;&#x7528;foreachRDD&#x7684;&#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;</strong></span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#错误的使用方式"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#&#x9519;&#x8BEF;&#x7684;&#x4F7F;&#x7528;&#x65B9;&#x5F0F;" class="headerlink" title="&#x9519;&#x8BEF;&#x7684;&#x4F7F;&#x7528;&#x65B9;&#x5F0F;"></a>&#x9519;&#x8BEF;&#x7684;&#x4F7F;&#x7528;&#x65B9;&#x5F0F;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#低效的使用方式"><span class="nav-number">2.2.</span> <span class="nav-text"><a href="#&#x4F4E;&#x6548;&#x7684;&#x4F7F;&#x7528;&#x65B9;&#x5F0F;" class="headerlink" title="&#x4F4E;&#x6548;&#x7684;&#x4F7F;&#x7528;&#x65B9;&#x5F0F;"></a>&#x4F4E;&#x6548;&#x7684;&#x4F7F;&#x7528;&#x65B9;&#x5F0F;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#浪费的使用方式"><span class="nav-number">2.3.</span> <span class="nav-text"><a href="#&#x6D6A;&#x8D39;&#x7684;&#x4F7F;&#x7528;&#x65B9;&#x5F0F;" class="headerlink" title="&#x6D6A;&#x8D39;&#x7684;&#x4F7F;&#x7528;&#x65B9;&#x5F0F;"></a>&#x6D6A;&#x8D39;&#x7684;&#x4F7F;&#x7528;&#x65B9;&#x5F0F;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正确的使用方式"><span class="nav-number">2.4.</span> <span class="nav-text"><a href="#&#x6B63;&#x786E;&#x7684;&#x4F7F;&#x7528;&#x65B9;&#x5F0F;" class="headerlink" title="&#x6B63;&#x786E;&#x7684;&#x4F7F;&#x7528;&#x65B9;&#x5F0F;"></a>&#x6B63;&#x786E;&#x7684;&#x4F7F;&#x7528;&#x65B9;&#x5F0F;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a><strong>&#x53C2;&#x8003;</strong></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Trust-CV"><span class="nav-number">1.</span> <span class="nav-text"><a href="#Trust-CV" class="headerlink" title="Trust CV"></a>Trust CV</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征-VS-模型"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x7279;&#x5F81;-VS-&#x6A21;&#x578B;" class="headerlink" title="&#x7279;&#x5F81; VS &#x6A21;&#x578B;"></a>&#x7279;&#x5F81; VS &#x6A21;&#x578B;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比赛与算法落地的区别"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x6BD4;&#x8D5B;&#x4E0E;&#x7B97;&#x6CD5;&#x843D;&#x5730;&#x7684;&#x533A;&#x522B;" class="headerlink" title="&#x6BD4;&#x8D5B;&#x4E0E;&#x7B97;&#x6CD5;&#x843D;&#x5730;&#x7684;&#x533A;&#x522B;"></a>&#x6BD4;&#x8D5B;&#x4E0E;&#x7B97;&#x6CD5;&#x843D;&#x5730;&#x7684;&#x533A;&#x522B;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Team-Work"><span class="nav-number">4.</span> <span class="nav-text"><a href="#Team-Work" class="headerlink" title="Team Work"></a>Team Work</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</span></a></li></ol></div>
             
 
           </div>
