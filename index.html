@@ -270,6 +270,156 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/20/embedding/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/profile.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lxmly">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/02/20/embedding/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-20T11:54:53+08:00">
+                2019-02-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Embedding实践-从word2vec到Topic2vec"><a href="#Embedding实践-从word2vec到Topic2vec" class="headerlink" title="Embedding实践:从word2vec到Topic2vec"></a>Embedding实践:从word2vec到Topic2vec</h2><p>自从Google word2vec广泛应用以来，Embedding的思想变得空前流行，已经成为深度学习不可或缺的一部分。Embedding是用一个低维向量来表征特征，可以将原来高维稀疏表示转换为低维稠密的向量表示。Embedding一般是通过神经网络训练的中间层结果，它在空间的位置和相互距离是具有意义，例如对于word2vec的训练出来的单词表征Embedding，对于像单词France和Paris这种有关联意义的单词，它们的空间距离是很近的，更有趣的是，还可以进行具有现实意义的向量运算，比如可以发现vec(Madrid) - vec(Spain) + vec(France) 和 vec(Paris)距离非常近。</p>
+<p>在推荐系统实践中，我们也对Embedding应用进行了实践，从word2vec到item2vec，从item2vec到我们改进而来的topic2vec。整个实践过程都可以感受到word2vec的魅力，简单而有效。word2vec其实包含了协同的思想，协同过滤如ItemCF就是通过统计用户行为中的物品共现规律来获得物品相似矩阵，但它因为只局限于两个结点之间，泛化能力受到局限。有不少针对这个的缺点改进，如Simrank、SVD++等，就个人实践经验来说，大都华而不实，在算法落地中的表现都比较一般，且耗费较多的计算资源，反而不如itemcf的整体效果。而Word2vec Embedding正好弥补了ItemCF泛化能力弱的缺点，二者优劣互补，结合使用能取得1 + 1 &gt; 2的效果。</p>
+<p>Word2vec原理<br>Word2vec的训练方式有两种CBOW(Continuous Bag-of-Words)和Skip-gram两种方式:</p>
+<ul>
+<li>CBOW 基于相邻的词决定当前词</li>
+<li>Skip-gram 当前词决定相邻的词</li>
+</ul>
+<p>从我们实践效果来说，Skip-gram效果更好，这里只总结Skip-gram原理，NN结构如下图所示:</p>
+<p><img src="/images/embedding_1.png" alt="embedding_1"></p>
+<p><img src="/images/embedding_2.png" alt="embedding_2"></p>
+<p>Skip-gram模型的训练目标是搜寻可以有效预测文档或句子附近词汇的单词表征（也就是Embedding）。对于一个训练词串$w_1, w_2,…,w_T$，其目标就是最大化平均log概率，公式如下:</p>
+<script type="math/tex; mode=display">\frac{1}{T}\sum_{t=1}^T\sum_{-c\leq j \leq c,j \neq 0} logp(w_{t+j} | w_t)</script><p>通过softmax函数定义 $p(w_{t+j} | w_t)$, 公式如下:</p>
+<script type="math/tex; mode=display">p(w_O|w_I) = \frac{exp({v'}_{w_O}^{\top}v_{w_I})}{\sum_{w=1}^{W}exp({v'}_{w}^{\top}v_{w_I})}</script><p>然后$W$是词典大小，直接运算是不现实的，于是作者应用Hierarchical Softmax和负采样(negative sampling)来解决该问题。</p>
+<h3 id="Negative-Sampling"><a href="#Negative-Sampling" class="headerlink" title="Negative Sampling"></a>Negative Sampling</h3><p>不同于原来每个训练样本都更新所有的权重，负采样只更新部分权重，可以巨幅降低计算量，且可以得到近优效果。Negative Sampling(NEG)的目标函数如下:</p>
+<script type="math/tex; mode=display">log \sigma({v'}_{w_O}^{\top}v_{w_I}) + \sum_{i=1}^k E_{w_i} \thicksim P_n(w)[log \sigma({v'}_{w_i}^{\top}v_{w_I})]</script><p>对比上面的公式，可以看到时间复杂度从$W$降低到了采样数$k$，采样公式采用一元模型分布（unigram distribution)，这里采样的概率和单词出现的频次有关，出现的频次越高，越容易被选作负样本，采样公式如下, 其中3/4是经验值：</p>
+<script type="math/tex; mode=display">p(w_i) = \frac{f(w_i)^{\frac{3}{4}}}{\sum_{j=0}^nf(w_j)^{\frac{3}{4}}}</script><h3 id="Item2vec"><a href="#Item2vec" class="headerlink" title="Item2vec"></a>Item2vec</h3><p>Word2vec的Skip-gram模型其实就是协同的思想，我们可以自然而然地迁移到用户行为序列中，就是把行为物品比作了单词，原理和word2vec完全一致。论文里拿Item2vec与SVD++作了一个简单的小对比，实验结果Item2vec效果更好。</p>
+<p>对比ItemCF，Item2vec有更好的泛化能力，我们可以基于训练出来的item Embedding，召回邻近topK items，这突破了ItemCF邻域关系的限制。</p>
+<p>在我们具体实践中，也察觉出Item2vec的弊端:</p>
+<ul>
+<li>无法解决覆盖率问题，在合理阈值下，只能覆盖出现在用户行为序列中的物品集，对于低频物品和新物品，是没有召回结果的。</li>
+<li>虽然覆盖率略高于ItemCF，但点击率低于ItemCF，整体收益仍是负向的。</li>
+</ul>
+<h3 id="Topic2vec"><a href="#Topic2vec" class="headerlink" title="Topic2vec"></a>Topic2vec</h3><p>基于实践所得经验，我们认为ItemCF不能被单纯替代，而应该以互补策略来对ItemCF进行补充。协同过滤的最大弊端就是受用户行为数据集所限，往往无法覆盖全量候选集。最简单的方式就是以内容过滤互补，内容过滤可以做到100%覆盖率，不过内容过滤在合理内容关联阈值限制下，召回结果同质化比较严重，泛化能力非常弱。于是我们思考能不能既满足100%覆盖率，又能具有学习用户行为模式的泛化能力，这里就有了Topic2vec。</p>
+<p>Topic2vec是对Item2vec的延伸，它将Item实体替换为表征Item的特征，Item实体是有时间周期的，具体的。而特征在很长一段时间内都是稳定的，是可以重组泛化的。我们在Item2vec网络之前再加入一层特征表示层，用于表征Item实体。初始化各特征的Embedding后，我们以weighted-mean的方式融合Embedding，剩下的流程与word2vec一致，训练后我们可以得到各特征的Embedding，通过weighted-mean融合可覆盖全量视频，而训练的过程又是拟合用户行为模式的过程，这里就取得了我们上面提到的效果，网络结构如下图所示:</p>
+<p><img src="/images/embedding_3.png" alt="embedding_3"></p>
+<p>Topic2vec既能覆盖全量视频，又具有不错的泛化能力，在具体实践中，我们将Topic2vec作为ItemCF的后补策略，二者结合使用，取得不错的线上效果了。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a href="https://arxiv.org/abs/1603.04259" target="_blank" rel="noopener">Item2Vec-Neural Item Embedding for Collaborative Filtering</a></li>
+<li><a href="https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf" target="_blank" rel="noopener">Distributed Representations of Words and Phrases and their Compositionality</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/27234078" target="_blank" rel="noopener">理解 Word2Vec 之 Skip-Gram 模型</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/05/attention/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1292,152 +1442,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/03/spark_streaming/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/profile.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="lxmly">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/03/spark_streaming/" itemprop="url">Spark Streaming小结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-03T21:20:35+08:00">
-                2018-04-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/spark/" itemprop="url" rel="index">
-                    <span itemprop="name">spark</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          spark ALS算法原理与源码解析
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/03/spark_streaming/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/03/spark_als/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1584,7 +1588,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/01/svm/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/03/spark_streaming/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -1603,7 +1607,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/01/svm/" itemprop="url">svm小结</a></h1>
+                <a class="post-title-link" href="/2018/04/03/spark_streaming/" itemprop="url">Spark Streaming小结</a></h1>
         
 
         <div class="post-meta">
@@ -1615,8 +1619,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-01T17:30:15+08:00">
-                2018-02-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-03T21:20:35+08:00">
+                2018-04-03
               </time>
             
 
@@ -1638,8 +1642,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/" itemprop="url" rel="index">
-                    <span itemprop="name">algorithm</span>
+                  <a href="/categories/spark/" itemprop="url" rel="index">
+                    <span itemprop="name">spark</span>
                   </a>
                 </span>
 
@@ -1676,10 +1680,10 @@
 
       
         
-          svm的一些知识
+          spark ALS算法原理与源码解析
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/02/01/svm/">
+            <a class="btn" href="/2018/04/03/spark_streaming/">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1767,7 +1771,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
