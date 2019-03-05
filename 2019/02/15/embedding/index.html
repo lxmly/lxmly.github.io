@@ -94,17 +94,21 @@
 
 
 
-<meta name="description" content="Kaggle">
+<meta name="description" content="灵活的Embedding">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kaggle比赛小结">
-<meta property="og:url" content="http://yoursite.com/2019/01/03/kaggle_summary/index.html">
+<meta property="og:title" content="Topic2vec">
+<meta property="og:url" content="http://yoursite.com/2019/02/15/embedding/index.html">
 <meta property="og:site_name" content="lxmly">
-<meta property="og:description" content="Kaggle">
+<meta property="og:description" content="灵活的Embedding">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-19T07:11:58.000Z">
+<meta property="og:image" content="http://yoursite.com/images/embedding_1.png">
+<meta property="og:image" content="http://yoursite.com/images/embedding_2.png">
+<meta property="og:image" content="http://yoursite.com/images/embedding_3.png">
+<meta property="og:updated_time" content="2019-03-05T14:21:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kaggle比赛小结">
-<meta name="twitter:description" content="Kaggle">
+<meta name="twitter:title" content="Topic2vec">
+<meta name="twitter:description" content="灵活的Embedding">
+<meta name="twitter:image" content="http://yoursite.com/images/embedding_1.png">
 
 
 
@@ -133,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/01/03/kaggle_summary/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/02/15/embedding/"/>
 
 
 
 
 
-  <title>Kaggle比赛小结 | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>Topic2vec | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -272,7 +276,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/03/kaggle_summary/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/15/embedding/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -289,7 +293,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kaggle比赛小结</h1>
+          <h1 class="post-title" itemprop="name headline">Topic2vec</h1>
         
 
         <div class="post-meta">
@@ -301,8 +305,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-03T20:01:05+08:00">
-                2019-01-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-15T21:20:05+08:00">
+                2019-02-15
               </time>
             
 
@@ -324,8 +328,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/随笔/" itemprop="url" rel="index">
-                    <span itemprop="name">随笔</span>
+                  <a href="/categories/algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">algorithm</span>
                   </a>
                 </span>
 
@@ -348,7 +352,7 @@
 
           
               <div class="post-description">
-                  Kaggle
+                  灵活的Embedding
               </div>
           
 
@@ -365,27 +369,37 @@
       
 
       
-        <p>打kaggle比赛有一段时间了，8个月拿到Kaggle Master，也算是一种肯定。整个过程付出很多，收获更多，需要阶段性总结一下。对我来说，kaggle就是一个非常不错的学习交流平台，在这里我通过比赛加深了对各种数据和模型的认识，掌握了许多可以迁移到实际工作中的数据挖掘技巧。在这里还结识了非常优秀的队友，和他们协作非常愉快。</p>
-<h2 id="Trust-CV"><a href="#Trust-CV" class="headerlink" title="Trust CV"></a>Trust CV</h2><p>比赛一般分为public board和private board，第一阶段显示的都是public board，最终成绩以private board为准。许多同学都被public board诱惑，陷入过拟合的境地，在终榜遭到shake up。我经过这段时间的熏陶，Trust CV已经成为我的准则，它代表着泛化能力的强弱。</p>
-<p>公榜往往只有总体数据的10%~20%，而给出的训练数据往往数倍于公榜数据量。通过设置合理的CV交叉验证，我们可以通过训练数据来给予模型合理的判断，其可信度以数据量而论，往往高于公榜score。在talking data比赛中，我们就因为迷恋public board而错失金牌，从此之后基于Trust CV理念，在最后提交的选择中，我们的选择都还不错。</p>
-<p>机器学习有个理念是bias-variance tradeoff，它是指模型复杂度的影响，其目的也是追求模型更强的泛化能力，其实在这里有异曲同工之妙。</p>
-<h2 id="特征-VS-模型"><a href="#特征-VS-模型" class="headerlink" title="特征 VS 模型"></a>特征 VS 模型</h2><p>我一般只挑选表格和nlp比赛参加。对于传统表格比赛，模型的选择基本趋向于lightgbm和xgboost等boost tree模型，在融合的时候也会加入FM，Ridge等弱模型作为锦上添花。因为模型大家使用的都差多，所以可以说特征为王，优秀的特征工程是重中之中，通过学习优秀的top解法，可以看到大量细致、琐碎的特征工程穿插其中，把数据的细节挖的清清楚楚。</p>
-<p>在特征的时候，除了一些固定的套路外，可以通过直觉来嗅出特征的味道。在普遍场景下，我们需要对用户进行画像建模，有时候也需要对物品进行画像建模。我们可以把自己代入到这个场景中，比如信用违约预测，我们可以想象当这个用户有什么异常行为后会在接下来更有可能违约呢，比如他历史上有多次违约记录，他最近开销很大，甚至超过了收入等等。发现数据规律的过程是充满乐趣的。</p>
-<p>对于模型，在nlp比赛中往往比较重要，随着DNN模型在nlp领域占据主导地位，特征工程的作用不再那么重要，往往聚焦于字符的清洗处理，以期命中更多的Embedding。网络结构的探索成为主要发力方向，这也是可以理解的，因为DNN本身就暗含特征工程，削弱了传统特征工程的作用。不过在一些场景下，在网络中加入统计特征还是有不错的收益的。</p>
-<h2 id="比赛与算法落地的区别"><a href="#比赛与算法落地的区别" class="headerlink" title="比赛与算法落地的区别"></a>比赛与算法落地的区别</h2><p>打比赛的pipeline和工作中的算法落地还是有区别的，我觉得比赛的pipeline其实是工作模型落地的一个子集。</p>
+        <h2 id="Embedding实践-从word2vec到Topic2vec"><a href="#Embedding实践-从word2vec到Topic2vec" class="headerlink" title="Embedding实践:从word2vec到Topic2vec"></a>Embedding实践:从word2vec到Topic2vec</h2><p>自从Google word2vec广泛应用以来，Embedding的思想变得空前流行，已经成为深度学习不可或缺的一部分。Embedding是用一个低维向量来表征特征，可以将原来高维稀疏表示转换为低维稠密的向量表示。Embedding一般是神经网络训练的中间层结果，它在空间的位置和相互间的物理距离是具有意义，例如对于word2vec的训练出来的单词表征Embedding，对于像单词France和Paris这种有关联意义的单词，它们的空间距离是很近的，更有趣的是，还可以进行具有现实意义的向量运算，比如可以发现vec(Madrid) - vec(Spain) + vec(France) 和 vec(Paris)距离非常近。</p>
+<p>在推荐系统应用中，我们也对Embedding应用进行了实践，从word2vec到item2vec，从item2vec到我们改进而来的topic2vec。整个实践过程都可以感受到word2vec的魅力，简单而有效。word2vec其实包含了协同的思想，协同过滤如ItemCF就是通过统计用户行为中的物品共现模式来获得物品相似矩阵，但它因为只局限于两个结点之间，泛化能力受到局限。有不少针对这个的缺点改进，如Simrank、SVD++等，就个人实践经验来说，大都华而不实，在算法落地中的表现都比较一般，且耗费较多的计算资源，反而不如ItemCF的整体收益，而Embedding思想正好弥补了ItemCF泛化能力弱的缺点，二者优劣互补，结合使用能取得1 + 1 &gt; 2的效果。</p>
+<p>Word2vec原理<br>Word2vec的训练方式有两种CBOW(Continuous Bag-of-Words)和Skip-gram两种方式:</p>
 <ul>
-<li>在比赛中，有预清洗好的数据和明确的离线拟合指标，然后通过特征工程、模型参数优化和模型融合来不断拟合，整个过程都是离线和静态的。</li>
-<li>在工作中，我们要拟合的却是线上，这个过程和目标都是在线和动态的，不过特征工程和模型参数优化这两个极为关键的模块和打比赛是具有共通性的。此外，在工作中，我们需要先从数仓中进行数据清洗，然后基于线上目标定义与之契合的离线metric，通过特征工程、模型离线训练、模型线上部署、ABTest不断提高线上指标数据。在这个过程中：<ul>
-<li>数据清洗和离线指标定义非常重要，离线指标和线上指标不同步也是经常遇到的问题</li>
-<li>模型需要有严格的效率控制，打比赛的花式Ensemble宣告失效，耗时的模型结构需要商榷，我们需要进行模型精度和效率的trade-off。</li>
+<li>CBOW 基于相邻的词决定当前词</li>
+<li>Skip-gram 当前词决定相邻的词</li>
 </ul>
-</li>
-<li>比赛中的数据量往往不大，一般在百万级左右，而工业界的数据量至少亿级别以上了。就需要用到spark、hadoop等分布式框架了。</li>
+<p>从我们实践效果来说，Skip-gram效果更好，这里只总结Skip-gram原理，NN结构如下图所示:</p>
+<p><img src="/images/embedding_1.png" alt="embedding_1"></p>
+<p><img src="/images/embedding_2.png" alt="embedding_2"></p>
+<p>Skip-gram模型的训练目标是搜寻可以有效预测文档或句子附近词汇的单词表征（也就是Embedding）。对于一个训练词串$w_1, w_2,…,w_T$，其目标就是最大化平均log概率，公式如下:</p>
+<script type="math/tex; mode=display">\frac{1}{T}\sum_{t=1}^T\sum_{-c\leq j \leq c,j \neq 0} logp(w_{t+j} | w_t)</script><p>通过softmax函数定义 $p(w_{t+j} | w_t)$, 公式如下:</p>
+<script type="math/tex; mode=display">p(w_O|w_I) = \frac{exp({v'}_{w_O}^{\top}v_{w_I})}{\sum_{w=1}^{W}exp({v'}_{w}^{\top}v_{w_I})}</script><p>然后$W$是词典大小，直接运算是不现实的，于是作者应用Hierarchical Softmax和负采样(negative sampling)来解决该问题，这里只总结负采样原理。</p>
+<h3 id="Negative-Sampling"><a href="#Negative-Sampling" class="headerlink" title="Negative Sampling"></a>Negative Sampling</h3><p>不同于原来每个训练样本都更新所有的权重，负采样只更新部分权重，可以巨幅降低计算量，且可以得到近优效果。Negative Sampling(NEG)的目标函数如下:</p>
+<script type="math/tex; mode=display">log \sigma({v'}_{w_O}^{\top}v_{w_I}) + \sum_{i=1}^k E_{w_i} \thicksim P_n(w)[log \sigma({v'}_{w_i}^{\top}v_{w_I})]</script><p>对比上面的公式，可以看到时间复杂度从$W$降低到了采样数$k$，采样公式采用一元模型分布（unigram distribution)，这里采样的概率和单词出现的频次有关，出现的频次越高，越容易被选作负样本，采样公式如下, 其中3/4是经验值：</p>
+<script type="math/tex; mode=display">p(w_i) = \frac{f(w_i)^{\frac{3}{4}}}{\sum_{j=0}^nf(w_j)^{\frac{3}{4}}}</script><h3 id="Item2vec"><a href="#Item2vec" class="headerlink" title="Item2vec"></a>Item2vec</h3><p>Word2vec的Skip-gram模型其实就是协同的思想，我们可以自然而然地迁移到用户行为序列中，就是把行为物品比作了单词，原理和word2vec完全一致。论文里拿Item2vec与SVD++作了一个简单的小对比，实验结果Item2vec效果更好。</p>
+<p>对比ItemCF，Item2vec有更好的泛化能力，我们可以基于训练出来的item Embedding，召回邻近topK items，这突破了ItemCF邻域关系的限制。</p>
+<p>在我们具体实践中，也察觉出Item2vec的弊端:</p>
+<ul>
+<li>无法解决覆盖率问题，在合理阈值下，只能覆盖出现在用户行为序列中的物品集，但对于低频物品和新物品，还是没有召回结果的。</li>
+<li>虽然覆盖率略高于ItemCF，但点击率低于ItemCF，整体收益仍是负向的，位置比较尴尬。</li>
 </ul>
-<p>打比赛就像读论文一样，也是学习提高方式。在工作中进行排序模型的落地中，就用到了一些在比赛中学到的特征工程和调参技巧，获得了不错的收益。</p>
-<h2 id="Team-Work"><a href="#Team-Work" class="headerlink" title="Team Work"></a>Team Work</h2><p>对我来说，打比赛获得学习经验的意义大于最后成绩，当然二者也不矛盾。我会倾向于团队协作完成一场比赛，在一个优秀团队里往往能学习到更多。这个协作过程中尽全力是我的原则，大家能力有高低，但负责任、靠谱的协作态度是必须的。</p>
-<p>在这个过程中，我们一般会先独自进行特征工程，以期保持各自的模型差异性，并保持特征模型等相关交流，然后在后期进行模型差异性融合，往往能取得不错的boost。<br>团队交流也是充满乐趣的，比赛中后期往往会有一段疲乏期，这时候进展开始变缓，团队交流能有效缓解这种情况，有时还能激发灵感。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总之，虽然打比赛占用了空闲和假期时间，但收获良多。kaggle的知识分享做的是非常优秀的，它提供了另外一种学习视野，收获良多。Kaggle比赛不能锻炼我们的每一块肌肉，对于工业界的算法落地，还是需要从更多细致的方面进行设计和考量。</p>
+<h3 id="Topic2vec"><a href="#Topic2vec" class="headerlink" title="Topic2vec"></a>Topic2vec</h3><p>基于实践所得经验，我们认为ItemCF不能被单纯替代，而应该以互补策略来对ItemCF进行补充。协同过滤的最大弊端就是受用户行为数据集所限，往往无法覆盖全量候选集。最简单的方式就是以内容过滤互补，内容过滤可以做到100%覆盖率，不过内容过滤在合理内容关联阈值限制下，召回结果同质化比较严重，泛化能力非常弱。于是我们思考能不能既满足100%覆盖率，又能具有学习用户行为模式的泛化能力，这里就有了Topic2vec。</p>
+<p>Topic2vec是对Item2vec的延伸，它将Item实体替换为表征Item的特征，Item实体是有时间周期的，具体的。而特征在很长一段时间内都是稳定的，是可以重组泛化的。我们在Item2vec网络之前再加入一层特征表示层，用于表征Item实体。初始化各特征的Embedding后，我们以weighted-mean的方式融合Embedding，剩下的流程与word2vec一致，训练后我们可以得到各特征的Embedding，通过weighted-mean融合可覆盖全量Items，而训练的过程又是拟合用户行为模式的过程，这里就取得了我们上面提到的效果，网络结构如下图所示:</p>
+<p><img src="/images/embedding_3.png" alt="embedding_3"></p>
+<p>Topic2vec既能覆盖全量Items，又具有不错的泛化能力，在具体实践中，我们将Topic2vec作为ItemCF的后补策略，二者结合使用，取得不错的线上效果了。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a href="https://arxiv.org/abs/1603.04259" target="_blank" rel="noopener">Item2Vec-Neural Item Embedding for Collaborative Filtering</a></li>
+<li><a href="https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf" target="_blank" rel="noopener">Distributed Representations of Words and Phrases and their Compositionality</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/27234078" target="_blank" rel="noopener">理解 Word2Vec 之 Skip-Gram 模型</a></li>
+</ul>
 
       
     </div>
@@ -410,8 +424,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/05/wide_and_deep/" rel="next" title="Wide & Deep">
-                <i class="fa fa-chevron-left"></i> Wide & Deep
+              <a href="/2019/02/15/kaggle_summary/" rel="next" title="Kaggle比赛小结">
+                <i class="fa fa-chevron-left"></i> Kaggle比赛小结
               </a>
             
           </div>
@@ -419,10 +433,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/05/attention/" rel="prev" title="Attention">
-                Attention <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -571,7 +581,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Trust-CV"><span class="nav-number">1.</span> <span class="nav-text"><a href="#Trust-CV" class="headerlink" title="Trust CV"></a>Trust CV</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征-VS-模型"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x7279;&#x5F81;-VS-&#x6A21;&#x578B;" class="headerlink" title="&#x7279;&#x5F81; VS &#x6A21;&#x578B;"></a>&#x7279;&#x5F81; VS &#x6A21;&#x578B;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比赛与算法落地的区别"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x6BD4;&#x8D5B;&#x4E0E;&#x7B97;&#x6CD5;&#x843D;&#x5730;&#x7684;&#x533A;&#x522B;" class="headerlink" title="&#x6BD4;&#x8D5B;&#x4E0E;&#x7B97;&#x6CD5;&#x843D;&#x5730;&#x7684;&#x533A;&#x522B;"></a>&#x6BD4;&#x8D5B;&#x4E0E;&#x7B97;&#x6CD5;&#x843D;&#x5730;&#x7684;&#x533A;&#x522B;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Team-Work"><span class="nav-number">4.</span> <span class="nav-text"><a href="#Team-Work" class="headerlink" title="Team Work"></a>Team Work</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Embedding实践-从word2vec到Topic2vec"><span class="nav-number">1.</span> <span class="nav-text"><a href="#Embedding&#x5B9E;&#x8DF5;-&#x4ECE;word2vec&#x5230;Topic2vec" class="headerlink" title="Embedding&#x5B9E;&#x8DF5;:&#x4ECE;word2vec&#x5230;Topic2vec"></a>Embedding&#x5B9E;&#x8DF5;:&#x4ECE;word2vec&#x5230;Topic2vec</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Negative-Sampling"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#Negative-Sampling" class="headerlink" title="Negative Sampling"></a>Negative Sampling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Item2vec"><span class="nav-number">1.2.</span> <span class="nav-text"><a href="#Item2vec" class="headerlink" title="Item2vec"></a>Item2vec</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Topic2vec"><span class="nav-number">1.3.</span> <span class="nav-text"><a href="#Topic2vec" class="headerlink" title="Topic2vec"></a>Topic2vec</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">1.4.</span> <span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</span></a></li></ol></li></ol></div>
             
 
           </div>
