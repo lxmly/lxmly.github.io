@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://yoursite.com/images/embedding_1.png">
 <meta property="og:image" content="http://yoursite.com/images/embedding_2.png">
 <meta property="og:image" content="http://yoursite.com/images/embedding_3.png">
-<meta property="og:updated_time" content="2019-03-05T14:21:07.000Z">
+<meta property="og:updated_time" content="2019-03-06T03:39:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Topic2vec">
 <meta name="twitter:description" content="灵活的Embedding">
@@ -143,11 +143,20 @@
 
 
 
-  <title>Topic2vec | lxmly</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>Topic2vec | lxmly</title>
   
 
 
 
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-137819837-1', 'auto');
+  ga('send', 'pageview');
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 
 
@@ -394,6 +403,7 @@
 <h3 id="Topic2vec"><a href="#Topic2vec" class="headerlink" title="Topic2vec"></a>Topic2vec</h3><p>基于实践所得经验，我们认为ItemCF不能被单纯替代，而应该以互补策略来对ItemCF进行补充。协同过滤的最大弊端就是受用户行为数据集所限，往往无法覆盖全量候选集。最简单的方式就是以内容过滤互补，内容过滤可以做到100%覆盖率，不过内容过滤在合理内容关联阈值限制下，召回结果同质化比较严重，泛化能力非常弱。于是我们思考能不能既满足100%覆盖率，又能具有学习用户行为模式的泛化能力，这里就有了Topic2vec。</p>
 <p>Topic2vec是对Item2vec的延伸，它将Item实体替换为表征Item的特征，Item实体是有时间周期的，具体的。而特征在很长一段时间内都是稳定的，是可以重组泛化的。我们在Item2vec网络之前再加入一层特征表示层，用于表征Item实体。初始化各特征的Embedding后，我们以weighted-mean的方式融合Embedding，剩下的流程与word2vec一致，训练后我们可以得到各特征的Embedding，通过weighted-mean融合可覆盖全量Items，而训练的过程又是拟合用户行为模式的过程，这里就取得了我们上面提到的效果，网络结构如下图所示:</p>
 <p><img src="/images/embedding_3.png" alt="embedding_3"></p>
+<p>在实现中，我们使用tensorflow的 embedding_lookup_sparse api来计算weighted-mean，它可以再给定id和权重后，计算embeddings。</p>
 <p>Topic2vec既能覆盖全量Items，又具有不错的泛化能力，在具体实践中，我们将Topic2vec作为ItemCF的后补策略，二者结合使用，取得不错的线上效果了。</p>
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
 <li><a href="https://arxiv.org/abs/1603.04259" target="_blank" rel="noopener">Item2Vec-Neural Item Embedding for Collaborative Filtering</a></li>
@@ -433,6 +443,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/07/tensorflow_1/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -509,7 +523,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

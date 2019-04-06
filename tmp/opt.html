@@ -94,13 +94,17 @@
 
 
 
+<meta name="description" content="梯度下降(Gradient descent)是最常用的优化算法之一。针对DNN的特点，改进迭代了多种优化器，在网络训练中，一般使用 $mini-batch gradient descent$，便是我们经常设置的参数batch-size。优化器就像一个导航仪，比如我们在山顶准备下山，它的作用便是如何让我们快速、准确地来到下山。在优化的过程中，我们会遇到下面困难:  选择合适的$learning ra">
 <meta property="og:type" content="website">
 <meta property="og:title" content="lxmly">
-<meta property="og:url" content="http://yoursite.com/categories/spark分布式算法/index.html">
+<meta property="og:url" content="http://yoursite.com/tmp/opt.html">
 <meta property="og:site_name" content="lxmly">
+<meta property="og:description" content="梯度下降(Gradient descent)是最常用的优化算法之一。针对DNN的特点，改进迭代了多种优化器，在网络训练中，一般使用 $mini-batch gradient descent$，便是我们经常设置的参数batch-size。优化器就像一个导航仪，比如我们在山顶准备下山，它的作用便是如何让我们快速、准确地来到下山。在优化的过程中，我们会遇到下面困难:  选择合适的$learning ra">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-21T10:12:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="lxmly">
+<meta name="twitter:description" content="梯度下降(Gradient descent)是最常用的优化算法之一。针对DNN的特点，改进迭代了多种优化器，在网络训练中，一般使用 $mini-batch gradient descent$，便是我们经常设置的参数batch-size。优化器就像一个导航仪，比如我们在山顶准备下山，它的作用便是如何让我们快速、准确地来到下山。在优化的过程中，我们会遇到下面困难:  选择合适的$learning ra">
 
 
 
@@ -129,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/spark分布式算法/"/>
+  <link rel="canonical" href="http://yoursite.com/tmp/opt.html"/>
 
 
 
 
 
-  <title>分类: spark分布式算法 | lxmly</title>
+  <title> | lxmly</title>
   
 
 
@@ -169,7 +173,7 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left  ">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -263,55 +267,57 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
+    
+    
+    <div class="post-block page">
+      <header class="post-header">
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>spark分布式算法<small>分类</small>
-        </h1>
-      </div>
+	<h1 class="post-title" itemprop="name headline"></h1>
+
+
+
+</header>
 
       
+      
+      
+      <div class="post-body">
         
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
         
-            <a class="post-title-link" href="/2018/04/03/spark_als/" itemprop="url">
-              
-                <span itemprop="name">spark ALS原理解析</span>
-              
-            </a>
+          <p>梯度下降(Gradient descent)是最常用的优化算法之一。针对DNN的特点，改进迭代了多种优化器，在网络训练中，一般使用 $mini-batch gradient descent$，便是我们经常设置的参数batch-size。优化器就像一个导航仪，比如我们在山顶准备下山，它的作用便是如何让我们快速、准确地来到下山。在优化的过程中，我们会遇到下面困难:</p>
+<ul>
+<li>选择合适的$learning rate$是非常困难的，过小则拟合缓慢，过大则可能不能拟合，在最低点附近来回打转</li>
+<li>$Learning\ rate\ schedules$的超参设定，它们和数据的特点紧密相关。</li>
+<li>如果我们的数据非常稀疏，特征参数间更新有着非常不同的频率，我们并不希望特征参数的更新尺度是一致的，例如对不常出现的特征执行步长比较大的更新。</li>
+<li>局部最优问题</li>
+</ul>
+<h2 id="SGD"><a href="#SGD" class="headerlink" title="SGD"></a>SGD</h2><script type="math/tex; mode=display">g_t = \nabla_{\theta_{t-1}}f(\theta_{t-1})</script><script type="math/tex; mode=display">\Delta\theta_t=-\eta*g_t</script><p>最简单朴实的优化手段，缺点是不够灵活，不能根据数据特点自适应</p>
+<h2 id="Adagrad"><a href="#Adagrad" class="headerlink" title="Adagrad"></a>Adagrad</h2><script type="math/tex; mode=display">\Delta\theta_t=-\frac{\eta}{\sqrt{\sum_{r=1}^{t}(g_r)^2+\epsilon}}*g_t</script><ul>
+<li>可以看出Adagrad适合处理稀疏数据，它可以对低频的参数做较大的更新，对高频的做较小的更新，也因此，对于稀疏的数据它的表现很好，很好地提高了SGD的鲁棒性。</li>
+<li>缺点 在训练过程中，这个梯度的平方和累加会一直增大， 分母越来越大，导致最后梯度更新趋向于0</li>
+</ul>
+<h2 id="RMSprop"><a href="#RMSprop" class="headerlink" title="RMSprop"></a>RMSprop</h2><script type="math/tex; mode=display">E[g^2]_t = \gamma E[g^2]_{t-1} + (1-\gamma)g^2_t</script><script type="math/tex; mode=display">\Delta\theta_{t+1}=-\frac{\eta}{\sqrt{E[g^2]_t+\epsilon}}*g_t</script><ul>
+<li>RMSprop对过往的梯度进行了指数衰减，很好的解决了Adagrad的问题，这里$\gamma$建议设置成0.9, $\eta$建议0.001</li>
+<li>在Kaggle Quora比赛里，我们用RMSprop替换了Adam优化器，在训练速度和CV上均有提升</li>
+</ul>
+<h2 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h2><script type="math/tex; mode=display">m_t = \beta_1 m_{t-1} + (1 - \beta_1)g_t</script><script type="math/tex; mode=display">v_t = \beta_2 v_{t-1} + (1 - \beta_2)g_t^2</script><script type="math/tex; mode=display">\hat{m_t}=\frac{m_t}{1-\beta_1^t}</script><script type="math/tex; mode=display">\hat{v_t}=\frac{v_t}{1-\beta_2^t}</script><script type="math/tex; mode=display">\Delta\theta_{t+1}=-\frac{\eta}{\sqrt{\hat{v_t}}+\epsilon}*\hat{m_t}</script><ul>
+<li>Adam算是用的最多了，它号称是兼顾了Adagrad善于处理稀疏梯度和RMSprop善于处理非平稳目标的优势。其中推荐设定$\beta_1=0.9, \beta_2=0.999$</li>
+<li>为不同的参数计算不同的自适应学习率，兼顾了稀疏特征</li>
+<li>内存消耗少，不像Adagrad一样需要存储历史梯度</li>
+</ul>
+<h1 id=""><a href="#" class="headerlink" title="#"></a>#</h1>
         
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-04-03T21:20:35+08:00"
-              content="2018-04-03" >
-          04-03
-        </time>
       </div>
-
-    </header>
-  </article>
-
-
+      
+      
       
     </div>
-
+    
+    
+    
   </div>
-  
-  
-  
-
-  
-
 
 
           </div>
@@ -319,6 +325,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -339,8 +349,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/profile.jpeg"
@@ -417,6 +436,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SGD"><span class="nav-number">1.</span> <span class="nav-text"><a href="#SGD" class="headerlink" title="SGD"></a>SGD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adagrad"><span class="nav-number">2.</span> <span class="nav-text"><a href="#Adagrad" class="headerlink" title="Adagrad"></a>Adagrad</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RMSprop"><span class="nav-number">3.</span> <span class="nav-text"><a href="#RMSprop" class="headerlink" title="RMSprop"></a>RMSprop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adam"><span class="nav-number">4.</span> <span class="nav-text"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#"><span class="nav-number"></span> <span class="nav-text"><a href="#" class="headerlink" title="#"></a>#</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
