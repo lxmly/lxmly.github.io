@@ -94,19 +94,19 @@
 
 
 
-<meta name="description" content="Kaggle">
+<meta name="description" content="Elo_4th">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kaggle比赛小结">
-<meta property="og:url" content="http://yoursite.com/2019/02/14/kaggle_summary/index.html">
+<meta property="og:title" content="Kaggle Elo比赛 top4 总结">
+<meta property="og:url" content="http://yoursite.com/2019/04/05/elo_4th/index.html">
 <meta property="og:site_name" content="lxmly">
-<meta property="og:description" content="Kaggle">
+<meta property="og:description" content="Elo_4th">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/kaggle_1.png">
-<meta property="og:updated_time" content="2019-03-05T14:24:20.000Z">
+<meta property="og:image" content="http://yoursite.com/images/elo_4th/1.png">
+<meta property="og:updated_time" content="2019-05-05T11:11:09.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kaggle比赛小结">
-<meta name="twitter:description" content="Kaggle">
-<meta name="twitter:image" content="http://yoursite.com/images/kaggle_1.png">
+<meta name="twitter:title" content="Kaggle Elo比赛 top4 总结">
+<meta name="twitter:description" content="Elo_4th">
+<meta name="twitter:image" content="http://yoursite.com/images/elo_4th/1.png">
 
 
 
@@ -135,13 +135,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/02/14/kaggle_summary/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/04/05/elo_4th/"/>
 
 
 
 
 
-  <title>Kaggle比赛小结 | lxmly</title>
+  <title>Kaggle Elo比赛 top4 总结 | lxmly</title>
   
 
 
@@ -283,7 +283,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/14/kaggle_summary/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/05/elo_4th/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -300,7 +300,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kaggle比赛小结</h1>
+          <h1 class="post-title" itemprop="name headline">Kaggle Elo比赛 top4 总结</h1>
         
 
         <div class="post-meta">
@@ -312,8 +312,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-14T20:01:05+08:00">
-                2019-02-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-05T21:05:20+08:00">
+                2019-04-05
               </time>
             
 
@@ -335,8 +335,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/随笔/" itemprop="url" rel="index">
-                    <span itemprop="name">随笔</span>
+                  <a href="/categories/kaggle/" itemprop="url" rel="index">
+                    <span itemprop="name">kaggle</span>
                   </a>
                 </span>
 
@@ -359,7 +359,7 @@
 
           
               <div class="post-description">
-                  Kaggle
+                  Elo_4th
               </div>
           
 
@@ -376,28 +376,33 @@
       
 
       
-        <p>打kaggle比赛有一段时间了，有幸拿到Kaggle Master，也算是一种肯定。最好成绩 4/4128，进入绿牌区，共收获2金5银，4次top 1%。整个过程付出很多，收获更多，需要阶段性总结一下。对我来说，kaggle就是一个非常不错的学习交流平台，在这里我通过比赛加深了对各种数据和模型的认识，掌握了许多可以迁移到实际工作中的数据挖掘技巧。在这里还结识了非常优秀的队友，和他们协作非常愉快。</p>
-<p><img src="/images/kaggle_1.png" alt="kaggle_1"></p>
-<h2 id="Trust-CV"><a href="#Trust-CV" class="headerlink" title="Trust CV"></a>Trust CV</h2><p>比赛一般分为public board和private board，第一阶段显示的都是public board，最终成绩以private board为准。许多同学都被public board诱惑，陷入过拟合的境地，在终榜遭到shake up。我经过这段时间的熏陶，Trust CV已经成为我的准则，它代表着泛化能力的强弱。</p>
-<p>公榜往往只有总体数据的10%~20%，而给出的训练数据往往数倍于公榜数据量。通过设置合理的CV交叉验证，我们可以通过训练数据来给予模型合理的判断，其可信度以数据量而论，往往高于公榜score。在talking data比赛中，我们就因为迷恋public board而错失金牌，从此之后基于Trust CV理念，在最后提交的选择中，我们的选择都还不错。</p>
-<p>机器学习有个理念是bias-variance tradeoff，它是指模型复杂度的影响，其目的也是追求模型更强的泛化能力，其实在这里有异曲同工之妙。</p>
-<h2 id="特征-VS-模型"><a href="#特征-VS-模型" class="headerlink" title="特征 VS 模型"></a>特征 VS 模型</h2><p>我一般只挑选表格和nlp比赛参加，因为这些知识对我工作有所帮助。对于传统表格比赛，模型的选择基本趋向于lightgbm和xgboost等boost tree模型，在融合的时候也会加入FM，Ridge等弱模型作为锦上添花。因为模型大家使用的都差多，所以可以说特征为王，优秀的特征工程是重中之中，通过学习优秀的top解法，可以看到大量细致、琐碎的特征工程穿插其中，把数据的细节挖的清清楚楚。</p>
-<p>在特征的时候，除了一些固定的套路外，可以通过直觉来嗅出特征的味道。在普遍场景下，我们需要对用户进行画像建模，有时候也需要对物品进行画像建模。我们可以把自己代入到这个场景中，比如信用违约预测，我们可以想象当这个用户有什么异常行为后会在接下来更有可能违约呢，比如他历史上有多次违约记录，他最近开销很大，甚至超过了收入等等。发现数据规律的过程是充满乐趣的。</p>
-<p>对于模型，在nlp比赛中往往比较重要，随着DNN模型在nlp领域占据主导地位，特征工程的作用不再那么重要，往往聚焦于字符的清洗处理，以期命中更多的Embedding。网络结构的探索成为主要发力方向，这也是可以理解的，因为DNN本身就暗含特征工程，削弱了传统特征工程的作用。不过在一些场景下，在网络中加入统计特征还是有不错的收益的。</p>
-<h2 id="比赛与算法落地的区别"><a href="#比赛与算法落地的区别" class="headerlink" title="比赛与算法落地的区别"></a>比赛与算法落地的区别</h2><p>打比赛的pipeline和工作中的算法落地还是有区别的，我觉得比赛的pipeline其实是工作模型落地的一个子集。</p>
+        <p>最近终于整体完结了kaggle ELO比赛(比赛+远程答辩)，我们队伍（TH &amp; daishu &amp; Q）最终排名4/4126，第一次进入Kaggle奖金区和经历Kaggle英文答辩，非常有意义，感谢我的队友TH与袋鼠，他们非常专业，本文对比赛所得作下小结。</p>
+<p>ELO比赛是根据用户以往的行为历史数据来预测该用户的忠诚度。这个比赛private leaderboard揭晓后，经历了Big Shakeup，不少public榜前排的选手跌落下去，这种剧烈的shakeup也在我们的意料之中，这一切源于这个比赛的数据分布的怪异与评价指标RMSE的设定，该比赛的关键点：</p>
+<h4 id="怪异的数据分布"><a href="#怪异的数据分布" class="headerlink" title="怪异的数据分布"></a>怪异的数据分布</h4><p>在train数据集里，绝大部分target都分布于-1~1之间，却有2000多个target为-33.21928的异常数据，结合该题的评价指标RMSE，这些异常数据的破坏力是决定性的，多预测正确数个异常点就能带来巨大的收益。思索主办方这样设定数据的意图，-33.21928代表了ZERO忠诚度的用户，这部分用户对主办方的业务意义重大。</p>
+<p>这个怪异的数据分布也给这个比赛增加了戏剧性和技巧性，数个异常点的校正就可以带来排名不小的提升，许多队伍沉迷【改值post-process】不能自拔，这也为后来的shakeup埋下伏笔。</p>
+<h3 id="模型框架"><a href="#模型框架" class="headerlink" title="模型框架"></a>模型框架</h3><p>针对如此异常的数据分布，我们设计了如下模型框架：</p>
+<p><img src="/images/elo_4th/1.png" alt="elo_4th_01"></p>
 <ul>
-<li>在比赛中，有预清洗好的数据和明确的离线拟合指标，然后通过特征工程、模型参数优化和模型融合来不断拟合，整个过程都是离线和静态的。</li>
-<li>在工作中，我们要拟合的却是线上，这个过程和目标都是在线和动态的，不过特征工程和模型参数优化这两个极为关键的模块和打比赛是具有共通性的。此外，在工作中，我们需要先从数仓中进行数据清洗，然后基于线上目标定义与之契合的离线metric，通过特征工程、模型离线训练、模型线上部署、ABTest不断提高线上指标数据。在这个过程中：<ul>
-<li>数据清洗和离线指标定义非常重要，离线指标和线上指标不同步也是经常遇到的问题</li>
-<li>模型需要有严格的效率控制，打比赛的花式Ensemble宣告失效，耗时的模型结构需要商榷，我们需要进行模型精度和效率的trade-off。</li>
+<li>训练二分模型预测异常数据的概率，这里异常数据标注为1，非异常数据标注为0</li>
+<li>只使用正常数据训练回归模型（消除异常数据对模型的异常影响）</li>
+<li>通过binary模型和regression模型的结合拟合最终RMSE评价指标</li>
 </ul>
-</li>
-<li>比赛中的数据量往往不大，一般在百万级左右，而工业界的数据量至少亿级别以上了。就需要用到spark、hadoop等分布式框架了。</li>
+<p>通过该模型框架，我们让Local cross validation score得到了可观的提升。</p>
+<h3 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h3><p>特征为王，特征工程的优秀与否具有决定性作用，我们队伍基于对数据的分析、业务推断和特征模式构造了大量细致的特征工程，整个过程比较艰苦和琐碎，细节不再详述。这里提一类有新意的特征模式，超多类别特征的Embedding降维。</p>
+<p>对于类别特征，一般用one-hot编码来搞定，或者用Lightgbm的category训练入参，对于只有几十个类别的特征还是比较适合的，而对于拥有上万个或者几十万类别的特征，我们可以尝试用Embedding的方式来构造，它可以捕捉到统计型特征捕捉不到的东西。</p>
+<p>在Elo比赛里，我们对purchase_date、merchant_id，purchase_amount作了Embedding化处理，使用的方式是Word2vec,LDA,PCA,NFM等，其实Embedding就是一种降维的方式，使用这种方式的前提是该特征中存在大量相同的值。比如purchase_amount，它本身是非常强力的特征，充分挖掘它的潜力非常重要，它虽然是一种数值特征，但是在千万行数据中，却只存在20w+个不同的purchase_amount值，存在大量相同的值，通过Word2vec进行Embedding降维，提取差异化特征，我们取得了不错的收益。</p>
+<h3 id="后处理"><a href="#后处理" class="headerlink" title="后处理"></a>后处理</h3><p>前面提到异常值带来的巨大收益，许多队伍都冒险选择了后处理，这也导致了最后private leaderboard的Big Shakeup。不少队伍的后处理方式就是对本地预测属于异常值的高概率的数据进行改值，直接赋值-33.21928，而很巧public leaderboard正好契合了某些改值手段。</p>
+<p>这种陷阱被调侃为”蜜罐”，新手是无法拒绝这种诱惑的，我们在最后关头还在犹豫是不是要提交一个改值版本。我们综合计算了风险与收益，结合最终的RMSE评价指标，作了以下判断：</p>
+<ul>
+<li>因为头部的预测概率已经足够高，改值带来的风险约是收益的三倍</li>
+<li>本地交叉验证不支持改值收益理论</li>
+<li>二分模型AUC比较糟糕，0.91+，对于如此不平衡的数据，这个AUC的置信度是很一般的，也说明了异常值预测的困难程度，在如此二分模型的基础上改值，无异于走钢丝。</li>
 </ul>
-<p>打比赛就像读论文一样，也是学习提高方式。在工作中进行排序模型的落地中，就用到了一些在比赛中学到的特征工程和调参技巧，获得了不错的收益。</p>
-<h2 id="Team-Work"><a href="#Team-Work" class="headerlink" title="Team Work"></a>Team Work</h2><p>对我来说，打比赛获得学习经验的意义大于最后成绩，当然二者也不矛盾。我会倾向于团队协作完成一场比赛，在一个优秀团队里往往能学习到更多。这个协作过程中尽全力是我的原则，大家能力有高低，但负责任、靠谱的协作态度是必须的。</p>
-<p>在这个过程中，我们一般会先独自进行特征工程，以期保持各自的模型差异性，并保持特征模型等相关交流，然后在后期进行模型差异性融合，往往能取得不错的boost。<br>团队交流也是充满乐趣的，比赛中后期往往会有一段疲乏期，这时候进展开始变缓，团队交流能有效缓解这种情况，有时还能激发灵感。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总之，虽然打比赛占用了空闲和假期时间，但收获良多。kaggle的知识分享做的是非常优秀的，它提供了另外一种学习视野，收获良多。Kaggle比赛不能锻炼我们的每一块肌肉，对于工业界的算法落地，还是需要从更多细致的方面进行设计和考量。</p>
+<p>综上，我们最终放弃了改值，提交了两个有些差异的submission，最终排名第四并选中了最优解，这也验证了我们的推断。</p>
+<h3 id="Trust-Local-CV"><a href="#Trust-Local-CV" class="headerlink" title="Trust Local CV"></a>Trust Local CV</h3><p>请相信你本地的交叉验证得分—-Trust Local CV。在各种比赛里，Trust Local CV一次次验证着它的正确，CV代表着你的数据模型的泛化能力与鲁棒性。一般而言，test数据是少于train数据，而public board的数据量一般又小于private board的数据量，正确的CV能较好的衡量你的数据模型在train这个量最大的数据集上表现，从概率的角度来看，CV的可信度明显强于public board。当然也会有异常的情况，这需要我们根据经验来判断和抉择了。</p>
+<h3 id="远程答辩"><a href="#远程答辩" class="headerlink" title="远程答辩"></a>远程答辩</h3><p>Elo比赛前5名属于奖金区，需要进行远程英文答辩，第一次和kaggle与比赛主办方通过Google Meet进行比赛交流，整个过程虽然有些紧张但也比较顺利，ELo工作人员还特意问道了对purchase_amount的Embedding的意图与动机。</p>
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>复盘整个比赛，收获颇多，这也是数据的魅力。在这个过程中我们通过特征、模型与技巧来拟合数据的规律，发现其中的奥秘，仿佛探案一般，还原数据的真相，非常有趣。</p>
+<p>Kaggle厉害的选手有很多，不乏工作多年的资深数据科学家，这次能在Kaggle拿到奖金，十分不易，全靠团队优秀的协作配合，感谢队友TH和袋鼠。</p>
 
       
     </div>
@@ -422,8 +427,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/05/attention/" rel="next" title="Attention">
-                <i class="fa fa-chevron-left"></i> Attention
+              <a href="/2019/02/15/embedding/" rel="next" title="Topic2vec">
+                <i class="fa fa-chevron-left"></i> Topic2vec
               </a>
             
           </div>
@@ -431,10 +436,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/02/15/embedding/" rel="prev" title="Topic2vec">
-                Topic2vec <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -583,7 +584,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Trust-CV"><span class="nav-number">1.</span> <span class="nav-text"><a href="#Trust-CV" class="headerlink" title="Trust CV"></a>Trust CV</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征-VS-模型"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x7279;&#x5F81;-VS-&#x6A21;&#x578B;" class="headerlink" title="&#x7279;&#x5F81; VS &#x6A21;&#x578B;"></a>&#x7279;&#x5F81; VS &#x6A21;&#x578B;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比赛与算法落地的区别"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x6BD4;&#x8D5B;&#x4E0E;&#x7B97;&#x6CD5;&#x843D;&#x5730;&#x7684;&#x533A;&#x522B;" class="headerlink" title="&#x6BD4;&#x8D5B;&#x4E0E;&#x7B97;&#x6CD5;&#x843D;&#x5730;&#x7684;&#x533A;&#x522B;"></a>&#x6BD4;&#x8D5B;&#x4E0E;&#x7B97;&#x6CD5;&#x843D;&#x5730;&#x7684;&#x533A;&#x522B;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Team-Work"><span class="nav-number">4.</span> <span class="nav-text"><a href="#Team-Work" class="headerlink" title="Team Work"></a>Team Work</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#怪异的数据分布"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x602A;&#x5F02;&#x7684;&#x6570;&#x636E;&#x5206;&#x5E03;" class="headerlink" title="&#x602A;&#x5F02;&#x7684;&#x6570;&#x636E;&#x5206;&#x5E03;"></a>&#x602A;&#x5F02;&#x7684;&#x6570;&#x636E;&#x5206;&#x5E03;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型框架"><span class="nav-number"></span> <span class="nav-text"><a href="#&#x6A21;&#x578B;&#x6846;&#x67B6;" class="headerlink" title="&#x6A21;&#x578B;&#x6846;&#x67B6;"></a>&#x6A21;&#x578B;&#x6846;&#x67B6;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征工程"><span class="nav-number"></span> <span class="nav-text"><a href="#&#x7279;&#x5F81;&#x5DE5;&#x7A0B;" class="headerlink" title="&#x7279;&#x5F81;&#x5DE5;&#x7A0B;"></a>&#x7279;&#x5F81;&#x5DE5;&#x7A0B;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后处理"><span class="nav-number"></span> <span class="nav-text"><a href="#&#x540E;&#x5904;&#x7406;" class="headerlink" title="&#x540E;&#x5904;&#x7406;"></a>&#x540E;&#x5904;&#x7406;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Trust-Local-CV"><span class="nav-number"></span> <span class="nav-text"><a href="#Trust-Local-CV" class="headerlink" title="Trust Local CV"></a>Trust Local CV</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#远程答辩"><span class="nav-number"></span> <span class="nav-text"><a href="#&#x8FDC;&#x7A0B;&#x7B54;&#x8FA9;" class="headerlink" title="&#x8FDC;&#x7A0B;&#x7B54;&#x8FA9;"></a>&#x8FDC;&#x7A0B;&#x7B54;&#x8FA9;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后"><span class="nav-number"></span> <span class="nav-text"><a href="#&#x6700;&#x540E;" class="headerlink" title="&#x6700;&#x540E;"></a>&#x6700;&#x540E;</span></a></div>
             
 
           </div>
