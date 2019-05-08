@@ -94,20 +94,19 @@
 
 
 
-<meta name="description" content="public与private榜单的交织">
+<meta name="description" content="DeepFM原理小结">
 <meta property="og:type" content="article">
-<meta property="og:title" content="bias与variance的权衡（tradeoff)">
-<meta property="og:url" content="http://yoursite.com/2017/09/01/bias_variance/index.html">
+<meta property="og:title" content="DeepFM">
+<meta property="og:url" content="http://yoursite.com/2019/05/01/deepFM/index.html">
 <meta property="og:site_name" content="lxmly">
-<meta property="og:description" content="public与private榜单的交织">
+<meta property="og:description" content="DeepFM原理小结">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/bias_1.jpeg">
-<meta property="og:image" content="http://yoursite.com/images/bias_2.jpeg">
-<meta property="og:updated_time" content="2018-12-28T07:43:22.000Z">
+<meta property="og:image" content="http://yoursite.com/images/deepFM/01.png">
+<meta property="og:updated_time" content="2019-05-08T02:09:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="bias与variance的权衡（tradeoff)">
-<meta name="twitter:description" content="public与private榜单的交织">
-<meta name="twitter:image" content="http://yoursite.com/images/bias_1.jpeg">
+<meta name="twitter:title" content="DeepFM">
+<meta name="twitter:description" content="DeepFM原理小结">
+<meta name="twitter:image" content="http://yoursite.com/images/deepFM/01.png">
 
 
 
@@ -136,13 +135,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/09/01/bias_variance/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/05/01/deepFM/"/>
 
 
 
 
 
-  <title>bias与variance的权衡（tradeoff) | lxmly</title>
+  <title>DeepFM | lxmly</title>
   
 
 
@@ -284,7 +283,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/01/bias_variance/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/01/deepFM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -301,7 +300,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">bias与variance的权衡（tradeoff)</h1>
+          <h1 class="post-title" itemprop="name headline">DeepFM</h1>
         
 
         <div class="post-meta">
@@ -313,8 +312,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-01T22:10:20+08:00">
-                2017-09-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-01T17:05:32+08:00">
+                2019-05-01
               </time>
             
 
@@ -360,7 +359,7 @@
 
           
               <div class="post-description">
-                  public与private榜单的交织
+                  DeepFM原理小结
               </div>
           
 
@@ -377,16 +376,30 @@
       
 
       
-        <p>&emsp;&emsp;这两个词是我们训练模型最关心的。因为二者之间存在矛盾，不可兼得，需要在二者之间进行权衡，使得模型的泛化误差最低。理解bias和variance可以帮助我们评估模型结果，避免过拟合和欠拟合的情况，下面是自己的一些理解。<br>&emsp;&emsp;假如你现在参加了一个kaggle比赛，题目会提供一份标注结果的训练数据集，和一份待预测的测试集。此外还有规定好的误差评分公式，比如回归问题一般是RMSE等。经过数据清洗、特征工程、模型选择、调参，但是你没有ensemble和cv。你哼哧哼哧地终于训练出了模型，local-rmse=0.3812（胡编的），还没提交的时候，对比了online leaderboard的rmse，第一名！怀着激动的心情提交了结果，结果倒数第1名。哈哈，当然这种反差有些夸张了，在这里local-rmse就是和bias相关的。出现这种反差的原因是因为模型有很高的variance，出现了过拟合。</p>
-<h4 id="含义"><a href="#含义" class="headerlink" title="含义"></a>含义</h4><p>bias：期望输出与真实标记的差别称为偏差。<br>variance：不同的训练数据集训练出的模型的输出值之间的差异，它表示了模型的稳定程度。比如，要预测一个给定点的值，用$n$份有差异的数据集训练，训练了$n$个模型，结果这$n$个模型对该点的预测值的差异浮动很大，此时该模型的variance就偏高了。这种情况对应了下图中右2和右4.    </p>
-<p><img src="/images/bias_1.jpeg" alt="bias_1"></p>
-<p>&emsp;&emsp;我们训练模型的最终目标，是降低模型的泛化误差，variance强调了模型的泛化能力，bias强调了模型的误差能力。如果一个模型variance和bias都很低，它就能获得较低的泛化误差。<br>&emsp;&emsp;许多模型在设计的时候，都强调避免过拟合，像普遍存在的正则项。在ensemble类模型中，随机森林基于bagging方法，通过样本采样和特征采样，使得每颗树都各有特色。gbdt基于boosting方法，在每一轮训练，通过拟合残差，也训练出了各有特色的树。这些方式在保证bias的基础上，使得模型具有良好的泛化能力。</p>
-<h3 id="过拟合与欠拟合"><a href="#过拟合与欠拟合" class="headerlink" title="过拟合与欠拟合"></a>过拟合与欠拟合</h3><p>&emsp;&emsp;处理过拟合和欠拟合的过程就是关于处理bias和variance。模型复杂度越高，过拟合的风险就越大，bias就减小，但是variance就越高。如下图所示：</p>
-<p><img src="/images/bias_2.jpeg" alt="bias_2"></p>
-<h3 id="误差公式"><a href="#误差公式" class="headerlink" title="误差公式"></a>误差公式</h3><p><script type="math/tex">error=bias^2(x)+var(x)+\varepsilon ^2</script> $\varepsilon$表示数据噪声。也就是说，泛华误差可分解为偏差、方差和噪声之和。</p>
-<h3 id="Cross-Validation"><a href="#Cross-Validation" class="headerlink" title="Cross Validation"></a>Cross Validation</h3><h4 id="k-fold-cv的k的选择"><a href="#k-fold-cv的k的选择" class="headerlink" title="k-fold cv的k的选择"></a>k-fold cv的k的选择</h4><p>当k偏小的时候，会导致bias偏高。当k偏大的时候，会导致variance偏高，通常把k控制在5~10的范围里。</p>
-<h4 id="bias-variance判断"><a href="#bias-variance判断" class="headerlink" title="bias-variance判断"></a>bias-variance判断</h4><p>根据错误均值判断bias，如果错误均值很低，说明在这个数据集上，该模型准确度是可以的。<br>根据错误标准差来判断variance，如果错误标准差很高，说明该模型的泛化能力需要提高。</p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://codesachin.wordpress.com/2015/08/30/cross-validation-and-the-bias-variance-tradeoff-for-dummies/" target="_blank" rel="noopener">Cross Validation and the Bias-Variance tradeoff</a><br><a href="https://codesachin.wordpress.com/2015/08/30/cross-validation-and-the-bias-variance-tradeoff-for-dummies/" target="_blank" rel="noopener">Understanding the Bias-Variance Tradeoff</a><br><a href="https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff" target="_blank" rel="noopener">Bias–variance tradeoff</a></p>
+        <p>DeepFM从理论上是对Wide&amp;Deep进一步地延伸，它将Wide&amp;Deep的Linear部分替换为FM，使得模型可以自动学习高阶特征交互，而无需进行手动的特征工程，此外因为FM高效的算法结构，DeepFM具有很不错的训练效率。</p>
+<p>论文聚焦在了“如何有效地进行特征组合”，算法FM刚好解决了这个问题。手工特征组合需要较多的组合实验测试，且稀疏数据特征组合后，特征空间暴增，导致训练不充分和效率低下。对比LR的手工交互，FM不仅实现组合特征的自动学习，并且训练效率降至线性时间，DeepFM其实是在Wide&amp;Deep框架下的延伸，Wide&amp;Deep + FM = Deep&amp;FM（除此之外，DeepFM还有一个亮点是共享Embedding）</p>
+<h3 id="FM原理"><a href="#FM原理" class="headerlink" title="FM原理"></a>FM原理</h3><p>特征组合在特征工程里是很常用的手段，FM通过引入隐向量自动、高效地完成该过程，公式如下：</p>
+<script type="math/tex; mode=display">y(X)=\omega_{0}+\sum_{i=1}^{n} \omega_{i} x_{i}+\sum_{i=1}^{n-1} \sum_{j=i+1}^{n} \omega_{i j} x_{i} x_{j}</script><script type="math/tex; mode=display">n代表样本的特征数量，x_i 是第 i 个特征的值， \omega 是模型参数，w_{ij}=⟨v_i,v_j⟩, v_i、v_j表示隐向量。</script><p>公式推导：</p>
+<script type="math/tex; mode=display">a b+a c+b c=\frac{1}{2}\left[(a+b+c)^{2}-\left(a^{2}+b^{2}+c^{2}\right)\right]</script><script type="math/tex; mode=display">
+\begin{aligned} 
+\sum_{i=1}^{n-1} \sum_{j=i+1}^{n}<v_{i}, v_{j}>x_{i} x_{j} &=\frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n}<v_{i}, v_{j}>x_{i} x_{j}-\frac{1}{2} \sum_{i=1}^{n}<v_{i}, v_{i}>x_{i} x_{i} \\ &=\frac{1}{2}\left(\sum_{i=1}^{n} \sum_{j=1}^{n} \sum_{f=1}^{n} v_{i, f} v_{j, f} x_{i} x_{j}-\sum_{i=1}^{n} \sum_{f=1}^{k} v_{i, f} v_{i, f} x_{i} x_{i}\right) \\ &=\frac{1}{2} \sum_{f=1}^{k}\left[\left(\sum_{i=1}^{n} v_{i, f} x_{i}\right) \cdot\left(\sum_{j=1}^{n} v_{j, f} x_{j}\right)-\sum_{i=1}^{n} v_{i, f}^{2} x_{i}^{2}\right] \\ &=\frac{1}{2} \sum_{f=1}^{k}\left[\left(\sum_{i=1}^{n} v_{i, f} x_{i}\right)^{2}-\sum_{i=1}^{n} v_{i, f}^{2} x_{i}^{2}\right] \end{aligned}</script><p>可以看出FM参数训练的复杂度是$O(kn)$，其中$k$表示隐向量维度，远小于类别特征数$n$</p>
+<h3 id="DeepFM原理"><a href="#DeepFM原理" class="headerlink" title="DeepFM原理"></a>DeepFM原理</h3><p>DeepFM由两部分组成：FM组件与Deep组件，二者共享同样的输入，输出函数如下：</p>
+<script type="math/tex; mode=display">\hat{y}=\operatorname{sigmoid}\left(y_{F M}+y_{D N N}\right)</script><script type="math/tex; mode=display">y_{F M} 表示FM组件输出，y_{D N N} 表示Deep组件输出</script><p>其中：</p>
+<script type="math/tex; mode=display">y_{F M}=\langle w, x\rangle+\sum_{j_{1}=1}^{d} \sum_{j_{2}=j_{1}+1}^{d}\left\langle V_{i}, V_{j}\right\rangle x_{j_{1}} \cdot x_{j_{2}}</script><p>整体框架图如下所示:</p>
+<p><img src="/images/deepFM/01.png" alt="deepFM_01"></p>
+<p>值的指出的是FM组件和Deep组件是共享同样的特征Embedding，这会带来两点重要的收益：</p>
+<ul>
+<li>它会同时从原始特征中学习低阶和高阶的特征组合</li>
+<li>无须像Wide&amp;Deep那样构建专家特征工程</li>
+</ul>
+<p>论文还细致比较了DeepFM对FNN、PNN与Wide&amp;Deep的优势，DeepFM是唯一不需要预训练与特征工程，并能够同时捕获低阶和高阶特征组合的模型。</p>
+<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p>DeepFM将FM嵌入到Wide&amp;Deep的框架下，并共享学习Embedding, 实现高阶组合特征的自动学习，解决了手工特征组合带来的不便，是Wide&amp;Deep进一步的延伸。</p>
+<p>在实际落地中，手工组合特征等各式特征工程当然仍然是不可或缺的，但在DeepFM框架下，这些组合特征可以进一步自动学习，向更高阶特征组合。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a href="https://arxiv.org/abs/1703.04247" target="_blank" rel="noopener">Deepfm: a factorization-machine based neural network for ctr prediction</a></li>
+<li><a href="https://www.csie.ntu.edu.tw/~b97053/paper/Rendle2010FM.pdf" target="_blank" rel="noopener">Factorization Machines</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/37963267" target="_blank" rel="noopener">FM算法解析</a></li>
+</ul>
 
       
     </div>
@@ -411,8 +424,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/08/01/als_formula/" rel="next" title="Explicit ALS公式推导">
-                <i class="fa fa-chevron-left"></i> Explicit ALS公式推导
+              <a href="/2019/04/05/elo_4th/" rel="next" title="Kaggle Elo比赛 top4 总结">
+                <i class="fa fa-chevron-left"></i> Kaggle Elo比赛 top4 总结
               </a>
             
           </div>
@@ -420,10 +433,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/27/breeze/" rel="prev" title="Breeze小结">
-                Breeze小结 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -572,7 +581,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#含义"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x542B;&#x4E49;" class="headerlink" title="&#x542B;&#x4E49;"></a>&#x542B;&#x4E49;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过拟合与欠拟合"><span class="nav-number"></span> <span class="nav-text"><a href="#&#x8FC7;&#x62DF;&#x5408;&#x4E0E;&#x6B20;&#x62DF;&#x5408;" class="headerlink" title="&#x8FC7;&#x62DF;&#x5408;&#x4E0E;&#x6B20;&#x62DF;&#x5408;"></a>&#x8FC7;&#x62DF;&#x5408;&#x4E0E;&#x6B20;&#x62DF;&#x5408;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#误差公式"><span class="nav-number"></span> <span class="nav-text"><a href="#&#x8BEF;&#x5DEE;&#x516C;&#x5F0F;" class="headerlink" title="&#x8BEF;&#x5DEE;&#x516C;&#x5F0F;"></a>&#x8BEF;&#x5DEE;&#x516C;&#x5F0F;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cross-Validation"><span class="nav-number"></span> <span class="nav-text"><a href="#Cross-Validation" class="headerlink" title="Cross Validation"></a>Cross Validation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#k-fold-cv的k的选择"><span class="nav-number">1.</span> <span class="nav-text"><a href="#k-fold-cv&#x7684;k&#x7684;&#x9009;&#x62E9;" class="headerlink" title="k-fold cv&#x7684;k&#x7684;&#x9009;&#x62E9;"></a>k-fold cv&#x7684;k&#x7684;&#x9009;&#x62E9;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bias-variance判断"><span class="nav-number">2.</span> <span class="nav-text"><a href="#bias-variance&#x5224;&#x65AD;" class="headerlink" title="bias-variance&#x5224;&#x65AD;"></a>bias-variance&#x5224;&#x65AD;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number"></span> <span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#FM原理"><span class="nav-number">1.</span> <span class="nav-text"><a href="#FM&#x539F;&#x7406;" class="headerlink" title="FM&#x539F;&#x7406;"></a>FM&#x539F;&#x7406;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DeepFM原理"><span class="nav-number">2.</span> <span class="nav-text"><a href="#DeepFM&#x539F;&#x7406;" class="headerlink" title="DeepFM&#x539F;&#x7406;"></a>DeepFM&#x539F;&#x7406;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思考"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x601D;&#x8003;" class="headerlink" title="&#x601D;&#x8003;"></a>&#x601D;&#x8003;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</span></a></li></ol></div>
             
 
           </div>

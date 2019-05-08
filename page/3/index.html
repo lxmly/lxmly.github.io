@@ -94,20 +94,13 @@
 
 
 
-<meta name="description" content="public与private榜单的交织">
-<meta property="og:type" content="article">
-<meta property="og:title" content="bias与variance的权衡（tradeoff)">
-<meta property="og:url" content="http://yoursite.com/2017/09/01/bias_variance/index.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="lxmly">
+<meta property="og:url" content="http://yoursite.com/page/3/index.html">
 <meta property="og:site_name" content="lxmly">
-<meta property="og:description" content="public与private榜单的交织">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/bias_1.jpeg">
-<meta property="og:image" content="http://yoursite.com/images/bias_2.jpeg">
-<meta property="og:updated_time" content="2018-12-28T07:43:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="bias与variance的权衡（tradeoff)">
-<meta name="twitter:description" content="public与private榜单的交织">
-<meta name="twitter:image" content="http://yoursite.com/images/bias_1.jpeg">
+<meta name="twitter:title" content="lxmly">
 
 
 
@@ -136,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/09/01/bias_variance/"/>
+  <link rel="canonical" href="http://yoursite.com/page/3/"/>
 
 
 
 
 
-  <title>bias与variance的权衡（tradeoff) | lxmly</title>
+  <title>lxmly</title>
   
 
 
@@ -176,7 +169,9 @@
     
   
 
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left 
+   page-home 
+ ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -269,9 +264,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-expand">
     
+      
 
   
 
@@ -284,7 +279,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/01/bias_variance/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/07/spark_guide/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -301,7 +296,9 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">bias与variance的权衡（tradeoff)</h1>
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/07/spark_guide/" itemprop="url">Spark Guides</a></h1>
         
 
         <div class="post-meta">
@@ -313,8 +310,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-01T22:10:20+08:00">
-                2017-09-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-07T23:11:25+08:00">
+                2017-06-07
               </time>
             
 
@@ -336,8 +333,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/algorithm/" itemprop="url" rel="index">
-                    <span itemprop="name">algorithm</span>
+                  <a href="/categories/spark/" itemprop="url" rel="index">
+                    <span itemprop="name">spark</span>
                   </a>
                 </span>
 
@@ -359,10 +356,6 @@
           
 
           
-              <div class="post-description">
-                  public与private榜单的交织
-              </div>
-          
 
         </div>
       </header>
@@ -377,17 +370,16 @@
       
 
       
-        <p>&emsp;&emsp;这两个词是我们训练模型最关心的。因为二者之间存在矛盾，不可兼得，需要在二者之间进行权衡，使得模型的泛化误差最低。理解bias和variance可以帮助我们评估模型结果，避免过拟合和欠拟合的情况，下面是自己的一些理解。<br>&emsp;&emsp;假如你现在参加了一个kaggle比赛，题目会提供一份标注结果的训练数据集，和一份待预测的测试集。此外还有规定好的误差评分公式，比如回归问题一般是RMSE等。经过数据清洗、特征工程、模型选择、调参，但是你没有ensemble和cv。你哼哧哼哧地终于训练出了模型，local-rmse=0.3812（胡编的），还没提交的时候，对比了online leaderboard的rmse，第一名！怀着激动的心情提交了结果，结果倒数第1名。哈哈，当然这种反差有些夸张了，在这里local-rmse就是和bias相关的。出现这种反差的原因是因为模型有很高的variance，出现了过拟合。</p>
-<h4 id="含义"><a href="#含义" class="headerlink" title="含义"></a>含义</h4><p>bias：期望输出与真实标记的差别称为偏差。<br>variance：不同的训练数据集训练出的模型的输出值之间的差异，它表示了模型的稳定程度。比如，要预测一个给定点的值，用$n$份有差异的数据集训练，训练了$n$个模型，结果这$n$个模型对该点的预测值的差异浮动很大，此时该模型的variance就偏高了。这种情况对应了下图中右2和右4.    </p>
-<p><img src="/images/bias_1.jpeg" alt="bias_1"></p>
-<p>&emsp;&emsp;我们训练模型的最终目标，是降低模型的泛化误差，variance强调了模型的泛化能力，bias强调了模型的误差能力。如果一个模型variance和bias都很低，它就能获得较低的泛化误差。<br>&emsp;&emsp;许多模型在设计的时候，都强调避免过拟合，像普遍存在的正则项。在ensemble类模型中，随机森林基于bagging方法，通过样本采样和特征采样，使得每颗树都各有特色。gbdt基于boosting方法，在每一轮训练，通过拟合残差，也训练出了各有特色的树。这些方式在保证bias的基础上，使得模型具有良好的泛化能力。</p>
-<h3 id="过拟合与欠拟合"><a href="#过拟合与欠拟合" class="headerlink" title="过拟合与欠拟合"></a>过拟合与欠拟合</h3><p>&emsp;&emsp;处理过拟合和欠拟合的过程就是关于处理bias和variance。模型复杂度越高，过拟合的风险就越大，bias就减小，但是variance就越高。如下图所示：</p>
-<p><img src="/images/bias_2.jpeg" alt="bias_2"></p>
-<h3 id="误差公式"><a href="#误差公式" class="headerlink" title="误差公式"></a>误差公式</h3><p><script type="math/tex">error=bias^2(x)+var(x)+\varepsilon ^2</script> $\varepsilon$表示数据噪声。也就是说，泛华误差可分解为偏差、方差和噪声之和。</p>
-<h3 id="Cross-Validation"><a href="#Cross-Validation" class="headerlink" title="Cross Validation"></a>Cross Validation</h3><h4 id="k-fold-cv的k的选择"><a href="#k-fold-cv的k的选择" class="headerlink" title="k-fold cv的k的选择"></a>k-fold cv的k的选择</h4><p>当k偏小的时候，会导致bias偏高。当k偏大的时候，会导致variance偏高，通常把k控制在5~10的范围里。</p>
-<h4 id="bias-variance判断"><a href="#bias-variance判断" class="headerlink" title="bias-variance判断"></a>bias-variance判断</h4><p>根据错误均值判断bias，如果错误均值很低，说明在这个数据集上，该模型准确度是可以的。<br>根据错误标准差来判断variance，如果错误标准差很高，说明该模型的泛化能力需要提高。</p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://codesachin.wordpress.com/2015/08/30/cross-validation-and-the-bias-variance-tradeoff-for-dummies/" target="_blank" rel="noopener">Cross Validation and the Bias-Variance tradeoff</a><br><a href="https://codesachin.wordpress.com/2015/08/30/cross-validation-and-the-bias-variance-tradeoff-for-dummies/" target="_blank" rel="noopener">Understanding the Bias-Variance Tradeoff</a><br><a href="https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff" target="_blank" rel="noopener">Bias–variance tradeoff</a></p>
-
+        
+          Spark 温故知新
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/07/spark_guide/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
       
     </div>
     
@@ -404,32 +396,12 @@
       
 
       
-      
+
       
 
       
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2017/08/01/als_formula/" rel="next" title="Explicit ALS公式推导">
-                <i class="fa fa-chevron-left"></i> Explicit ALS公式推导
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/27/breeze/" rel="prev" title="Breeze小结">
-                Breeze小结 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
       
-
-      
+        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -439,11 +411,14 @@
   </article>
 
 
+    
+  </section>
 
-    <div class="post-spread">
-      
-    </div>
-  </div>
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+  </nav>
+
 
 
           </div>
@@ -451,10 +426,6 @@
 
 
           
-  <div class="comments" id="comments">
-    
-  </div>
-
 
         </div>
         
@@ -475,17 +446,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/profile.jpeg"
@@ -562,22 +524,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#含义"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x542B;&#x4E49;" class="headerlink" title="&#x542B;&#x4E49;"></a>&#x542B;&#x4E49;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过拟合与欠拟合"><span class="nav-number"></span> <span class="nav-text"><a href="#&#x8FC7;&#x62DF;&#x5408;&#x4E0E;&#x6B20;&#x62DF;&#x5408;" class="headerlink" title="&#x8FC7;&#x62DF;&#x5408;&#x4E0E;&#x6B20;&#x62DF;&#x5408;"></a>&#x8FC7;&#x62DF;&#x5408;&#x4E0E;&#x6B20;&#x62DF;&#x5408;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#误差公式"><span class="nav-number"></span> <span class="nav-text"><a href="#&#x8BEF;&#x5DEE;&#x516C;&#x5F0F;" class="headerlink" title="&#x8BEF;&#x5DEE;&#x516C;&#x5F0F;"></a>&#x8BEF;&#x5DEE;&#x516C;&#x5F0F;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cross-Validation"><span class="nav-number"></span> <span class="nav-text"><a href="#Cross-Validation" class="headerlink" title="Cross Validation"></a>Cross Validation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#k-fold-cv的k的选择"><span class="nav-number">1.</span> <span class="nav-text"><a href="#k-fold-cv&#x7684;k&#x7684;&#x9009;&#x62E9;" class="headerlink" title="k-fold cv&#x7684;k&#x7684;&#x9009;&#x62E9;"></a>k-fold cv&#x7684;k&#x7684;&#x9009;&#x62E9;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bias-variance判断"><span class="nav-number">2.</span> <span class="nav-text"><a href="#bias-variance&#x5224;&#x65AD;" class="headerlink" title="bias-variance&#x5224;&#x65AD;"></a>bias-variance&#x5224;&#x65AD;</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number"></span> <span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</span></a></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -688,10 +634,10 @@
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
 
-
+  
 
   
 
