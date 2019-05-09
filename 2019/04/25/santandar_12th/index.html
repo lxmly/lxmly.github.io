@@ -102,7 +102,7 @@
 <meta property="og:description" content="Santander 12/8802">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/santandar/01.png">
-<meta property="og:updated_time" content="2019-05-09T14:31:57.000Z">
+<meta property="og:updated_time" content="2019-05-09T14:51:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kaggle Santander比赛 top12 总结">
 <meta name="twitter:description" content="Santander 12/8802">
@@ -398,8 +398,9 @@
 <p><strong>3.</strong> 数据集中的Float特征存在大量相同的值</p>
 <ul>
 <li>train和test的特征值都保留四位小数，明显进行了截取，多个特征都存在大量相同的值，以至于许多队伍都把这个Float值当做类别处理</li>
-<li>对同值Float特征作count特征，观察多个特征的count分布，我们发现正负样本分布存在细小差异，且形状贴近正态分布，如下图所示：<br><img src="/images/santandar/01.png" alt="santandar_01"></li>
+<li>对同值Float特征作count特征，观察多个特征的count分布，我们发现正负样本分布存在细小差异，且形状贴近正态分布，如下图所示：</li>
 </ul>
+<p><img src="/images/santandar/01.png" width="300px"></p>
 <p>当我们把count值作为特征进行测试后，AUC 0.901-&gt;0.902，和0.91+与0.92+仍然相去甚大</p>
 <p>进一步思考</p>
 <ul>
