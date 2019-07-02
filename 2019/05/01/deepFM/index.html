@@ -102,7 +102,7 @@
 <meta property="og:description" content="DeepFM原理小结">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/deepFM/01.png">
-<meta property="og:updated_time" content="2019-05-23T07:10:42.000Z">
+<meta property="og:updated_time" content="2019-06-28T09:28:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DeepFM">
 <meta name="twitter:description" content="DeepFM原理小结">
@@ -378,13 +378,20 @@
       
         <p>DeepFM从理论上是对Wide&amp;Deep进一步地延伸，它将Wide&amp;Deep的Linear部分替换为FM，使得模型可以自动学习高阶特征交互，而无需进行手动的特征工程，此外因为FM高效的算法结构，DeepFM具有很不错的训练效率。</p>
 <p>论文聚焦在了“如何有效地进行特征组合”，算法FM刚好解决了这个问题。手工特征组合需要较多的组合实验测试，且稀疏数据特征组合后，特征空间暴增，导致训练不充分和效率低下。对比LR的手工交互，FM不仅实现组合特征的自动学习，并且训练效率降至线性时间，DeepFM其实是在Wide&amp;Deep框架下的延伸，Wide&amp;Deep + FM = Deep&amp;FM（除此之外，DeepFM还有一个亮点是共享Embedding）</p>
-<h3 id="FM原理"><a href="#FM原理" class="headerlink" title="FM原理"></a>FM原理</h3><p>特征组合在特征工程里是很常用的手段，FM通过引入隐向量自动、高效地完成该过程。正常的特征组合公式如下：</p>
-<script type="math/tex; mode=display">y(X)=\omega_{0}+\sum_{i=1}^{n} \omega_{i} x_{i}+\sum_{i=1}^{n-1} \sum_{j=i+1}^{n} \omega_{i j} x_{i} x_{j}</script><p>FM通过引入隐向量的概念可以高效地完成这一特征组合操作，公式变化为：</p>
+<h3 id="FM算法"><a href="#FM算法" class="headerlink" title="FM算法"></a>FM算法</h3><p>FM(Factorization Machine)是工业界最常用的排序模型之一，其拥有优秀的工程效率和线上表现，有较强的特征泛化能力。</p>
+<p>特征工程是机器学习的核心基石，特征组合在特征工程里是很常用的手段，FM通过引入隐向量自动、高效地完成该过程，且更进一步。</p>
+<p>比如，如果我们在LR的基础上加入穷举的特征组合，公式如下：</p>
+<script type="math/tex; mode=display">y(X)=\omega_{0}+\sum_{i=1}^{n} \omega_{i} x_{i}+\sum_{i=1}^{n-1} \sum_{j=i+1}^{n} \omega_{i j} x_{i} x_{j}</script><p>该方式有两个缺点</p>
+<ul>
+<li>工程效率低下，时间复杂度巨高（工业落地不能忍）</li>
+<li>特征组合不具有泛化能力，对于未出现的组合毫无办法</li>
+</ul>
+<p>而FM算法通过引入隐向量的概念可以高效地完成这一特征组合操作，公式变化为：</p>
 <script type="math/tex; mode=display">
-\hat{y}(X) :=\omega_{0}+\sum_{i=1}^{n} \omega_{i} x_{i}+\sum_{i=1}^{n-1} \sum_{j=i+1}^{n}<v_{i}, v_{j}>x_{i} x_{j}</script><script type="math/tex; mode=display">n代表样本的特征数量，x_i 是第 i 个特征的值， \omega 是模型参数，w_{ij}=⟨v_i,v_j⟩, v_i、v_j表示隐向量。</script><p>可以看出系数个数从 $\frac{n(n-1)}{2}$ 个降低为 $kn$个($k$为隐向量维度)，进一步优化：</p>
+\hat{y}(X) :=\omega_{0}+\sum_{i=1}^{n} \omega_{i} x_{i}+\sum_{i=1}^{n-1} \sum_{j=i+1}^{n}<v_{i}, v_{j}>x_{i} x_{j}</script><script type="math/tex; mode=display">n代表样本的特征数量，x_i 是第 i 个特征的值， \omega 是模型参数，w_{ij}=⟨v_i,v_j⟩, v_i、v_j表示隐向量。</script><p>这个公式的时间复杂度是$kn^2$,比暴力组合的时间复杂还要高，我们需要对该公式进行优化，推导如下：</p>
 <script type="math/tex; mode=display">a b+a c+b c=\frac{1}{2}\left[(a+b+c)^{2}-\left(a^{2}+b^{2}+c^{2}\right)\right]</script><script type="math/tex; mode=display">
 \begin{aligned} 
-\sum_{i=1}^{n-1} \sum_{j=i+1}^{n}<v_{i}, v_{j}>x_{i} x_{j} &=\frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n}<v_{i}, v_{j}>x_{i} x_{j}-\frac{1}{2} \sum_{i=1}^{n}<v_{i}, v_{i}>x_{i} x_{i} \\ &=\frac{1}{2}\left(\sum_{i=1}^{n} \sum_{j=1}^{n} \sum_{f=1}^{k} v_{i, f} v_{j, f} x_{i} x_{j}-\sum_{i=1}^{n} \sum_{f=1}^{k} v_{i, f} v_{i, f} x_{i} x_{i}\right) \\ &=\frac{1}{2} \sum_{f=1}^{k}\left[\left(\sum_{i=1}^{n} v_{i, f} x_{i}\right) \cdot\left(\sum_{j=1}^{n} v_{j, f} x_{j}\right)-\sum_{i=1}^{n} v_{i, f}^{2} x_{i}^{2}\right] \\ &=\frac{1}{2} \sum_{f=1}^{k}\left[\left(\sum_{i=1}^{n} v_{i, f} x_{i}\right)^{2}-\sum_{i=1}^{n} v_{i, f}^{2} x_{i}^{2}\right] \end{aligned}</script><p>可以看出FM参数训练的复杂度是$O(kn)$，其中$k$表示隐向量维度，远小于类别特征数$n$，且适合稀疏数据。</p>
+\sum_{i=1}^{n-1} \sum_{j=i+1}^{n}<v_{i}, v_{j}>x_{i} x_{j} &=\frac{1}{2} \sum_{i=1}^{n} \sum_{j=1}^{n}<v_{i}, v_{j}>x_{i} x_{j}-\frac{1}{2} \sum_{i=1}^{n}<v_{i}, v_{i}>x_{i} x_{i} \\ &=\frac{1}{2}\left(\sum_{i=1}^{n} \sum_{j=1}^{n} \sum_{f=1}^{k} v_{i, f} v_{j, f} x_{i} x_{j}-\sum_{i=1}^{n} \sum_{f=1}^{k} v_{i, f} v_{i, f} x_{i} x_{i}\right) \\ &=\frac{1}{2} \sum_{f=1}^{k}\left[\left(\sum_{i=1}^{n} v_{i, f} x_{i}\right) \cdot\left(\sum_{j=1}^{n} v_{j, f} x_{j}\right)-\sum_{i=1}^{n} v_{i, f}^{2} x_{i}^{2}\right] \\ &=\frac{1}{2} \sum_{f=1}^{k}\left[\left(\sum_{i=1}^{n} v_{i, f} x_{i}\right)^{2}-\sum_{i=1}^{n} v_{i, f}^{2} x_{i}^{2}\right] \end{aligned}</script><p>可以看出系数个数从暴力的$\frac{n(n-1)}{2}$ 个降低为 $kn$个($k$为隐向量维度)，其中$k$表示隐向量维度，远小于类别特征数$n$，且适合稀疏数据。</p>
 <h3 id="DeepFM原理"><a href="#DeepFM原理" class="headerlink" title="DeepFM原理"></a>DeepFM原理</h3><p>DeepFM由两部分组成：FM组件与Deep组件，二者共享同样的输入，输出函数如下：</p>
 <script type="math/tex; mode=display">\hat{y}=\operatorname{sigmoid}\left(y_{F M}+y_{D N N}\right)</script><script type="math/tex; mode=display">y_{F M} 表示FM组件输出，y_{D N N} 表示Deep组件输出</script><p>其中：</p>
 <script type="math/tex; mode=display">y_{F M}=\langle w, x\rangle+\sum_{j_{1}=1}^{d} \sum_{j_{2}=j_{1}+1}^{d}\left\langle V_{i}, V_{j}\right\rangle x_{j_{1}} \cdot x_{j_{2}}</script><p>整体框架图如下所示:</p>
@@ -583,7 +590,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#FM原理"><span class="nav-number">1.</span> <span class="nav-text"><a href="#FM&#x539F;&#x7406;" class="headerlink" title="FM&#x539F;&#x7406;"></a>FM&#x539F;&#x7406;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DeepFM原理"><span class="nav-number">2.</span> <span class="nav-text"><a href="#DeepFM&#x539F;&#x7406;" class="headerlink" title="DeepFM&#x539F;&#x7406;"></a>DeepFM&#x539F;&#x7406;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思考"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x601D;&#x8003;" class="headerlink" title="&#x601D;&#x8003;"></a>&#x601D;&#x8003;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#FM算法"><span class="nav-number">1.</span> <span class="nav-text"><a href="#FM&#x7B97;&#x6CD5;" class="headerlink" title="FM&#x7B97;&#x6CD5;"></a>FM&#x7B97;&#x6CD5;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DeepFM原理"><span class="nav-number">2.</span> <span class="nav-text"><a href="#DeepFM&#x539F;&#x7406;" class="headerlink" title="DeepFM&#x539F;&#x7406;"></a>DeepFM&#x539F;&#x7406;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思考"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x601D;&#x8003;" class="headerlink" title="&#x601D;&#x8003;"></a>&#x601D;&#x8003;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text"><a href="#&#x53C2;&#x8003;" class="headerlink" title="&#x53C2;&#x8003;"></a>&#x53C2;&#x8003;</span></a></li></ol></div>
             
 
           </div>

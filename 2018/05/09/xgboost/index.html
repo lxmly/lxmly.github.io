@@ -101,10 +101,12 @@
 <meta property="og:site_name" content="lxmly">
 <meta property="og:description" content="xgboost，kaggle利器">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-02-25T09:20:53.000Z">
+<meta property="og:image" content="http://yoursite.com/images/xgboost/01.png">
+<meta property="og:updated_time" content="2019-05-30T06:54:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="xgboost核心原理">
 <meta name="twitter:description" content="xgboost，kaggle利器">
+<meta name="twitter:image" content="http://yoursite.com/images/xgboost/01.png">
 
 
 
@@ -404,10 +406,15 @@ Obj^{(t)} = -\frac{1}{2}\sum_{j=1}^T\frac{G_j^2}{H_j + \lambda}</script></li>
 <script type="math/tex; mode=display">
 Gain=\frac{1}{2} \left( \frac{G^2_L}{H_L + \lambda} + \frac{G^2_R}{H_R + \lambda} - \frac{(G_L + G_R)^2}{H_L + H_R + \lambda}\right) - \gamma</script></li>
 </ul>
+<h2 id="稀疏切分"><a href="#稀疏切分" class="headerlink" title="稀疏切分"></a>稀疏切分</h2><p><img src="/images/xgboost/01.png" alt="xgboost_01"></p>
+<p>当样本的第i个特征值缺失时，无法利用该特征进行划分时，XGBoost的想法是将该样本分别划分到左结点和右结点，然后计算其增益，哪个大就划分到哪边</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li>Shrinkage and Column Subsampling<br><br>Shrinkage降低了单颗树的影响，为future trees留下了更多生长空间，进而提升模型（这个在gbdt里也是有的）<br><br>Column Subsampling，就是特征采样，这个在随机森林里用到。根据用户反馈，特征采样比样本采样更能防止过拟合。</li>
-<li>处理缺失值 <br><br>个人理解，其实就是不处理，设置了一个default direction，把缺失值丢到了这个方向里，在叶子计算得分时忽略这些缺失值。</li>
+<li>添加了对稀疏数据的处理。 <br></li>
 <li>Column Block for Parallel Learning <br><br>就是以特征值为key，对样本进行了一次索引，并对特征值进行排序，存入内存中，称为‘block’。在树训练过程中，最耗时的是寻找最佳分裂结点，这个过程需要对数据排序，有了‘block’，这个过程的耗时就会大大减少，这是并行化的基础，可以看出xgboost是在特征粒度上实现并行的。</li>
+<li>目标函数优化利用了损失函数关于待求函数的二阶导数</li>
+<li>交叉验证，early stop，当预测结果已经很好的时候可以提前停止建树，加快训练速度，一定程度防止过拟合</li>
+<li>支持设置样本权重，该权重体现在一阶导数g和二阶导数h，通过调整权重可以去更加关注一些样本</li>
 </ul>
 
       
@@ -594,7 +601,7 @@ Gain=\frac{1}{2} \left( \frac{G^2_L}{H_L + \lambda} + \frac{G^2_R}{H_R + \lambda
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#核心公式推导"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x6838;&#x5FC3;&#x516C;&#x5F0F;&#x63A8;&#x5BFC;" class="headerlink" title="&#x6838;&#x5FC3;&#x516C;&#x5F0F;&#x63A8;&#x5BFC;"></a>&#x6838;&#x5FC3;&#x516C;&#x5F0F;&#x63A8;&#x5BFC;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#核心公式推导"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x6838;&#x5FC3;&#x516C;&#x5F0F;&#x63A8;&#x5BFC;" class="headerlink" title="&#x6838;&#x5FC3;&#x516C;&#x5F0F;&#x63A8;&#x5BFC;"></a>&#x6838;&#x5FC3;&#x516C;&#x5F0F;&#x63A8;&#x5BFC;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#稀疏切分"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x7A00;&#x758F;&#x5207;&#x5206;" class="headerlink" title="&#x7A00;&#x758F;&#x5207;&#x5206;"></a>&#x7A00;&#x758F;&#x5207;&#x5206;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</span></a></li></ol></div>
             
 
           </div>

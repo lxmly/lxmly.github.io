@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="lxmly">
 <meta property="og:description" content="SVD++算法总结和实现">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-27T06:44:27.000Z">
+<meta property="og:updated_time" content="2019-05-24T04:00:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SVD++总结">
 <meta name="twitter:description" content="SVD++算法总结和实现">
@@ -406,8 +406,9 @@
 <h2 id="偏见"><a href="#偏见" class="headerlink" title="偏见"></a><strong>偏见</strong></h2><p>&emsp;&emsp;矩阵分解的一个优点是它可以很灵活地加入各种影响评分的因素，这里我们引入‘偏见’因素。从评分数据中显示出，相比于其他用户，有些用户给分就是偏高或偏。相比于其他物品，有些物品就是能得到偏高的评分。<br>因此，用 $q<em>{i}^Tp</em>{u}$ 来定义完整评分是有缺陷的，我们认为评分=兴趣+偏见。偏见公式、新评分公式和学习公式如下：</p>
 <script type="math/tex; mode=display">b_{ui} = \mu + b_i + b _u\\
 r_{ui} = \mu + b_i + b _u+q_{i}^Tp_{u}\\
-\min_{q^*, p^*} \sum_{(u,i)\in K}  (r_{ui}-b_i - b _u-q_i^T*p_u)^2 + \lambda(||q_i||^2 +||p_u||^2+b_u^2+bi^2 )</script><p>这里，$b_i$表示物品偏见，$b_u$表示用户偏见， $\mu$表示全局均值。至此，SVD矩阵分解算法总结完毕。</p>
-<h2 id="隐式数据-implicit-data"><a href="#隐式数据-implicit-data" class="headerlink" title="隐式数据 (implicit data)"></a><strong>隐式数据</strong> (implicit data)</h2><p>&emsp;&emsp;这次加入的因素是隐式数据表达的物品兴趣偏好。我们称呼用户对物品评分这种类型的数据为显式数据(explicit data)。而用户的行为数据，如浏览电影详情页，观看电影等，我们称之为隐式数据。隐式数据反应了用户的兴趣偏好，即隐式反馈。而在现实的推荐系统中，这类数据才是主体数据。于是现在评分变为显示兴趣+偏见+隐式反馈，用户兴趣=显式兴趣+隐式反馈，新的评分公式如下：</p>
+\min_{q^*, p^*} \sum_{(u,i)\in K}  (r_{ui}-b_i - b _u-q_i^T*p_u - \mu)^2 + \lambda(||q_i||^2 +||p_u||^2+b_u^2+bi^2 )</script><p>这里，$b_i$表示物品偏见，$b_u$表示用户偏见， $\mu$表示全局均值。至此，SVD矩阵分解算法总结完毕。<br>最后求导:</p>
+<script type="math/tex; mode=display">
+\begin{array}{l}{\bullet b_{u} \leftarrow b_{u}+\gamma \cdot\left(e_{u i}-\lambda_{4} \cdot b_{u}\right)} \\ {\bullet b_{i} \leftarrow b_{i}+\gamma \cdot\left(e_{u i}-\lambda_{4} \cdot b_{i}\right)} \\ {\bullet q_{i} \leftarrow q_{i}+\gamma \cdot\left(e_{u i} \cdot p_{u}-\lambda_{4} \cdot q_{i}\right)} \\ {\bullet p_{u} \leftarrow q_{u}+\gamma \cdot\left(e_{u i} \cdot q_{i}-\lambda_{4} \cdot p_{u}\right)}\end{array}</script><h2 id="隐式数据-implicit-data"><a href="#隐式数据-implicit-data" class="headerlink" title="隐式数据 (implicit data)"></a><strong>隐式数据</strong> (implicit data)</h2><p>&emsp;&emsp;这次加入的因素是隐式数据表达的物品兴趣偏好。我们称呼用户对物品评分这种类型的数据为显式数据(explicit data)。而用户的行为数据，如浏览电影详情页，观看电影等，我们称之为隐式数据。隐式数据反应了用户的兴趣偏好，即隐式反馈。而在现实的推荐系统中，这类数据才是主体数据。于是现在评分变为显示兴趣+偏见+隐式反馈，用户兴趣=显式兴趣+隐式反馈，新的评分公式如下：</p>
 <script type="math/tex; mode=display">r_{ui} = \mu + b_i + b _u+q_{i}^T(p_{u} + |N(u)|^{-\frac{1}{2}}\sum_{j\in N(u)}y_j)</script><p>在这里，$N(u)$表示用户u的行为物品集，$y_j$表示物品j所表达的隐式反馈。这就是所谓的SVD++,它在SVD的基础上，加入了隐式反馈因素，更细致地表达了用户兴趣。<br>&emsp;&emsp;这里隐式反馈的归一化项为什么是$ |N(u)|^{-\frac{1}{2}}$而不是$|N(u)|$，论文里没有提到。我猜想是当用户发生越多行为的时候，他的隐式反馈越准确，相应其权重应提升，$ |N(u)|^{-\frac{1}{2}}$满足了这种设定。</p>
 <h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a><strong>实现</strong></h2><p>基于python实现了svd++，源码地址：<a href="https://github.com/lxmly/recsyspy" target="_blank" rel="noopener">https://github.com/lxmly/recsyspy</a></p>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h2><p><a href="http://www.cs.rochester.edu/twiki/pub/Main/HarpSeminar/" target="_blank" rel="noopener">Factorization meets the neighborhood: a multifaceted collaborative filtering model</a><br><a href="https://datajobs.com/data-science-repo/Recommender-Systems-%5BNetflix%5D.pdf" target="_blank" rel="noopener">Matrix factorization techniques for recommender systems</a></p>
