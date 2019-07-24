@@ -94,19 +94,20 @@
 
 
 
-<meta name="description" content="Santander 12/8802">
+<meta name="description" content="Deep CTR with Attention">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kaggle Santander比赛 top12 总结">
-<meta property="og:url" content="http://yoursite.com/2019/04/25/santandar_12th/index.html">
+<meta property="og:title" content="Deep Interest Network for Click-Through Rate Predictioin">
+<meta property="og:url" content="http://yoursite.com/2019/07/01/din/index.html">
 <meta property="og:site_name" content="lxmly">
-<meta property="og:description" content="Santander 12/8802">
+<meta property="og:description" content="Deep CTR with Attention">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/santandar/01.png">
-<meta property="og:updated_time" content="2019-05-09T14:51:44.000Z">
+<meta property="og:image" content="http://yoursite.com/images/din/01.png">
+<meta property="og:image" content="http://yoursite.com/images/din/02.png">
+<meta property="og:updated_time" content="2019-07-24T03:31:05.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kaggle Santander比赛 top12 总结">
-<meta name="twitter:description" content="Santander 12/8802">
-<meta name="twitter:image" content="http://yoursite.com/images/santandar/01.png">
+<meta name="twitter:title" content="Deep Interest Network for Click-Through Rate Predictioin">
+<meta name="twitter:description" content="Deep CTR with Attention">
+<meta name="twitter:image" content="http://yoursite.com/images/din/01.png">
 
 
 
@@ -135,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/25/santandar_12th/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/07/01/din/"/>
 
 
 
 
 
-  <title>Kaggle Santander比赛 top12 总结 | lxmly</title>
+  <title>Deep Interest Network for Click-Through Rate Predictioin | lxmly</title>
   
 
 
@@ -283,7 +284,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/25/santandar_12th/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/01/din/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -300,7 +301,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Kaggle Santander比赛 top12 总结</h1>
+          <h1 class="post-title" itemprop="name headline">Deep Interest Network for Click-Through Rate Predictioin</h1>
         
 
         <div class="post-meta">
@@ -312,8 +313,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-25T20:15:12+08:00">
-                2019-04-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-01T20:05:20+08:00">
+                2019-07-01
               </time>
             
 
@@ -335,8 +336,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/kaggle/" itemprop="url" rel="index">
-                    <span itemprop="name">kaggle</span>
+                  <a href="/categories/DNN-CTR/" itemprop="url" rel="index">
+                    <span itemprop="name">DNN CTR</span>
                   </a>
                 </span>
 
@@ -359,7 +360,7 @@
 
           
               <div class="post-description">
-                  Santander 12/8802
+                  Deep CTR with Attention
               </div>
           
 
@@ -376,51 +377,37 @@
       
 
       
-        <p>Santander Customer Transaction Prediction，Kaggle有史以来参赛人数最多的比赛，反作弊后共有8802个队伍，9838人参与，真是万人空巷了。我们队伍参赛时间共20多天，最终排名12/8802。这个比赛Kaggle表格题大佬几乎尽出，GM高手过招，最终能拿下这个排名还是很高兴的，感谢队友TH、Daishu和包大人，本文对比赛历程作以小结。</p>
-<h3 id="看似简单的数据"><a href="#看似简单的数据" class="headerlink" title="看似简单的数据"></a>看似简单的数据</h3><p>Santander比赛是一个匿名特征赛，这个比赛之所以参赛人数如此众多，有一部分原因是它看似简单的数据:</p>
-<ul>
-<li>数据量小，train + test = 40w</li>
-<li>200维的匿名特征处理起来很平滑，上手容易</li>
+        <p>这篇paper是关于阿里广告推荐的Deep CTR模型优化，文章巧妙运用Attention机制于推荐中，刻画用户兴趣与被推荐广告间的Attention关系，使得用户兴趣画像的建模更加精细。</p>
+<p>在推荐系统中，因为大量特征都是极度稀疏的，Deep Model一般先将稀疏特征映射至低维、稠密的Embedding向量，然后以特征组的方式转换至定长的向量(转换方式可以是Sum或Avg Pooling等)，最后以横向拼接的方式喂入全连接层。相比于经常使用的LR，Deep Model可以减少许多特征工程任务，并极大得提升模型能力。</p>
+<p>然而，有限维度的Embedding将会是表达用户多样兴趣的一个瓶颈。用户的兴趣是丰富多彩的，而上述方式将用户兴趣压缩进定长Embedding中，这个Embedding所在空间的表达能力是有限的。我们可以通过提高空间维度来强化表达能力，但是这会极大地增多学习参数，并在有限数据的情况下提升模型的过拟合风险，此外，这种方式会增加计算和存储的负担，这对于算法的工业落地是不可忍受的。</p>
+<p>通过上面的原因分析，引入了本文的核心思想。当我们预测一个固定的item（这里是广告）的时候，我们没有必要将用户多样的兴趣都同等地压缩到一个Embedding向量中，因为只有用户的部分兴趣会影响到最终的行为。例如，一个用户会点击一个推荐的键盘，主要是因为他之前购买了一台电脑，而不是因为他之前买了一双鞋。基于这个假设，引出了本文模型Deep Interest Network (DIN)，它会通过考虑用户历史行为与特定item间的相关性来动态地计算用户的兴趣表示，实现这种设计的方式便是引入Attention机制。</p>
+<h2 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h2><p>DIN模型的网络结构如下，从下往上进行结构分析:<br><img src="/images/din/01.png" alt="din"></p>
+<h3 id="特征Group"><a href="#特征Group" class="headerlink" title="特征Group"></a>特征Group</h3><ul>
+<li>用户画像特征：用户固有属性，如性别、年龄、地域等</li>
+<li>用户行为List：这里使用的具体的商品实体id，注意到此处用了类别id、商店id与商品id三者的Embedding进行向量Concat来表示商品Embedding</li>
+<li>情境特征：如时间点等</li>
+<li>广告特征：商品id、商家id、类别id，与商品实体基本一致</li>
 </ul>
-<p>但比赛难度不是数据难度决定的，而是参赛选手决定的，万人的参与让整个比赛异常惨烈，尤其是最后几天Top排名竞争到了白热化的程度。整个比赛充斥着谜一般Magic，下面说一下我们发现Magic的历程。</p>
-<h3 id="Magic"><a href="#Magic" class="headerlink" title="Magic"></a>Magic</h3><p>首先说一下我对Magic特征的定义:能带来巨幅提升的简单特征簇。该比赛评价指标是AUC，在我们进入比赛的初期，top30的Public AUC score都在901以上，而且波动巨大，top1的甚至在924，后面几千名都在901以下，这种怪异的排名明显存在Magic特征。</p>
-<p>我们发现如下线索：</p>
-<p><strong>1.</strong> 对正负样本数据分别作特征shuffle作数据增强有正向收益，</p>
-<ul>
-<li>有收益说明数据增强的数据是符合原数据规律的，数据增强增加了训练样本，降低了泛化误差。</li>
-<li>推测正负样本是根据特定分布Roll选出来的，所以shuffle产生了作用。</li>
+<h3 id="Attention"><a href="#Attention" class="headerlink" title="Attention"></a>Attention</h3><p>这里针对的是用户行为List，常规的模型对其的处理方式是作简单的Sum池化，这样的缺点是对于给定的用户，无论候选的广告是什么，用户行为表示向量都是保持不变的。限定长度的Embedding表示空间将成为表达用户多样兴趣的瓶颈。</p>
+<p>DIN以优雅的方式解决了这个问题，对于给定的广告，只关注那些激活的兴趣表示。DIN会通过考虑用户行为历史与给定广告的相关程度，动态地计算用户的兴趣表示向量。对于不同的广告，用户的兴趣表示也会随之发生变化。</p>
+<p>DIN引入了一个新颖的激活单元（模型结构图右侧）来计算注意力：用户向量+广告向量+內积连接后走激活函数。挺多模型都会走这种结构，这里面其实是引入一阶和二阶特征组合。下面是用户向量表示的计算方式，计算注意力值之后，以weighted sum池化的方式转化为定长Embedding。</p>
+<script type="math/tex; mode=display">
+\boldsymbol{v}_{U}(A)=f\left(\boldsymbol{v}_{A}, \boldsymbol{e}_{1}, \boldsymbol{e}_{2}, \ldots, \boldsymbol{e}_{H}\right)=\sum_{j=1}^{H} a\left(\boldsymbol{e}_{j}, \boldsymbol{v}_{A}\right) \boldsymbol{e}_{j}=\sum_{j=1}^{H} \boldsymbol{w}_{j} \boldsymbol{e}_{j}</script><p>注意这里和传统Attention的不同之处，传统的方式会进行权重归一化，DIN抛弃了这一步。DIN认为该值的大小一定程度上反应了用户兴趣的强度。</p>
+<p>作者还尝试了LSTM来对用户行为历史建模，但是没有提升。和NLP任务的文本序列不同的是，用户的历史行为序列也许包含了多种并发兴趣。在这些兴趣上的突然跳跃和戛然而止使得用户行为序列充满了噪声。</p>
+<p>文章给出了一个形象的示例，非常符合DIN的设计初衷，如下图所示。用户的兴趣表示与候选广告相契合，与广告内容越相关，该行为的权重也会越高。</p>
+<p><img src="/images/din/02.png" alt="din"></p>
+<h2 id="训练优化"><a href="#训练优化" class="headerlink" title="训练优化"></a>训练优化</h2><h3 id="小批量正则化"><a href="#小批量正则化" class="headerlink" title="小批量正则化"></a>小批量正则化</h3><p>正则化是提升模型泛化能力的重要措施，而对于稀疏输入与海量参数，直接施加正则化的操作性很低，开销会很大。</p>
+<p>当没有正则化的时候，如SGD只会更新那些非零的稀疏特征，然而加入正则化后，模型将会更新所有参数，这讲导致极度繁重的计算量。</p>
+<p>DIN只对出现在每个mini-batch中的稀疏特征作L2正则化:</p>
+<script type="math/tex; mode=display">
+L_{2}(\mathbf{W})=\sum_{j=1}^{K} \sum_{m=1}^{B} \sum_{(\boldsymbol{x}, y) \in \mathcal{B}_{m}} \frac{I\left(\boldsymbol{x}_{j} \neq 0\right)}{n_{j}}\left\|\boldsymbol{w}_{j}\right\|_{2}^{2}</script><h3 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h3><p>DIN提出了Dice激活函数，其是在PReLU函数基础上加入了mini-batch数据的归一化，其思想有点类似BatchNormal，使得模型优化更加平滑。</p>
+<script type="math/tex; mode=display">
+f(s)=p(s) \cdot s+(1-p(s)) \cdot \alpha s, p(s)=\frac{1}{1+e^{-\frac{s-E[s]}{\sqrt{\operatorname{Var}[s]+\epsilon}}}}</script><h3 id="评价函数"><a href="#评价函数" class="headerlink" title="评价函数"></a>评价函数</h3><p>DIN使用GAUC进行模型评价，离线指标与线上效果更贴近。使用AUC评估，会存在用户偏差。分别对每个用户计算AUC，然后以加权平均的方式计算结果，公式如下：</p>
+<script type="math/tex; mode=display">
+\mathrm{GAUC}=\frac{\sum_{i=1}^{n} w_{i} * \mathrm{AUC}_{i}}{\sum_{i=1}^{n} w_{i}}=\frac{\sum_{i=1}^{n} \text {impression}_{i} * \mathrm{AUC}_{i}}{\sum_{i=1}^{n} \text {impression}_{i}}</script><h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><ul>
+<li>DIN巧妙地将Attention机制引入到推荐中，实现高效的用户多样兴趣的建模，达到”千物千面”的效果，对于不同的item，DIN基于Attention机制将适配为不同的用户兴趣表示，使得模型在有限的Embedding空间中能表达更丰富的用户兴趣，取得整体效果的提升。</li>
+<li>DIN还提出了许多实用的技巧，如Dice激活函数、自适应正则与GAUC评价函数，加速工业模型训练与线上线下指标的评估，十分具有借鉴意义。</li>
 </ul>
-<p><strong>2.</strong> Test数据中存在fake data</p>
-<ul>
-<li>有一个非常聪明的开源kernal推测当该行不存在一个特征值是唯一的，该行就是虚假数据，kernal给出的fake data正好10w个，这个数字太规整了，我们断定这个假设是正确的。</li>
-<li>识别Fake data非常重要，对于Magic，它们充当的角色就是噪声，10w噪声，足以破坏Magic</li>
-</ul>
-<p><strong>3.</strong> 数据集中的Float特征存在大量相同的值</p>
-<ul>
-<li>train和test的特征值都保留四位小数，明显进行了截取，多个特征都存在大量相同的值，以至于许多队伍都把这个Float值当做类别处理</li>
-<li>对同值Float特征作count特征，观察多个特征的count分布，我们发现正负样本分布存在细小差异，且形状贴近正态分布，如下图所示：</li>
-</ul>
-<p><img src="/images/santandar/01.png" width="300px"></p>
-<p>当我们把count值作为特征进行测试后，AUC 0.901-&gt;0.902，和0.91+与0.92+仍然相去甚大</p>
-<p>进一步思考</p>
-<ul>
-<li>正负样本都是根据特定分布随机出来的</li>
-<li>数据中存在大量相同的Float值</li>
-<li>正负样本不平衡 9:1的关系</li>
-</ul>
-<p>我们作出了以下特征假设: 对于某个特征 target=1的值为10左右的count数的绝对量要多余target=1的10左右的count数，因为分别roll出来的有独立值，比如10.1只在target=1中，10.2只在target=0中，10.2的绝对count数量要多于10.1的绝对数量。这个10.1就是有问题的值了。</p>
-<p>基于这种假设，我们设计了count / dist类型的交叉特征簇，dist是受正态分布启发，表示值距离，用来描述我们的特征假设，dist可以是以下计算方式</p>
-<ul>
-<li>特征值到该特征min距离</li>
-<li>特征值到该特征max距离</li>
-<li>特征值到该特征mean距离</li>
-<li>特征值到该特征mode距离</li>
-<li>特征值count密度</li>
-</ul>
-<p>这部分属于我们的核心Magic特征，除此之外还进行了大量锦上添花的特征尝试，本地CV和线上的一致表现也验证了我们的猜想。</p>
-<p>模型方面我们最好的单模型来自于Lightgbm，本地CV0.925+，优秀的单模型是取得Top排名的必备。我们还开发了NN模型，它表现稍差，但和Lightgbm有良好的差异性，最终stacking后，本地CV0.9261，PB0.925，PR0.9238。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这场比赛是我经历竞争最激烈的一场比赛，对于最终的成绩12th也比较满意，毕竟这场比赛有众多Kaggle GM参与。</p>
-<p>对数据的异常现象保持敏感是非常重要的，若能通过数据分析给予异常以合理的解释，数据的真相就呼之欲出了。</p>
 
       
     </div>
@@ -445,8 +432,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/05/elo_4th/" rel="next" title="Kaggle Elo比赛 top4 总结">
-                <i class="fa fa-chevron-left"></i> Kaggle Elo比赛 top4 总结
+              <a href="/2019/05/01/deepFM/" rel="next" title="DeepFM">
+                <i class="fa fa-chevron-left"></i> DeepFM
               </a>
             
           </div>
@@ -454,10 +441,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/01/deepFM/" rel="prev" title="DeepFM">
-                DeepFM <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -606,7 +589,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#看似简单的数据"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x770B;&#x4F3C;&#x7B80;&#x5355;&#x7684;&#x6570;&#x636E;" class="headerlink" title="&#x770B;&#x4F3C;&#x7B80;&#x5355;&#x7684;&#x6570;&#x636E;"></a>&#x770B;&#x4F3C;&#x7B80;&#x5355;&#x7684;&#x6570;&#x636E;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Magic"><span class="nav-number">2.</span> <span class="nav-text"><a href="#Magic" class="headerlink" title="Magic"></a>Magic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x603B;&#x7ED3;" class="headerlink" title="&#x603B;&#x7ED3;"></a>&#x603B;&#x7ED3;</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型结构"><span class="nav-number">1.</span> <span class="nav-text"><a href="#&#x6A21;&#x578B;&#x7ED3;&#x6784;" class="headerlink" title="&#x6A21;&#x578B;&#x7ED3;&#x6784;"></a>&#x6A21;&#x578B;&#x7ED3;&#x6784;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特征Group"><span class="nav-number">1.1.</span> <span class="nav-text"><a href="#&#x7279;&#x5F81;Group" class="headerlink" title="&#x7279;&#x5F81;Group"></a>&#x7279;&#x5F81;Group</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Attention"><span class="nav-number">1.2.</span> <span class="nav-text"><a href="#Attention" class="headerlink" title="Attention"></a>Attention</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#训练优化"><span class="nav-number">2.</span> <span class="nav-text"><a href="#&#x8BAD;&#x7EC3;&#x4F18;&#x5316;" class="headerlink" title="&#x8BAD;&#x7EC3;&#x4F18;&#x5316;"></a>&#x8BAD;&#x7EC3;&#x4F18;&#x5316;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#小批量正则化"><span class="nav-number">2.1.</span> <span class="nav-text"><a href="#&#x5C0F;&#x6279;&#x91CF;&#x6B63;&#x5219;&#x5316;" class="headerlink" title="&#x5C0F;&#x6279;&#x91CF;&#x6B63;&#x5219;&#x5316;"></a>&#x5C0F;&#x6279;&#x91CF;&#x6B63;&#x5219;&#x5316;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#激活函数"><span class="nav-number">2.2.</span> <span class="nav-text"><a href="#&#x6FC0;&#x6D3B;&#x51FD;&#x6570;" class="headerlink" title="&#x6FC0;&#x6D3B;&#x51FD;&#x6570;"></a>&#x6FC0;&#x6D3B;&#x51FD;&#x6570;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#评价函数"><span class="nav-number">2.3.</span> <span class="nav-text"><a href="#&#x8BC4;&#x4EF7;&#x51FD;&#x6570;" class="headerlink" title="&#x8BC4;&#x4EF7;&#x51FD;&#x6570;"></a>&#x8BC4;&#x4EF7;&#x51FD;&#x6570;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">3.</span> <span class="nav-text"><a href="#&#x601D;&#x8003;" class="headerlink" title="&#x601D;&#x8003;"></a>&#x601D;&#x8003;</span></a></li></ol></div>
             
 
           </div>
